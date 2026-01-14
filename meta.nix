@@ -39,7 +39,10 @@
       hostname = "MACBOOK-002531";
       role = "workstation";
       user = "primary";
-      features = [ "development" "gui" ];
+      features = [
+        "development"
+        "gui"
+      ];
       description = "Personal MacBook (Apple Silicon)";
     };
 
@@ -62,7 +65,10 @@
       hostname = "wsl";
       role = "workstation";
       user = "primary";
-      features = [ "development" "wsl" ];
+      features = [
+        "development"
+        "wsl"
+      ];
       description = "Windows Subsystem for Linux";
       isTemplate = true;
     };
@@ -72,7 +78,10 @@
       hostname = "macbook-intel";
       role = "workstation";
       user = "primary";
-      features = [ "development" "gui" ];
+      features = [
+        "development"
+        "gui"
+      ];
       description = "MacBook (Intel)";
       isTemplate = true;
     };

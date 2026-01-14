@@ -12,6 +12,6 @@
   # Add any machine-specific WSL settings here
 
   # Example: customize Windows username if different
-  # programs.zsh.shellAliases.code = 
+  # programs.zsh.shellAliases.code =
   #   "/mnt/c/Users/YOUR_WINDOWS_USER/AppData/Local/Programs/Microsoft VS Code/bin/code";
 }
