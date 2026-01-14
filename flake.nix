@@ -19,8 +19,6 @@
 
   outputs =
     inputs@{
-      self,
-      nixpkgs,
       flake-parts,
       ...
     }:
@@ -32,7 +30,7 @@
       systems = meta.allSystems;
 
       perSystem =
-        { pkgs, system, ... }:
+        { pkgs, ... }:
         {
           formatter = pkgs.nixfmt;
           devShells.default = pkgs.mkShell {

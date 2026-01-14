@@ -28,7 +28,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.neovim = {
       enable = true;
-      defaultEditor = cfg.defaultEditor;
+      inherit (cfg) defaultEditor;
       viAlias = true;
       vimAlias = true;
       vimdiffAlias = true;

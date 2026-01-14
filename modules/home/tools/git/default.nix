@@ -54,7 +54,7 @@ in
       settings = {
         user = {
           name = userConfig.fullName;
-          email = userConfig.email;
+          inherit (userConfig) email;
         };
         init.defaultBranch = "main";
         push.autoSetupRemote = true;

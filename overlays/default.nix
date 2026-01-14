@@ -4,7 +4,7 @@
 #
 # Custom overlays to modify or add packages.
 
-final: prev: {
+_final: _prev: {
   # Example: override a package
   # my-package = prev.my-package.overrideAttrs (old: {
   #   version = "1.0.0";

@@ -5,7 +5,6 @@
 # Core configuration shared by all platforms.
 
 {
-  config,
   lib,
   pkgs,
   userConfig,
@@ -13,7 +12,6 @@
 }:
 
 {
-  programs.home-manager.enable = true;
   xdg.enable = true;
 
   home = {
@@ -21,6 +19,44 @@
     homeDirectory = lib.mkDefault (
       if pkgs.stdenv.isDarwin then userConfig.homeDirectory.darwin else userConfig.homeDirectory.linux
     );
+
+    sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
+
+    sessionPath = [
+      "$HOME/.bun/bin"
+    ];
+
+    packages = with pkgs; [
+      # Modern CLI tools
+      eza
+      bat
+      ripgrep
+      fd
+      fzf
+      jq
+      yq
+      delta
+      dust
+      htop
+      btop
+      tree
+      tailspin
+
+      # Development
+      lazygit
+      direnv
+      bun
+
+      # Utilities
+      curl
+      wget
+
+      # AI Tools
+      codex
+    ];
   };
 
   # ── Enable Tool Modules ───────────────────────────────────────────────────
@@ -31,69 +67,33 @@
     tmux.enable = true;
   };
 
-  # ── Environment ───────────────────────────────────────────────────────────
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+  # ── Programs ─────────────────────────────────────────────────────────────────
+  programs = {
+    home-manager.enable = true;
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    bat = {
+      enable = true;
+      config.theme = "TwoDark";
+    };
+
+    eza = {
+      enable = true;
+      enableZshIntegration = true;
+      icons = "auto";
+      git = true;
+    };
+
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+
+    lazygit.enable = true;
   };
-
-  home.sessionPath = [
-    "$HOME/.bun/bin"
-  ];
-
-  # ── Packages ──────────────────────────────────────────────────────────────
-  home.packages = with pkgs; [
-    # Modern CLI tools
-    eza
-    bat
-    ripgrep
-    fd
-    fzf
-    jq
-    yq
-    delta
-    dust
-    htop
-    btop
-    tree
-    tailspin
-
-    # Development
-    lazygit
-    direnv
-    bun
-
-    # Utilities
-    curl
-    wget
-
-    # AI Tools
-    codex
-  ];
-
-  # ── Other Programs ────────────────────────────────────────────────────────
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.bat = {
-    enable = true;
-    config.theme = "TwoDark";
-  };
-
-  programs.eza = {
-    enable = true;
-    enableZshIntegration = true;
-    icons = "auto";
-    git = true;
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-  };
-
-  programs.lazygit.enable = true;
 }

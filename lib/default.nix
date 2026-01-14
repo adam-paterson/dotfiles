@@ -52,7 +52,7 @@ rec {
     let
       hostConfig = getHost hostname;
       userConfig = getUser hostConfig.user;
-      system = hostConfig.system;
+      inherit (hostConfig) system;
     in
     darwin.lib.darwinSystem {
       inherit system;
@@ -103,7 +103,7 @@ rec {
     let
       hostConfig = getHost hostname;
       userConfig = getUser hostConfig.user;
-      system = hostConfig.system;
+      inherit (hostConfig) system;
       pkgs = import nixpkgs { inherit system; };
       platformModule = getPlatformModule hostConfig;
     in
@@ -125,9 +125,9 @@ rec {
         ../hosts/linux/${hostname}.nix
         {
           home = {
-            username = userConfig.username;
+            inherit (userConfig) username;
             homeDirectory = userConfig.homeDirectory.linux;
-            stateVersion = meta.defaults.stateVersion;
+            inherit (meta.defaults) stateVersion;
           };
         }
       ];

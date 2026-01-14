@@ -4,8 +4,7 @@
 #
 # Custom package definitions.
 
-{ pkgs }:
-{
+_: {
   # Example custom package:
   # my-script = pkgs.writeShellScriptBin "my-script" ''
   #   echo "Hello from my-script!"

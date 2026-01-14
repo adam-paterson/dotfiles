@@ -4,8 +4,7 @@
 #
 # Homebrew casks and brews managed by nix-darwin.
 
-{ ... }:
-{
+_: {
   homebrew = {
     enable = true;
 

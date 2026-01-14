@@ -4,8 +4,7 @@
 #
 # Home-manager configuration for Ubuntu VPS server.
 
-{ hostConfig, ... }:
-{
+_: {
   # ── Host-Specific Packages ────────────────────────────────────────────────
   # Add any VPS-specific packages here
   # home.packages = [ ];
