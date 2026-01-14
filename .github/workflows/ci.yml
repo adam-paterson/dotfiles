@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Check formatting
+        run: nix fmt -- --check .
+
+      - name: Statix lint
+        run: nix run nixpkgs#statix -- check .
+
+      - name: Deadnix check
+        run: nix run nixpkgs#deadnix -- -f .
+
+  check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Nix flake check
+        run: nix flake check
+
+  build-darwin:
+    needs: [lint, check]
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [macbook, macbook-intel]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build ${{ matrix.config }}
+        run: nix build .#darwinConfigurations.${{ matrix.config }}.system
+
+  build-linux:
+    needs: [lint, check]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - adampaterson@ubuntu-vps
+          - adampaterson@wsl
+          - adampaterson@linux-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build ${{ matrix.config }}
+        run: nix build ".#homeConfigurations.\"${{ matrix.config }}\".activationPackage"
+
+  deploy-vps:
+    needs: [build-linux]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Load 1Password secrets
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          VPS_HOST: op://nix-config/vps/host
+          VPS_USER: op://nix-config/vps/user
+          VPS_SSH_KEY: op://nix-config/vps/ssh-key
+          VPS_KNOWN_HOSTS: op://nix-config/vps/known-hosts
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          nix run home-manager -- switch \
+            --flake .#adampaterson@ubuntu-vps \
+            --target-host "$VPS_USER@$VPS_HOST"
