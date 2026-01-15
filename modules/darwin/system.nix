@@ -20,8 +20,11 @@ _: {
         AppleShowAllFiles = true;
         ShowPathbar = true;
         ShowStatusBar = true;
+        _FXSortFoldersFirst = true;
         FXDefaultSearchScope = "SCcf"; # Search current folder
         FXEnableExtensionChangeWarning = false;
+        ShowExternalHardDrivesOnDesktop = false;
+        ShowRemovableMediaOnDesktop = false;
       };
 
       trackpad = {
@@ -33,6 +36,10 @@ _: {
       NSGlobalDomain = {
         AppleInterfaceStyle = "Dark";
         AppleKeyboardUIMode = 3; # Full keyboard access
+        ApplePressAndHoldEnabled = false;
+        AppleScrollerPagingBehavior = true;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
         NSAutomaticCapitalizationEnabled = false;
@@ -43,11 +50,24 @@ _: {
 
       screencapture = {
         location = "~/Pictures/Screenshots";
-        type = "png";
+type = "png";
       };
     };
 
-    keyboard.enableKeyMapping = true;
+    keyboard = {
+      enableKeyMapping = true;
+
+      # Remap ISO Section key (§/±) to Grave Accent/Tilde (`/~)
+      # This fixes external keyboards like Keychron Q1 that send ISO scancode
+      # 0x64 (ISO Section) instead of 0x35 (Grave Accent)
+      userKeyMapping = [
+        {
+          # ISO Section key (§/±) -> Grave Accent/Tilde (`/~)
+          HIDKeyboardModifierMappingSrc = 30064771172; # 0x700000064
+          HIDKeyboardModifierMappingDst = 30064771125; # 0x700000035
+        }
+      ];
+    };
 
     activationScripts.screenshotsDir.text = ''
       mkdir -p ~/Pictures/Screenshots

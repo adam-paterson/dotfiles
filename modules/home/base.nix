@@ -48,11 +48,13 @@
       # Development
       lazygit
       direnv
-      bun
 
       # Utilities
       curl
       wget
+
+    ] ++ lib.optionals (!pkgs.stdenv.isAarch64) [
+      bun
 
       # AI Tools
       codex
@@ -61,7 +63,7 @@
 
   # ── Enable Tool Modules ───────────────────────────────────────────────────
   tools = {
-    opencode.enable = true;
+    opencode.enable = lib.mkDefault (!pkgs.stdenv.isAarch64);
     git.enable = true;
     neovim.enable = true;
     tmux.enable = true;
