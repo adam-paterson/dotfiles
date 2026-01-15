@@ -41,6 +41,9 @@ jobs:
   build-darwin:
     needs: [lint, check]
     runs-on: macos-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
     strategy:
       fail-fast: false
       matrix:
@@ -56,6 +59,9 @@ jobs:
   build-linux:
     needs: [lint, check]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
     strategy:
       fail-fast: false
       matrix:
@@ -65,7 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: DeterminateSystems/flakehub-cache-action@v3
 
       - name: Build ${{ matrix.config }}
         run: nix build ".#homeConfigurations.\"${{ matrix.config }}\".activationPackage"
@@ -74,10 +80,13 @@ jobs:
     needs: [build-linux]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      id-token: "write"
+      contents: "read"
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: DeterminateSystems/flakehub-cache-action@v3
 
       - name: Load 1Password secrets
         uses: 1password/load-secrets-action@v2
