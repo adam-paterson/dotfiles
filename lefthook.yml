@@ -1,0 +1,29 @@
+# lefthook.yml - Git hooks configuration
+# Install hooks with: lefthook install (or `just hooks`)
+
+# Pre-commit: fast checks on staged files only
+pre-commit:
+  parallel: true
+  commands:
+    nixfmt:
+      glob: "*.nix"
+      run: nix fmt -- --check {staged_files}
+      fail_text: "Run 'just fmt' to fix formatting"
+
+    statix:
+      glob: "*.nix"
+      run: nix run nixpkgs#statix -- check {staged_files}
+      fail_text: "Run 'just lint-fix' to fix issues"
+
+    deadnix:
+      glob: "*.nix"
+      run: nix run nixpkgs#deadnix -- {staged_files}
+      fail_text: "Run 'just deadnix-fix' to remove dead code"
+
+# Pre-push: full validation before pushing
+pre-push:
+  parallel: false
+  commands:
+    flake-check:
+      run: nix flake check --no-build
+      fail_text: "Flake check failed - fix errors before pushing"
