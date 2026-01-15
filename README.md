@@ -145,7 +145,8 @@ nix run nixpkgs#deadnix -- -f .
 
 1. Create a 1Password Service Account
 2. Add `OP_SERVICE_ACCOUNT_TOKEN` to GitHub repository secrets
-3. Store deployment secrets in 1Password vault `nix-config`
+3. Store deployment secrets in 1Password vault `Nix`
+4. If deploying over Tailscale, add `vps/tailscale-authkey` for CI
 
 ### Local Development
 

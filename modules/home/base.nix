@@ -54,6 +54,7 @@
         # Utilities
         curl
         wget
+        _1password-cli
 
       ]
       ++ lib.optionals (!pkgs.stdenv.isAarch64) [

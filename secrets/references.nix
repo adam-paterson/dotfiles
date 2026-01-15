@@ -12,10 +12,11 @@
 {
   # ── VPS Deployment ────────────────────────────────────────────────────────
   vps = {
-    host = "op://nix-config/vps/host";
-    user = "op://nix-config/vps/user";
-    sshKey = "op://nix-config/vps/ssh-key";
-    knownHosts = "op://nix-config/vps/known-hosts";
+    host = "op://Nix/vps/host";
+    user = "op://Nix/vps/user";
+    sshKey = "op://Nix/vps/ssh-key";
+    knownHosts = "op://Nix/vps/known-hosts";
+    tailscaleAuthKey = "op://Nix/vps/tailscale-authkey";
   };
 
   # ── Git Signing ───────────────────────────────────────────────────────────

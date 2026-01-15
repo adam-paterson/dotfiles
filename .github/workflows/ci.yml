@@ -100,10 +100,16 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          VPS_HOST: op://nix-config/vps/host
-          VPS_USER: op://nix-config/vps/user
-          VPS_SSH_KEY: op://nix-config/vps/ssh-key
-          VPS_KNOWN_HOSTS: op://nix-config/vps/known-hosts
+          VPS_HOST: op://Nix/vps/host
+          VPS_USER: op://Nix/vps/user
+          VPS_SSH_KEY: op://Nix/vps/ssh-key
+          VPS_KNOWN_HOSTS: op://Nix/vps/known-hosts
+          TAILSCALE_AUTHKEY: op://Nix/vps/tailscale-authkey
+
+      - name: Connect to Tailscale
+        uses: tailscale/tailscale-action@v2
+        with:
+          authkey: ${{ env.TAILSCALE_AUTHKEY }}
 
       - name: Setup SSH
         run: |
