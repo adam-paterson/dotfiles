@@ -10,6 +10,9 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
@@ -26,6 +29,9 @@ jobs:
 
   check:
     runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: "write"
+      contents: "read"
     strategy:
       fail-fast: false
       matrix:
