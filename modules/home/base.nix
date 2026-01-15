@@ -13,6 +13,7 @@
 
 {
   xdg.enable = true;
+  nixpkgs.config.allowUnfree = true;
 
   home = {
     username = lib.mkDefault userConfig.username;
