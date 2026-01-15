@@ -50,7 +50,7 @@ _: {
 
       screencapture = {
         location = "~/Pictures/Screenshots";
-type = "png";
+        type = "png";
       };
     };
 

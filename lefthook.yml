@@ -12,7 +12,7 @@ pre-commit:
 
     statix:
       glob: "*.nix"
-      run: nix run nixpkgs#statix -- check {staged_files}
+      run: nix run nixpkgs#statix -- check .
       fail_text: "Run 'just lint-fix' to fix issues"
 
     deadnix:

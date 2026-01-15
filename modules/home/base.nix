@@ -29,36 +29,39 @@
       "$HOME/.bun/bin"
     ];
 
-    packages = with pkgs; [
-      # Modern CLI tools
-      eza
-      bat
-      ripgrep
-      fd
-      fzf
-      jq
-      yq
-      delta
-      dust
-      htop
-      btop
-      tree
-      tailspin
+    packages =
+      with pkgs;
+      [
+        # Modern CLI tools
+        eza
+        bat
+        ripgrep
+        fd
+        fzf
+        jq
+        yq
+        delta
+        dust
+        htop
+        btop
+        tree
+        tailspin
 
-      # Development
-      lazygit
-      direnv
+        # Development
+        lazygit
+        direnv
 
-      # Utilities
-      curl
-      wget
+        # Utilities
+        curl
+        wget
 
-    ] ++ lib.optionals (!pkgs.stdenv.isAarch64) [
-      bun
+      ]
+      ++ lib.optionals (!pkgs.stdenv.isAarch64) [
+        bun
 
-      # AI Tools
-      codex
-    ];
+        # AI Tools
+        codex
+      ];
   };
 
   # ── Enable Tool Modules ───────────────────────────────────────────────────
