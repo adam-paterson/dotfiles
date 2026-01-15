@@ -62,7 +62,6 @@ jobs:
         config:
           - adampaterson@ubuntu-vps
           - adampaterson@wsl
-          - adampaterson@linux-arm
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
