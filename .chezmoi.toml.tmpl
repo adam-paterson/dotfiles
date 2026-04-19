@@ -1,7 +1,7 @@
 encryption = "age"
 
 {{ $hostname := promptStringOnce . "hostname" "Hostname" .chezmoi.hostname | lower }}
-{{ $headless := promptBoolOnce . "headless" "Is this a headless server?" false }}
+{{ $headless := promptBoolOnce . "headless" "Is this a headless server?" true }}
 {{ $work := promptBoolOnce . "work" "Is this a work machine?" false }}
 {{ $private := promptBoolOnce . "private" "Is this a personal machine?" true }}
 {{ $useEncryption := promptBoolOnce . "useEncryption" "Use encryption (age)?" true }}
@@ -18,10 +18,10 @@ headless = {{ $headless }}
 private = {{ $private }}
 work = {{ $work }}
 useEncryption = {{ $useEncryption }}
+installMasApps = {{ $installMasApps }}
 gitUsername = {{ $gitUsername | quote }}
 gitEmail = {{ $gitEmail | quote }}
 timezone = {{ $timezone | quote }}
-installMasApps = {{ $installMasApps }}
 
 [edit]
 command = "nvim"

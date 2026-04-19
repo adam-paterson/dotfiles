@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo ":: [01] Applying NixOS configuration"
+
+{{ $flake := joinPath .chezmoi.homeDir "nix-config/flake.nix" -}}
+{{- $lock := joinPath .chezmoi.homeDir "nix-config/flake.lock" -}}
+{{- $system := joinPath .chezmoi.homeDir "nix-config/modules/linux-system.nix" -}}
+# flake.nix: {{ if stat $flake }}{{ output "sha256sum" $flake | trim }}{{ else }}n/a{{ end }}
+# flake.lock: {{ if stat $lock }}{{ output "sha256sum" $lock | trim }}{{ else }}n/a{{ end }}
+# linux-system.nix: {{ if stat $system }}{{ output "sha256sum" $system | trim }}{{ else }}n/a{{ end }}
+
+NIX_CONFIG_DIR="{{ .chezmoi.homeDir }}/nix-config"
+HOSTNAME="{{ .hostname }}"
+
+if [[ ! -d "$NIX_CONFIG_DIR" ]]; then
+  echo "    Warning: $NIX_CONFIG_DIR not found, skipping"
+  exit 0
+fi
+
+if [[ ! -f "$NIX_CONFIG_DIR/flake.nix" ]]; then
+  echo "    Warning: flake.nix not found in $NIX_CONFIG_DIR"
+  exit 0
+fi
+
+# Ensure ~/nix-config is its own git repo (required for Nix flakes)
+if [[ ! -d "$NIX_CONFIG_DIR/.git" ]]; then
+  echo "    Initialising git repo in $NIX_CONFIG_DIR..."
+  git init "$NIX_CONFIG_DIR"
+  git -C "$NIX_CONFIG_DIR" add .
+  git -C "$NIX_CONFIG_DIR" commit -m "Initial nix-config from chezmoi" --allow-empty
+else
+  git -C "$NIX_CONFIG_DIR" add -A
+  if ! git -C "$NIX_CONFIG_DIR" diff --cached --quiet 2>/dev/null; then
+    git -C "$NIX_CONFIG_DIR" commit -m "Update nix-config from chezmoi" --no-verify
+  fi
+fi
+
+echo "    Switching NixOS configuration..."
+sudo nixos-rebuild switch --flake "$NIX_CONFIG_DIR#$HOSTNAME" --show-trace || true

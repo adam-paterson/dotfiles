@@ -8,14 +8,10 @@
   i18n.defaultLocale = "en_GB.UTF-8";
 
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-      auto-optimise-store = true
-    '';
     settings = {
       trusted-users = [ "root" "@wheel" ];
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
     };
     gc = {
       automatic = true;

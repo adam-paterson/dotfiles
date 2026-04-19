@@ -33,8 +33,8 @@ nix-config/modules/system.nix
 nix-config/modules/apps.nix
 nix-config/modules/host-users.nix
 
-# macOS-specific scripts
-.chezmoiscripts/run_onchange_before_01_init-nix.sh
+# macOS-specific scripts (nix-darwin)
+.chezmoiscripts/run_onchange_after_01_init-darwin.sh
 
 # macOS-only GUI apps
 .config/aerospace/
@@ -45,12 +45,15 @@ nix-config/modules/host-users.nix
 {{- end }}
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Linux/VPS exclusions (skip on macOS)
+# Linux/NixOS-only exclusions (skip on macOS)
 # ─────────────────────────────────────────────────────────────────────────────
 {{- if eq .chezmoi.os "darwin" }}
 
 # NixOS-specific config (only needed on Linux VPS)
 nix-config/modules/linux-system.nix
+
+# NixOS-specific scripts
+.chezmoiscripts/run_onchange_after_01_init-nixos.sh
 {{- end }}
 
 # ─────────────────────────────────────────────────────────────────────────────
