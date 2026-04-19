@@ -3,7 +3,7 @@ set -eu
 
 DOTFILES_REPO="${DOTFILES_REPO:-adam-paterson/dotfiles}"
 DOTFILES_REF="${DOTFILES_REF:-}"
-DOTFILES_SSH="${DOTFIELDS_SSH:-}"
+DOTFILES_SSH="${DOTFILES_SSH:-}"
 
 usage() {
 	cat >&2 <<'EOF'
@@ -59,21 +59,46 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-# Install chezmoi if missing
-if ! command -v chezmoi >/dev/null 2>&1; then
-	echo ":: Installing chezmoi..."
-	if command -v nix >/dev/null 2>&1; then
-		nix-env -iA nixpkgs.chezmoi || nix profile install nixpkgs#chezmoi || {
-			echo "error: failed to install chezmoi via nix" >&2
-			exit 1
-		}
-	elif command -v curl >/dev/null 2>&1; then
+# Install chezmoi if missing or too old
+install_chezmoi() {
+	echo ":: Installing latest chezmoi..."
+	if command -v curl >/dev/null 2>&1; then
 		sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
 	elif command -v wget >/dev/null 2>&1; then
 		sh -c "$(wget -qO- https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
 	else
-		echo "error: install curl or wget first" >&2
+		echo "error: curl or wget required to install chezmoi" >&2
 		exit 1
+	fi
+}
+
+if ! command -v chezmoi >/dev/null 2>&1; then
+	install_chezmoi
+else
+	# Check if installed version meets minimum requirement
+	REQUIRED_MAJOR=2
+	REQUIRED_MINOR=69
+	CURRENT_VERSION=$(chezmoi --version 2>/dev/null | head -1 | sed 's/.*version //' | sed 's/[^0-9.].*//')
+	CURRENT_MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
+	CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
+
+	NEEDS_UPGRADE=0
+	if [ -z "$CURRENT_MAJOR" ] || [ -z "$CURRENT_MINOR" ]; then
+		NEEDS_UPGRADE=1
+	elif [ "$CURRENT_MAJOR" -lt "$REQUIRED_MAJOR" ] 2>/dev/null; then
+		NEEDS_UPGRADE=1
+	elif [ "$CURRENT_MAJOR" -eq "$REQUIRED_MAJOR" ] && [ "$CURRENT_MINOR" -lt "$REQUIRED_MINOR" ] 2>/dev/null; then
+		NEEDS_UPGRADE=1
+	fi
+
+	if [ "$NEEDS_UPGRADE" -eq 1 ]; then
+		echo ":: Installed chezmoi is too old ($CURRENT_VERSION, need >= 2.69.0)"
+		install_chezmoi
+	fi
+
+	# Ensure the new binary is on PATH
+	if [ -x "$HOME/.local/bin/chezmoi" ]; then
+		export PATH="$HOME/.local/bin:$PATH"
 	fi
 fi
 

@@ -33,13 +33,17 @@ if [[ ! -f "$NIX_CONFIG_DIR/flake.nix" ]]; then
 fi
 
 # Ensure ~/nix-config is its own git repo (required for Nix flakes)
+# Disable commit signing for this repo (op-ssh-sign may not be available yet)
 if [[ ! -d "$NIX_CONFIG_DIR/.git" ]]; then
   echo "    Initialising git repo in $NIX_CONFIG_DIR..."
   git init "$NIX_CONFIG_DIR"
+  git -C "$NIX_CONFIG_DIR" config commit.gpgsign false
+  git -C "$NIX_CONFIG_DIR" config commit.sshsign false
   git -C "$NIX_CONFIG_DIR" add .
   git -C "$NIX_CONFIG_DIR" commit -m "Initial nix-config from chezmoi" --allow-empty
 else
-  # Stage any changes so Nix sees the latest files
+  git -C "$NIX_CONFIG_DIR" config commit.gpgsign false
+  git -C "$NIX_CONFIG_DIR" config commit.sshsign false
   git -C "$NIX_CONFIG_DIR" add -A
   if ! git -C "$NIX_CONFIG_DIR" diff --cached --quiet 2>/dev/null; then
     git -C "$NIX_CONFIG_DIR" commit -m "Update nix-config from chezmoi" --no-verify
