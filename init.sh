@@ -2,8 +2,8 @@
 set -eu
 
 DOTFILES_REPO="${DOTFILES_REPO:-adam-paterson/dotfiles}"
-DOTFILES_REF="${DOTFIELDS_REF:-}"
-DOTFILES_SSH="${DOTFIELDS_SSH:-}"
+DOTFILES_REF="${DOTFILES_REF:-}"
+DOTFILES_SSH="${DOTFILES_SSH:-}"
 
 usage() {
 	cat >&2 <<'EOF'
@@ -59,31 +59,49 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
+CHEZMOI_VERSION="2.69.0"
+
 # Install or upgrade chezmoi
 install_chezmoi() {
-	echo ":: Installing chezmoi..."
+	echo ":: Installing chezmoi v${CHEZMOI_VERSION}..."
 
-	# On NixOS, use nix to install (avoids dynamic linker issues)
+	GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
+	GOARCH=$(uname -m)
+	case "$GOARCH" in
+	x86_64 | amd64) GOARCH="amd64" ;;
+	aarch64 | arm64) GOARCH="arm64" ;;
+	esac
+
+	# On NixOS, use the musl build (statically linked, no glibc dependency)
+	GOOS_EXTRA=""
 	if [ -f /etc/NIXOS ]; then
-		if command -v nix >/dev/null 2>&1; then
-			echo "    Installing via nix profile (NixOS)..."
-			nix profile install nixpkgs#chezmoi 2>/dev/null || nix-env -iA nixpkgs.chezmoi 2>/dev/null || {
-				echo "error: failed to install chezmoi via nix" >&2
-				exit 1
-			}
-			return 0
-		fi
+		GOOS_EXTRA="-musl"
 	fi
 
-	# On all other systems, use the official installer
+	TARBALL="chezmoi_${CHEZMOI_VERSION}_${GOOS}${GOOS_EXTRA}_${GOARCH}.tar.gz"
+	TARBALL_URL="https://github.com/twpayne/chezmoi/releases/download/v${CHEZMOI_VERSION}/${TARBALL}"
+
+	TMPDIR=$(mktemp -d)
+	trap 'rm -rf "$TMPDIR"' EXIT
+
+	echo "    Downloading $TARBALL_URL..."
 	if command -v curl >/dev/null 2>&1; then
-		sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+		curl -fsSL "$TARBALL_URL" -o "$TMPDIR/$TARBALL"
 	elif command -v wget >/dev/null 2>&1; then
-		sh -c "$(wget -qO- https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+		wget -qO "$TMPDIR/$TARBALL" "$TARBALL_URL"
 	else
-		echo "error: curl or wget required to install chezmoi" >&2
+		echo "error: curl or wget required" >&2
 		exit 1
 	fi
+
+	tar -xzf "$TMPDIR/$TARBALL" -C "$TMPDIR"
+
+	BINDIR="$HOME/.local/bin"
+	mkdir -p "$BINDIR"
+	mv "$TMPDIR/chezmoi" "$BINDIR/chezmoi"
+	chmod +x "$BINDIR/chezmoi"
+
+	echo "    Installed: $($BINDIR/chezmoi --version 2>/dev/null || echo 'ok')"
 }
 
 NEEDED_MAJOR=2
@@ -92,7 +110,6 @@ NEEDED_MINOR=69
 if ! command -v chezmoi >/dev/null 2>&1; then
 	install_chezmoi
 else
-	# Check version meets minimum requirement
 	CURRENT_VERSION=$(chezmoi --version 2>/dev/null | head -1 | sed 's/.*version //' | sed 's/[^0-9.].*//')
 	CURRENT_MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
 	CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
@@ -113,7 +130,7 @@ else
 fi
 
 # Ensure PATH includes common chezmoi locations
-for dir in "$HOME/.local/bin" "$HOME/bin" "/nix/var/nix/profiles/default/bin"; do
+for dir in "$HOME/.local/bin" "$HOME/bin"; do
 	if [ -d "$dir" ]; then
 		PATH="$dir:$PATH"
 	fi
