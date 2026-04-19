@@ -1,0 +1,22 @@
+[tools]
+node = "lts"
+terraform = "latest"
+python = "3.12"
+uv = "latest"
+"pipx:poetry" = "latest"
+"pipx:pre-commit" = "latest"
+go = "latest"
+rust = "latest"
+"npm:oh-my-opencode" = "3.5.5"
+"npm:@twsxtd/hapi" = "latest"
+"npm:@google/gemini-cli" = "latest"
+
+[settings]
+auto_install = true
+experimental = true
+trusted_config_paths = ["~/Projects", "~/Work"]
+always_keep_download = false
+always_keep_install = false
+
+[env]
+_.path = ["./node_modules/.bin", "./bin"]
