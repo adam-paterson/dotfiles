@@ -60,4 +60,11 @@ fi
 
 "$mise_cmd" install --yes
 "$mise_cmd" reshim
+
+# Retry aqua packages that needed go/cargo (now available after mise)
+if command -v "$aqua_bin_dir/aqua" &>/dev/null || [[ -x "$aqua_bin_dir/aqua" ]]; then
+    echo "    Retrying aqua packages (go/rust now available)..."
+    "$aqua_bin_dir/aqua" install || true
+fi
+
 echo "    Done"

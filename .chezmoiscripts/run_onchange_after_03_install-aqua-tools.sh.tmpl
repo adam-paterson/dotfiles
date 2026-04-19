@@ -44,5 +44,8 @@ else
 fi
 
 echo "    Using aqua: $aqua_cmd"
-"$aqua_cmd" install
+"$aqua_cmd" install || {
+    echo "    Warning: some aqua packages failed to install"
+    echo "    Packages requiring go/cargo will be retried after mise installs go/rust"
+}
 echo "    Done"
