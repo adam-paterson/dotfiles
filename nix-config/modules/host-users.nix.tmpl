@@ -1,0 +1,8 @@
+{ config, pkgs, ... }:
+
+{
+  users.users.{{ .chezmoi.username }} = {
+    home = "/Users/{{ .chezmoi.username }}";
+    shell = pkgs.zsh;
+  };
+}

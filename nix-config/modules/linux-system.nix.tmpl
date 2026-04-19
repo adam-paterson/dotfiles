@@ -1,0 +1,78 @@
+{ config, pkgs, inputs, ... }:
+
+{
+  boot.isContainer = false;
+
+  time.timeZone = "{{ .timezone }}";
+
+  i18n.defaultLocale = "en_GB.UTF-8";
+
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+      auto-optimise-store = true
+    '';
+    settings = {
+      trusted-users = [ "root" "@wheel" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 ];
+    };
+  };
+
+  services = {
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        PermitRootLogin = "no";
+      };
+    };
+  };
+
+  security = {
+    sudo.wheelNeedsPassword = false;
+  };
+
+  environment.systemPackages = with pkgs; [
+    git
+    curl
+    wget
+    jq
+    fd
+    ripgrep
+    bat
+    eza
+    fzf
+    tmux
+    delta
+    unzip
+    gnupg
+    openssh
+    starship
+    just
+    age
+    sops
+  ];
+
+  programs.zsh.enable = true;
+
+  users.users.{{ .chezmoi.username }} = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+  };
+}

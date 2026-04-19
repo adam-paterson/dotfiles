@@ -1,0 +1,75 @@
+{
+  description = "{{ .hostname }} system configuration";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+{{- if eq .platform "darwin" }}
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+    };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
+{{- end }}
+
+    home-manager = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs@{ self, nixpkgs, ... }:
+{{- if eq .platform "darwin" }}
+    let
+      hostname = "{{ .hostname }}";
+      system = "aarch64-darwin";
+    in
+    {
+      darwinConfigurations.${hostname} = inputs.nix-darwin.lib.darwinSystem {
+        inherit system;
+        specialArgs = { inherit inputs self hostname system; };
+        modules = [
+          ./modules/system.nix
+          ./modules/apps.nix
+          ./modules/host-users.nix
+          inputs.nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              enable = true;
+              enableRosetta = system == "aarch64-darwin";
+              user = "{{ .chezmoi.username }}";
+            };
+          }
+        ];
+      };
+    };
+{{- else if eq .platform "linux" }}
+    let
+      hostname = "{{ .hostname }}";
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs self hostname system; };
+        modules = [
+          ./modules/linux-system.nix
+        ];
+      };
+    };
+{{- end }}
+}

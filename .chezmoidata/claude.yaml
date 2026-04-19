@@ -1,0 +1,16 @@
+defaults:
+  disable_nonessential_traffic: true
+  timeout_ms: "300000"
+
+providers:
+  anthropic:
+    base_url: "https://api.anthropic.com"
+  openrouter:
+    base_url: "https://openrouter.ai/api"
+
+accounts:
+  anthropic:
+    provider: anthropic
+    model: claude-sonnet-4-20250514
+    small_model: claude-haiku-4-20250414
+    disable_nonessential_traffic: true

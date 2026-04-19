@@ -1,0 +1,50 @@
+{ config, pkgs, inputs, ... }:
+
+{
+  system = {
+    primaryUser = "{{ .chezmoi.username }}";
+    stateVersion = 6;
+
+    checks.verifyNixPath = false;
+
+    defaults = {
+      NSGlobalDomain = {
+        AppleInterfaceStyle = "Dark";
+        AppleKeyboardUIMode = 2;
+        ApplePressAndHoldEnabled = false;
+        InitialKeyRepeat = 15;
+        KeyRepeat = 2;
+        NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticDashSubstitutionEnabled = false;
+        NSAutomaticPeriodSubstitutionEnabled = false;
+        NSAutomaticQuoteSubstitutionEnabled = false;
+        NSAutomaticSpellingCorrectionEnabled = false;
+        _HIHideMenuBar = false;
+      };
+    };
+
+    startup = {
+      chime = false;
+    };
+  };
+
+  security.pam.services.sudo_local.touchIdAuth = true;
+
+  time.timeZone = "{{ .timezone }}";
+
+  programs = {
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+  };
+
+  nix = {
+    enable = false;
+  };
+
+  nixpkgs = {
+    hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
+  };
+}

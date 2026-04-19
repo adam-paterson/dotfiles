@@ -1,0 +1,14 @@
+# 1Password Service Account Token
+#
+# This file is a placeholder. To set up 1Password:
+#
+#   1. Create a 1Password service account at https://my.1password.com/service-accounts/
+#   2. Encrypt the token with your age recipient key:
+#      echo -n 'YOUR_SERVICE_ACCOUNT_TOKEN' | age -r $(cat ~/.ssh/main.pub) -o OP_SERVICE_ACCOUNT_TOKEN.age
+#   3. Move the encrypted file here:
+#      mv OP_SERVICE_ACCOUNT_TOKEN.age private_dot_config/1password/
+#   4. Run `chezmoi add private_dot_config/1password/OP_SERVICE_ACCOUNT_TOKEN.age`
+#
+# The boot-05 script will decrypt this token and authenticate `op`.
+# After 1Password is configured, run `chezmoi apply` again to populate
+# templates that use onepasswordRead.

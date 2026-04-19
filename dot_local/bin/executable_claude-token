@@ -1,0 +1,29 @@
+#!/bin/env bash
+set -euo pipefail
+
+PROVIDER="${1:-anthropic}"
+
+case "$PROVIDER" in
+  anthropic)
+    if command -v op &>/dev/null; then
+      op read "op://Private/anthropic-api-key/credential" 2>/dev/null \
+        || echo "Error: Could not read Anthropic API key from 1Password" >&2
+    else
+      echo "Error: 1Password CLI not installed" >&2
+      exit 1
+    fi
+    ;;
+  openrouter)
+    if command -v op &>/dev/null; then
+      op read "op://Private/openrouter-api-key/credential" 2>/dev/null \
+        || echo "Error: Could not read OpenRouter API key from 1Password" >&2
+    else
+      echo "Error: 1Password CLI not installed" >&2
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Usage: claude-token [anthropic|openrouter]" >&2
+    exit 1
+    ;;
+esac

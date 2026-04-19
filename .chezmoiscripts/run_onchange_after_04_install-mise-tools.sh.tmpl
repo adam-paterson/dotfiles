@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# boot-04: Install mise-managed tools
+# Runs after file updates so mise config is on disk.
+
+{{ $miseConfig := joinPath .chezmoi.homeDir ".config/mise/config.toml" -}}
+{{ $aquaConfig := joinPath .chezmoi.homeDir ".config/aquaproj-aqua/aqua.yaml" -}}
+# mise config: {{ if stat $miseConfig }}{{ output "sha256sum" $miseConfig | trim }}{{ else }}n/a{{ end }}
+# aqua config: {{ if stat $aquaConfig }}{{ output "sha256sum" $aquaConfig | trim }}{{ else }}n/a{{ end }}
+
+echo ":: [04] Installing mise-managed tools"
+
+# Source nix environment and ensure tool bin dirs are on PATH
+{{ include ".chezmoitemplates/shell/source_nix_env.sh" -}}
+
+aqua_bin_dir="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin"
+if [[ -d "$aqua_bin_dir" ]]; then
+    export PATH="$aqua_bin_dir:$PATH"
+fi
+
+source_aqua_config="{{ joinPath .chezmoi.sourceDir "private_dot_config/aquaproj-aqua/aqua.yaml" }}"
+AQUA_CONFIG_PATH="$HOME/.config/aquaproj-aqua/aqua.yaml"
+if [[ -f "$AQUA_CONFIG_PATH" ]]; then
+    :
+elif [[ -f "$source_aqua_config" ]]; then
+    AQUA_CONFIG_PATH="$source_aqua_config"
+else
+    echo "    Skipped (aqua config not found)"
+    exit 0
+fi
+
+export AQUA_GLOBAL_CONFIG="$AQUA_CONFIG_PATH"
+export AQUA_CONFIG="$AQUA_CONFIG_PATH"
+
+# Use the aqua-managed mise binary directly
+mise_cmd="$aqua_bin_dir/mise"
+if [[ ! -x "$mise_cmd" ]]; then
+    echo "    Error: aqua-managed mise not found at $mise_cmd"
+    echo "    Ensure jdx/mise is in your aqua.yaml and run boot-03 first."
+    exit 1
+fi
+
+if ! "$mise_cmd" --version >/dev/null 2>&1; then
+    echo "    Error: mise failed to execute"
+    exit 1
+fi
+
+# Activate mise so shims are available in this shell
+eval "$("$mise_cmd" activate bash)"
+
+# cd to HOME to avoid mise warnings about missing CWD
+cd "$HOME"
+
+# npm-backed tools need node available during version resolution
+if ! command -v npm &>/dev/null; then
+    "$mise_cmd" install --yes node
+    eval "$("$mise_cmd" activate bash)"
+fi
+
+"$mise_cmd" install --yes
+"$mise_cmd" reshim
+echo "    Done"

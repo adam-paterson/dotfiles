@@ -1,0 +1,107 @@
+{ pkgs, ... }:
+
+{
+  environment.systemPackages = with pkgs; [
+    git
+    curl
+    wget
+    jq
+    fd
+    ripgrep
+    bat
+    eza
+    fzf
+    tmux
+    delta
+    unzip
+    gnupg
+    pinentry_mac
+    openssh
+    starship
+    just
+    age
+  ];
+
+  environment.variables.EDITOR = "nvim";
+
+  homebrew = {
+    enable = true;
+    onActivation = {
+      autoUpdate = false;
+      upgrade = true;
+      cleanup = "zap";
+    };
+
+{{- $installMasApps := false }}
+{{- if hasKey . "installMasApps" }}{{ $installMasApps = .installMasApps }}{{ end }}
+{{- if $installMasApps }}
+    masApps = {
+      {{- range .homebrew.masApps.shared }}
+      {{ index . 0 }} = {{ index . 1 }};
+      {{- end }}
+      {{- if .work }}
+      {{- range .homebrew.masApps.work }}
+      {{ index . 0 }} = {{ index . 1 }};
+      {{- end }}
+      {{- end }}
+      {{- if .private }}
+      {{- range .homebrew.masApps.private }}
+      {{ index . 0 }} = {{ index . 1 }};
+      {{- end }}
+      {{- end }}
+    };
+{{- else }}
+    masApps = {};
+{{- end }}
+
+    taps = [
+      "homebrew/cask"
+      "homebrew/core"
+      {{- range .homebrew.taps.shared }}
+      {{ . | quote }}
+      {{- end }}
+      {{- if .work }}
+      {{- range .homebrew.taps.work }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+      {{- if .private }}
+      {{- range .homebrew.taps.private }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+    ];
+
+    brews = [
+      {{- range .homebrew.brews.shared }}
+      {{ . | quote }}
+      {{- end }}
+      {{- if .work }}
+      {{- range .homebrew.brews.work }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+      {{- if .private }}
+      {{- range .homebrew.brews.private }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+    ];
+
+    casks = [
+      {{- range .homebrew.casks.shared }}
+      {{ . | quote }}
+      {{- end }}
+      {{- if .work }}
+      {{- range .homebrew.casks.work }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+      {{- if .private }}
+      {{- range .homebrew.casks.private }}
+      {{ . | quote }}
+      {{- end }}
+      {{- end }}
+    ];
+  };
+}

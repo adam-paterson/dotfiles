@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "dracula",
+  "model": "anthropic/claude-sonnet-4-20250514",
+  "small_model": "anthropic/claude-haiku-4-20250414",
+  "default_agent": "build",
+  "agent": {
+    "build": {
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "variant": "xhigh",
+      "options": { "store": false },
+      "description": "Default implementation agent for daily coding work."
+    },
+    "plan": {
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "variant": "xhigh",
+      "options": { "store": false },
+      "description": "Planning agent for multi-step and spec-first tasks."
+    }
+  },
+  "watcher": {
+    "ignore": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/.direnv/**",
+      "**/.cache/**"
+    ]
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 16384
+  },
+  "share": "manual",
+  "autoupdate": "notify",
+  "permission": {
+    "edit": "ask",
+    "bash": "ask",
+    "webfetch": "ask",
+    "websearch": "ask"
+  }
+}

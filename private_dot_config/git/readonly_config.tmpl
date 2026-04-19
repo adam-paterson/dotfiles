@@ -1,0 +1,73 @@
+[alias]
+	br = "branch"
+	ci = "commit"
+	co = "checkout"
+	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+	last = "log -1 HEAD"
+	lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+	st = "status -sb"
+	unstage = "reset HEAD --"
+
+[ignore]
+	file = "$HOME/.config/git/ignore"
+
+[color]
+	ui = true
+
+[commit]
+	gpgsign = true
+
+[core]
+	editor = "nvim"
+	longpaths = true
+{{- if eq .osid "darwin" }}
+	pager = "delta"
+{{- else }}
+	pager = "delta"
+{{- end }}
+	excludesFile = "$HOME/.config/git/.global-ignore"
+
+[delta]
+	dark = true
+	features = "catppuccin-mocha"
+	hyperlinks = true
+	line-numbers = true
+	navigate = true
+	side-by-side = true
+
+[gpg]
+	format = "ssh"
+
+[gpg "ssh"]
+{{- if eq .osid "darwin" }}
+	program = "{{ .chezmoi.homeDir }}/.local/bin/op-ssh-sign"
+{{- else }}
+	program = "/usr/bin/op-ssh-sign"
+{{- end }}
+
+[init]
+	defaultBranch = "main"
+
+[interactive]
+	diffFilter = "delta --color-only"
+
+[merge]
+	autoStash = true
+	conflictstyle = "zdiff3"
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[rebase]
+	autoStash = true
+
+[tag]
+	gpgSign = true
+
+[user]
+	email = {{ .gitEmail | quote }}
+	name = {{ .gitUsername | quote }}
+	signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn"

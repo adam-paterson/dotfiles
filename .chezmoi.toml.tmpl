@@ -1,0 +1,39 @@
+encryption = "age"
+
+{{ $hostname := promptStringOnce . "hostname" "Hostname" .chezmoi.hostname | lower }}
+{{ $headless := promptBoolOnce . "headless" "Is this a headless server?" false }}
+{{ $work := promptBoolOnce . "work" "Is this a work machine?" false }}
+{{ $private := promptBoolOnce . "private" "Is this a personal machine?" true }}
+{{ $useEncryption := promptBoolOnce . "useEncryption" "Use encryption (age)?" true }}
+{{ $gitUsername := promptStringOnce . "gitUsername" "Git username" "Adam Paterson" }}
+{{ $gitEmail := promptStringOnce . "gitEmail" "Git email" "hello@adampaterson.co.uk" }}
+{{ $timezone := promptStringOnce . "timezone" "Timezone" "Europe/London" }}
+{{ $installMasApps := promptBoolOnce . "installMasApps" "Install Mac App Store apps?" false }}
+
+[data]
+hostname = {{ $hostname | quote }}
+platform = {{ .chezmoi.os | quote }}
+osid = {{ .chezmoi.os | quote }}
+headless = {{ $headless }}
+private = {{ $private }}
+work = {{ $work }}
+useEncryption = {{ $useEncryption }}
+gitUsername = {{ $gitUsername | quote }}
+gitEmail = {{ $gitEmail | quote }}
+timezone = {{ $timezone | quote }}
+installMasApps = {{ $installMasApps }}
+
+[edit]
+command = "nvim"
+
+[diff]
+pager = "sh -c 'delta --config ~/.config/delta/config --paging=never || less -FRX'"
+
+[onepassword]
+prompt = false
+
+{{ if $useEncryption }}
+[age]
+identity = "{{ .chezmoi.homeDir }}/.ssh/main"
+recipient = "{{ .chezmoi.homeDir }}/.ssh/main.pub"
+{{ end }}

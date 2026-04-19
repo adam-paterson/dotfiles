@@ -1,0 +1,11 @@
+aerospace:
+  floatingApps:
+    shared:
+      # System applications
+      - id: com.apple.systempreferences
+        comment: System Settings
+      - id: com.apple.Preview
+        comment: Preview
+      # Utilities
+      - id: io.tailscale.ipn.macsys
+        comment: Tailscale

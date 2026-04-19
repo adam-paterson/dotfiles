@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo ":: [boot-01] Initialising Nix configuration"
+
+{{- if eq .osid "darwin" }}
+
+# Include sha256sums of rendered nix files for change detection
+{{ $flake := joinPath .chezmoi.homeDir "nix-config/flake.nix" -}}
+{{- $lock := joinPath .chezmoi.homeDir "nix-config/flake.lock" -}}
+{{- $apps := joinPath .chezmoi.homeDir "nix-config/modules/apps.nix" -}}
+{{- $system := joinPath .chezmoi.homeDir "nix-config/modules/system.nix" -}}
+{{- $hostUsers := joinPath .chezmoi.homeDir "nix-config/modules/host-users.nix" -}}
+# flake.nix: {{ if stat $flake }}{{ output "sha256sum" $flake | trim }}{{ else }}n/a{{ end }}
+# flake.lock: {{ if stat $lock }}{{ output "sha256sum" $lock | trim }}{{ else }}n/a{{ end }}
+# apps.nix: {{ if stat $apps }}{{ output "sha256sum" $apps | trim }}{{ else }}n/a{{ end }}
+# system.nix: {{ if stat $system }}{{ output "sha256sum" $system | trim }}{{ else }}n/a{{ end }}
+# host-users.nix: {{ if stat $hostUsers }}{{ output "sha256sum" $hostUsers | trim }}{{ else }}n/a{{ end }}
+
+NIX_CONFIG_DIR="{{ .chezmoi.homeDir }}/nix-config"
+HOSTNAME="{{ .hostname }}"
+
+if [[ ! -d "$NIX_CONFIG_DIR" ]]; then
+  echo "    Warning: $NIX_CONFIG_DIR not found, skipping"
+  echo "    Run 'chezmoi apply' first to render nix config files"
+  exit 0
+fi
+
+if [[ ! -f "$NIX_CONFIG_DIR/flake.nix" ]]; then
+  echo "    Warning: flake.nix not found in $NIX_CONFIG_DIR"
+  echo "    Run 'chezmoi apply' first to render nix config files"
+  exit 0
+fi
+
+# Ensure ~/nix-config is its own git repo (required for Nix flakes)
+if [[ ! -d "$NIX_CONFIG_DIR/.git" ]]; then
+  echo "    Initialising git repo in $NIX_CONFIG_DIR..."
+  git init "$NIX_CONFIG_DIR"
+  git -C "$NIX_CONFIG_DIR" add .
+  git -C "$NIX_CONFIG_DIR" commit -m "Initial nix-config from chezmoi" --allow-empty
+else
+  # Stage any changes so Nix sees the latest files
+  git -C "$NIX_CONFIG_DIR" add -A
+  if ! git -C "$NIX_CONFIG_DIR" diff --cached --quiet 2>/dev/null; then
+    git -C "$NIX_CONFIG_DIR" commit -m "Update nix-config from chezmoi" --no-verify
+  fi
+fi
+
+# Source nix-daemon if not yet in PATH
+{{ include ".chezmoitemplates/shell/source_nix_env.sh" -}}
+
+if ! command -v darwin-version &>/dev/null 2>&1; then
+  echo "    Installing nix-darwin..."
+  sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake "$NIX_CONFIG_DIR#$HOSTNAME" || true
+else
+  echo "    Switching nix-darwin configuration..."
+  sudo darwin-rebuild switch --flake "$NIX_CONFIG_DIR#$HOSTNAME" || true
+fi
+
+{{- else if eq .osid "linux" }}
+
+echo "    NixOS detected — system configuration managed by NixOS"
+
+{{- else }}
+
+echo "    Skipping Nix initialisation (unsupported OS: {{ .osid }})"
+
+{{- end }}

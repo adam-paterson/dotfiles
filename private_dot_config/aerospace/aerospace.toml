@@ -1,0 +1,486 @@
+# -------------------------------------
+# Core configuration - testings
+# -------------------------------------
+after-startup-command = ["exec-and-forget borders"]
+
+# notify sketchybar * borders when the space changes
+exec-on-workspace-change = [
+  "exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=0",
+]
+
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# Visual settings
+accordion-padding = 30
+default-root-container-layout = "tiles"
+default-root-container-orientation = "auto"
+
+# Key mapping preset. Possible values: (qwerty|dvorak)
+key-mapping.preset = "qwerty"
+
+# Mouse behaviour on focus
+on-focused-monitor-changed = ["move-mouse monitor-lazy-center"]
+
+# Gap configuration
+[gaps]
+inner.vertical = 10
+inner.horizontal = 10
+outer.left = 10
+outer.bottom = 5
+outer.top = [
+  { monitor."^Built-in" = 5 },
+  43,
+]  # 43 to account for the menu bar on the built-in display, 5 for the rest
+outer.right = 10
+
+[mode.main.binding]
+# ============================================================================
+# MODE SWITCHERS - alt-ctrl-[letter] pattern
+# ============================================================================
+
+alt-ctrl-w = [
+  "mode window",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=window",
+]
+
+alt-ctrl-s = [
+  "mode space",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=space",
+]
+
+alt-ctrl-l = [
+  "mode layout",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=layout",
+]
+
+alt-ctrl-a = [
+  "mode app",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=app",
+]
+
+alt-ctrl-m = [
+  "mode maintenance",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=maintenance",
+]
+
+# ============================================================================
+# FREQUENT WINDOW OPERATIONS - Direct access with alt- prefix
+# ============================================================================
+
+# Window focus (vim-style navigation)
+alt-h = "focus left"
+alt-j = "focus down"
+alt-k = "focus up"
+alt-l = "focus right"
+
+alt-left = "focus left"
+alt-right = "focus right"
+alt-up = "focus up"
+alt-down = "focus down"
+
+# Window movement
+alt-shift-h = "move left"
+alt-shift-j = "move down"
+alt-shift-k = "move up"
+alt-shift-l = "move right"
+
+alt-shift-left = "move left"
+alt-shift-right = "move right"
+alt-shift-up = "move up"
+alt-shift-down = "move down"
+
+# ============================================================================
+# FREQUENT WORKSPACE OPERATIONS - Direct access
+# ============================================================================
+
+# Workspace switching
+alt-tab = "workspace-back-and-forth"
+alt-1 = "workspace 1"
+alt-2 = "workspace 2"
+alt-3 = "workspace 3"
+alt-4 = "workspace 4"
+
+# Move window to workspace (stay on current)
+cmd-alt-1 = "move-node-to-workspace 1"
+cmd-alt-2 = "move-node-to-workspace 2"
+cmd-alt-3 = "move-node-to-workspace 3"
+cmd-alt-4 = "move-node-to-workspace 4"
+
+# ============================================================================
+# ESSENTIAL SHORTCUTS
+# ============================================================================
+
+alt-f = "fullscreen"
+
+## App quick Access
+cmd-enter = "exec-and-forget open -na ~/Applications/Ghostty.app"
+
+# ============================================================================
+# WINDOW MODE - Advanced window operations
+# ============================================================================
+# Advanced operations: resize, join, monitor, close (frequent ops moved to main)
+# ============================================================================
+
+[mode.window.binding]
+# Exit mode
+esc = [
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Resize windows
+s = ["resize smart -50"]
+d = ["resize smart +50"]
+shift-s = ["resize smart -100"]
+shift-d = ["resize smart +100"]
+
+# Join containers
+h = [
+  "join-with left",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+j = [
+  "join-with down",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+k = [
+  "join-with up",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+l = [
+  "join-with right",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Monitor operations
+m = [
+  "focus-monitor --wrap-around next",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+shift-m = [
+  "move-node-to-monitor --wrap-around next",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+ctrl-m = [
+  "move-node-to-monitor --wrap-around prev",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Window operations
+q = [
+  "close",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+shift-q = [
+  "close-all-windows-but-current",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick mode switching
+alt-ctrl-l = [
+  "mode layout",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=layout",
+]
+alt-ctrl-a = [
+  "mode app",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=app",
+]
+alt-ctrl-m = [
+  "mode maintenance",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=maintenance",
+]
+
+# ============================================================================
+# SPACE MODE - Advanced workspace operations
+# ============================================================================
+# Advanced operations: move-and-follow, navigation, monitor ops (frequent ops moved to main)
+# ============================================================================
+
+[mode.space.binding]
+# Exit mode
+esc = [
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Move window and follow (advanced operation)
+1 = [
+  "move-node-to-workspace 1",
+  "workspace 1",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+2 = [
+  "move-node-to-workspace 2",
+  "workspace 2",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+3 = [
+  "move-node-to-workspace 3",
+  "workspace 3",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+4 = [
+  "move-node-to-workspace 4",
+  "workspace 4",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Workspace navigation
+left = [
+  "workspace --wrap-around prev",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+right = [
+  "workspace --wrap-around next",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+up = [
+  "workspace --wrap-around prev",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+down = [
+  "workspace --wrap-around next",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+tab = [
+  "workspace-back-and-forth",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Move workspaces between monitors
+shift-left = [
+  "move-workspace-to-monitor --wrap-around prev",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+shift-right = [
+  "move-workspace-to-monitor --wrap-around next",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick mode switching
+alt-ctrl-w = [
+  "mode window",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=window",
+]
+alt-ctrl-l = [
+  "mode layout",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=layout",
+]
+alt-ctrl-a = [
+  "mode app",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=app",
+]
+
+# ============================================================================
+# LAYOUT MODE - Layout switching and container operations
+# ============================================================================
+# Layout types, container operations
+# ============================================================================
+
+[mode.layout.binding]
+# Exit mode
+esc = [
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Layout types
+t = [
+  "layout tiles horizontal vertical",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+c = [
+  "layout accordion horizontal vertical",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+f = [
+  "layout floating tiling",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Orientation control
+h = [
+  "layout tiles horizontal",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+v = [
+  "layout tiles vertical",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Container operations
+r = [
+  "flatten-workspace-tree",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+b = [
+  "balance-sizes",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick layout switching
+slash = [
+  "layout tiles horizontal vertical",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+comma = [
+  "layout accordion horizontal vertical",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+period = [
+  "layout floating tiling",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick mode switching
+alt-ctrl-w = [
+  "mode window",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=window",
+]
+alt-ctrl-a = [
+  "mode app",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=app",
+]
+alt-ctrl-m = [
+  "mode maintenance",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=maintenance",
+]
+
+# ============================================================================
+# APP MODE - Application launching
+# ============================================================================
+# Launch applications with semantic keys matching workspace assignments
+# ============================================================================
+
+[mode.app.binding]
+# Exit mode
+esc = [
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Application launching (semantic keys)
+t = [
+  'exec-and-forget open -na "Ghostty"',
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+c = [
+  'exec-and-forget open -a "Calendar"',
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+f = [
+  'exec-and-forget open -a "finder"',
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick mode switching
+alt-ctrl-w = [
+  "mode window",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=window",
+]
+alt-ctrl-s = [
+  "mode space",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=space",
+]
+alt-ctrl-m = [
+  "mode maintenance",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=maintenance",
+]
+
+# ============================================================================
+# MAINTENANCE MODE - System utilities and configuration
+# ============================================================================
+# Less frequently used system operations, config management, themes
+# ============================================================================
+
+[mode.maintenance.binding]
+# Exit mode
+esc = [
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Configuration management
+r = [
+  "reload-config",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+shift-r = [
+  "exec-and-forget killall AeroSpace && open -a AeroSpace",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# System utilities
+s = [
+  "exec-and-forget screencapture -ic",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+shift-s = [
+  "exec-and-forget screencapture -i ~/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png",
+  "mode main",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=main",
+]
+
+# Quick mode switching
+alt-ctrl-w = [
+  "mode window",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=window",
+]
+alt-ctrl-s = [
+  "mode space",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=space",
+]
+alt-ctrl-l = [
+  "mode layout",
+  "exec-and-forget ~/.nix-profile/bin/sketchybar --trigger aerospace_mode_change MODE=layout",
+]
+
+# ============================================================================
+# AUTOMATIC WINDOW ASSIGNMENT
+# ============================================================================
+[workspace-to-monitor-force-assignment]
+1 = "main"
+2 = "^Built-in.*"
+3 = "^DELL"
+4 = "^Sidecar"

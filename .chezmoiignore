@@ -1,0 +1,82 @@
+# --------------------
+# Always ignore (metadata)
+
+*.tmp
+README.md
+
+# Nix lockfiles (managed by nix flake lock in ~/nix-config git repo)
+nix-config/flake.lock
+nix-config/.flake-darwin.lock
+nix-config/.flake-linux.lock
+.editorconfig
+.git/
+.gitignore
+.github/
+.pre-commit-config.yaml
+init.sh
+docs/
+node_modules/
+selene.toml
+stylua.toml
+treefmt.toml
+
+# Password manager install hook (not a target file)
+.install-password-manager.sh
+
+# ─────────────────────────────────────────────────────────────────────────────
+# macOS-only exclusions (skip on Linux)
+# ─────────────────────────────────────────────────────────────────────────────
+{{- if ne .chezmoi.os "darwin" }}
+
+# macOS-specific nix modules
+nix-config/modules/system.nix
+nix-config/modules/apps.nix
+nix-config/modules/host-users.nix
+
+# macOS-specific scripts
+.chezmoiscripts/run_onchange_before_01_init-nix.sh
+
+# macOS-only GUI apps
+.config/aerospace/
+.config/borders/
+.config/ghostty/
+.config/hammerspoon/
+.config/karabiner/
+{{- end }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Linux/VPS exclusions (skip on macOS)
+# ─────────────────────────────────────────────────────────────────────────────
+{{- if eq .chezmoi.os "darwin" }}
+
+# NixOS-specific config (only needed on Linux VPS)
+nix-config/modules/linux-system.nix
+{{- end }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Headless/server exclusions (no GUI)
+# ─────────────────────────────────────────────────────────────────────────────
+{{- if .headless }}
+
+# GUI apps
+.config/aerospace/
+.config/borders/
+.config/ghostty/
+.config/hammerspoon/
+.config/karabiner/
+.config/nvim/
+{{- end }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Encryption gate - exclude secrets when encryption is disabled
+# ─────────────────────────────────────────────────────────────────────────────
+{{- if not .useEncryption }}
+private_dot_config/1password/
+private_dot_ssh/
+{{- end }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Ignored directories
+# ─────────────────────────────────────────────────────────────────────────────
+backup/
+tests/
