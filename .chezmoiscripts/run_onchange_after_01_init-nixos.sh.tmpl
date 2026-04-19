@@ -23,6 +23,16 @@ if [[ ! -f "$NIX_CONFIG_DIR/flake.nix" ]]; then
   exit 0
 fi
 
+# Copy the existing hardware-configuration.nix into the flake directory
+# (required because Nix flakes can't reference absolute paths in pure eval mode)
+HW_CONFIG_SRC="/etc/nixos/hardware-configuration.nix"
+HW_CONFIG_DST="$NIX_CONFIG_DIR/modules/hardware-configuration.nix"
+
+if [[ -f "$HW_CONFIG_SRC" ]] && [[ ! -f "$HW_CONFIG_DST" ]]; then
+  echo "    Copying hardware-configuration.nix into nix-config..."
+  cp "$HW_CONFIG_SRC" "$HW_CONFIG_DST"
+fi
+
 # Ensure ~/nix-config is its own git repo (required for Nix flakes)
 # Disable commit signing for this repo (op-ssh-sign may not be available yet)
 if [[ ! -d "$NIX_CONFIG_DIR/.git" ]]; then
