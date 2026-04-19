@@ -60,9 +60,11 @@
 
   programs.zsh.enable = true;
 
+{{- if ne .chezmoi.username "root" }}
   users.users.{{ .chezmoi.username }} = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
   };
+{{- end }}
 }
