@@ -63,6 +63,7 @@
         specialArgs = { inherit inputs self hostname system; };
         modules = [
           ./modules/linux-system.nix
+          /etc/nixos/hardware-configuration.nix
         ];
       };
     };
