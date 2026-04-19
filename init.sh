@@ -2,8 +2,8 @@
 set -eu
 
 DOTFILES_REPO="${DOTFILES_REPO:-adam-paterson/dotfiles}"
-DOTFILES_REF="${DOTFILES_REF:-}"
-DOTFILES_SSH="${DOTFILES_SSH:-}"
+DOTFILES_REF="${DOTFIELDS_REF:-}"
+DOTFILES_SSH="${DOTFIELDS_SSH:-}"
 
 usage() {
 	cat >&2 <<'EOF'
@@ -59,9 +59,23 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-# Install chezmoi if missing or too old
+# Install or upgrade chezmoi
 install_chezmoi() {
-	echo ":: Installing latest chezmoi..."
+	echo ":: Installing chezmoi..."
+
+	# On NixOS, use nix to install (avoids dynamic linker issues)
+	if [ -f /etc/NIXOS ]; then
+		if command -v nix >/dev/null 2>&1; then
+			echo "    Installing via nix profile (NixOS)..."
+			nix profile install nixpkgs#chezmoi 2>/dev/null || nix-env -iA nixpkgs.chezmoi 2>/dev/null || {
+				echo "error: failed to install chezmoi via nix" >&2
+				exit 1
+			}
+			return 0
+		fi
+	fi
+
+	# On all other systems, use the official installer
 	if command -v curl >/dev/null 2>&1; then
 		sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
 	elif command -v wget >/dev/null 2>&1; then
@@ -72,12 +86,13 @@ install_chezmoi() {
 	fi
 }
 
+NEEDED_MAJOR=2
+NEEDED_MINOR=69
+
 if ! command -v chezmoi >/dev/null 2>&1; then
 	install_chezmoi
 else
-	# Check if installed version meets minimum requirement
-	REQUIRED_MAJOR=2
-	REQUIRED_MINOR=69
+	# Check version meets minimum requirement
 	CURRENT_VERSION=$(chezmoi --version 2>/dev/null | head -1 | sed 's/.*version //' | sed 's/[^0-9.].*//')
 	CURRENT_MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
 	CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
@@ -85,22 +100,25 @@ else
 	NEEDS_UPGRADE=0
 	if [ -z "$CURRENT_MAJOR" ] || [ -z "$CURRENT_MINOR" ]; then
 		NEEDS_UPGRADE=1
-	elif [ "$CURRENT_MAJOR" -lt "$REQUIRED_MAJOR" ] 2>/dev/null; then
+	elif [ "$CURRENT_MAJOR" -lt "$NEEDED_MAJOR" ] 2>/dev/null; then
 		NEEDS_UPGRADE=1
-	elif [ "$CURRENT_MAJOR" -eq "$REQUIRED_MAJOR" ] && [ "$CURRENT_MINOR" -lt "$REQUIRED_MINOR" ] 2>/dev/null; then
+	elif [ "$CURRENT_MAJOR" -eq "$NEEDED_MAJOR" ] && [ "$CURRENT_MINOR" -lt "$NEEDED_MINOR" ] 2>/dev/null; then
 		NEEDS_UPGRADE=1
 	fi
 
 	if [ "$NEEDS_UPGRADE" -eq 1 ]; then
-		echo ":: Installed chezmoi is too old ($CURRENT_VERSION, need >= 2.69.0)"
+		echo ":: Installed chezmoi is too old ($CURRENT_VERSION, need >= $NEEDED_MAJOR.$NEEDED_MINOR.0)"
 		install_chezmoi
 	fi
-
-	# Ensure the new binary is on PATH
-	if [ -x "$HOME/.local/bin/chezmoi" ]; then
-		export PATH="$HOME/.local/bin:$PATH"
-	fi
 fi
+
+# Ensure PATH includes common chezmoi locations
+for dir in "$HOME/.local/bin" "$HOME/bin" "/nix/var/nix/profiles/default/bin"; do
+	if [ -d "$dir" ]; then
+		PATH="$dir:$PATH"
+	fi
+done
+export PATH
 
 # Build the chezmoi init command
 set --
