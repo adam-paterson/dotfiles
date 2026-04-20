@@ -3,6 +3,9 @@ set -euo pipefail
 
 echo ":: [01] Preparing and applying NixOS configuration"
 
+# Source nix environment if available (needed if nix not yet in PATH)
+{{ include ".chezmoitemplates/shell/source_nix_env.sh" -}}
+
 {{ $flake := joinPath .chezmoi.homeDir "nix-config/flake.nix" -}}
 # flake.nix: {{ if stat $flake }}{{ output "sha256sum" $flake | trim }}{{ else }}n/a{{ end }}
 
@@ -75,6 +78,17 @@ done
 if [[ "$MISSING" -eq 1 ]]; then
   echo "    Cannot proceed with missing required files" >&2
   exit 1
+fi
+
+# ── Ensure git is available (required for Nix flakes) ──────────────────
+# git may not be installed yet on a fresh NixOS system (only becomes a
+# system package after the first nixos-rebuild switch).  Use nix shell to
+# get it temporarily if needed.
+if ! command -v git >/dev/null 2>&1; then
+  echo "    git not found, entering nix shell with git..."
+  # Re-exec this script inside nix shell so git is available for the rest
+  nix shell nixpkgs#git --command bash "$0"
+  exit $?
 fi
 
 # ── nix-config git repo (required for Nix flakes) ──────────────────────
