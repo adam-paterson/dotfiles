@@ -37,7 +37,11 @@
       enable = true;
       settings = {
         PasswordAuthentication = false;
+{{- if ne .chezmoi.username "root" }}
         PermitRootLogin = "no";
+{{- else }}
+        PermitRootLogin = "prohibit-password";
+{{- end }}
       };
     };
 
