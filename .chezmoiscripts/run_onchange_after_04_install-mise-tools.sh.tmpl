@@ -52,6 +52,13 @@ eval "$("$mise_cmd" activate bash)"
 # cd to HOME to avoid mise warnings about missing CWD
 cd "$HOME"
 
+# Fresh NixOS machines can hit a Node source-build path before python exists in
+# the current shell. Bootstrap python first so Node configure has `python`.
+if ! command -v python &>/dev/null; then
+    "$mise_cmd" install --yes python
+    eval "$("$mise_cmd" activate bash)"
+fi
+
 # npm-backed tools need node available during version resolution
 if ! command -v npm &>/dev/null; then
     "$mise_cmd" install --yes node
