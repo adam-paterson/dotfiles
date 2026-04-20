@@ -63,6 +63,32 @@ darwin-check:
 [group('darwin')]
 darwin-build:
     cd "$HOME/nix-config" && nix build .#darwinConfigurations.{{ "{{hostname}}" }}.system
+{{- else if eq .platform "linux" }}
+
+############################################################################
+#  NixOS
+############################################################################
+
+# Build and switch NixOS configuration (review before applying!)
+[group('nixos')]
+nixos:
+    cd "$HOME/nix-config" && sudo nixos-rebuild switch --flake .#{{ "{{hostname}}" }} --show-trace
+
+# Build NixOS configuration without switching
+[group('nixos')]
+nixos-build:
+    cd "$HOME/nix-config" && nix build .#nixosConfigurations.{{ "{{hostname}}" }}.system --show-trace
+
+# Check NixOS flake without building
+[group('nixos')]
+nixos-check:
+    cd "$HOME/nix-config" && nix flake check
+
+# Dry run — show what would change without applying
+[group('nixos')]
+nixos-dry-run:
+    cd "$HOME/nix-config" && sudo nixos-rebuild dry-run --flake .#{{ "{{hostname}}" }} --show-trace
+
 {{- end }}
 
 ############################################################################
@@ -85,6 +111,12 @@ upp input:
 [group('nix')]
 history:
     nix profile history --profile /nix/var/nix/profiles/system
+{{- else if eq .platform "linux" }}
+
+# List all NixOS generations
+[group('nix')]
+history:
+    sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
 {{- end }}
 
 # Open a nix repl with nixpkgs
@@ -98,6 +130,12 @@ repl:
 [group('nix')]
 clean days='7':
     sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than {{ "{{days}}" }}d
+{{- else if eq .platform "linux" }}
+
+# Remove all generations older than N days
+[group('nix')]
+clean days='7':
+    sudo nix-collect-garbage --delete-older-than {{ "{{days}}" }}d
 {{- end }}
 
 # Garbage collect unused nix store entries

@@ -55,15 +55,14 @@
 {{- else if eq .platform "linux" }}
     let
       hostname = "{{ .hostname }}";
-      system = "x86_64-linux";
+      system = "{{ .chezmoi.arch }}-linux";
     in
     {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs self hostname system; };
         modules = [
-          ./modules/linux-system.nix
-          ./modules/hardware-configuration.nix
+          ./nixos.nix
         ];
       };
     };

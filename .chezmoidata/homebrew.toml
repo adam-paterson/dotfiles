@@ -1,0 +1,97 @@
+[homebrew]
+[homebrew.taps]
+shared = ["nikitabobko/tap", "FelixKratz/formulae"]
+work = ["azure/functions"]
+private = []
+
+[homebrew.casks]
+shared = [
+  "cmux",
+  "dockdoor",
+  "visual-studio-code",
+  "hammerspoon",
+  "karabiner-elements",
+  "keyboardcleantool",
+  "ghostty",
+  "notion",
+  "nikitabobko/tap/aerospace",
+  "obs",
+  "orbstack",
+  "raycast",
+  "slidepilot",
+  "stats",
+  "tailscale-app",
+  "google-chrome",
+  "chatgpt-atlas",
+  "chatgpt",
+  "obsidian",
+]
+work = []
+private = [
+  "discord",
+  "iina",
+  "logseq",
+  "setapp",
+  "soundsource",
+  "telegram",
+  "whatsapp",
+]
+
+[homebrew.brews]
+shared = ["macos-trash", "mole", "borders"]
+work = ["cliclick", "azure-cli", "azure-functions-core-tools"]
+private = ["mas"]
+
+[homebrew.masApps]
+shared = []
+work = []
+private = [
+  [
+    "KeystrokePro",
+    "1572206224",
+  ],
+  [
+    "Messenger",
+    "1480068668",
+  ],
+  [
+    "Texifier",
+    "458866234",
+  ],
+  [
+    "Notability",
+    "360593530",
+  ],
+  [
+    "Goodnotes",
+    "1444383602",
+  ],
+  [
+    "MSWord",
+    "462054704",
+  ],
+  [
+    "MSExcel",
+    "462058435",
+  ],
+  [
+    "MSPowerPoint",
+    "462062816",
+  ],
+  [
+    "OneDrive",
+    "823766827",
+  ],
+  [
+    "WeChat",
+    "836500024",
+  ],
+  [
+    "QQ",
+    "451108668",
+  ],
+  [
+    "Spokenly",
+    "6740315592",
+  ],
+]

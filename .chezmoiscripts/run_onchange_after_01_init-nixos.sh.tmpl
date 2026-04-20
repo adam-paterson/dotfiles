@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo ":: [01] Applying NixOS configuration"
+echo ":: [01] Preparing and applying NixOS configuration"
 
 {{ $flake := joinPath .chezmoi.homeDir "nix-config/flake.nix" -}}
-{{- $lock := joinPath .chezmoi.homeDir "nix-config/flake.lock" -}}
-{{- $system := joinPath .chezmoi.homeDir "nix-config/modules/linux-system.nix" -}}
 # flake.nix: {{ if stat $flake }}{{ output "sha256sum" $flake | trim }}{{ else }}n/a{{ end }}
-# flake.lock: {{ if stat $lock }}{{ output "sha256sum" $lock | trim }}{{ else }}n/a{{ end }}
-# linux-system.nix: {{ if stat $system }}{{ output "sha256sum" $system | trim }}{{ else }}n/a{{ end }}
 
 NIX_CONFIG_DIR="{{ .chezmoi.homeDir }}/nix-config"
+NIXOS_DIR="$NIX_CONFIG_DIR/nixos"
 HOSTNAME="{{ .hostname }}"
 
 if [[ ! -d "$NIX_CONFIG_DIR" ]]; then
@@ -20,28 +17,74 @@ fi
 
 if [[ ! -f "$NIX_CONFIG_DIR/flake.nix" ]]; then
   echo "    Warning: flake.nix not found in $NIX_CONFIG_DIR"
+  echo "    Run 'chezmoi apply' first to render nix config files"
   exit 0
 fi
 
-# Copy the existing hardware-configuration.nix into the flake directory
-# (required because Nix flakes can't reference absolute paths in pure eval mode)
-HW_CONFIG_SRC="/etc/nixos/hardware-configuration.nix"
-HW_CONFIG_DST="$NIX_CONFIG_DIR/modules/hardware-configuration.nix"
+mkdir -p "$NIXOS_DIR"
 
-if [[ -f "$HW_CONFIG_SRC" ]] && [[ ! -f "$HW_CONFIG_DST" ]]; then
-  echo "    Copying hardware-configuration.nix into nix-config..."
-  cp "$HW_CONFIG_SRC" "$HW_CONFIG_DST"
+# ── hardware-configuration.nix ──────────────────────────────────────────
+# This file is machine-specific (boot config, filesystem UUIDs, etc.) and
+# MUST come from the running system, never from git.
+HW_SRC="/etc/nixos/hardware-configuration.nix"
+HW_DST="$NIXOS_DIR/hardware-configuration.nix"
+
+if [[ -f "$HW_SRC" ]]; then
+  echo "    Copying hardware-configuration.nix from /etc/nixos/"
+  cp "$HW_SRC" "$HW_DST"
+  # Verify the copy is valid Nix
+  if ! head -1 "$HW_DST" | grep -q '{'; then
+    echo "    Error: copied file does not look like valid Nix" >&2
+    rm -f "$HW_DST"
+    exit 1
+  fi
+else
+  echo "    Error: $HW_SRC not found" >&2
+  echo "    On NixOS this file should always exist. Is this really NixOS?" >&2
+  exit 1
 fi
 
-# Ensure ~/nix-config is its own git repo (required for Nix flakes)
-# Disable commit signing for this repo (op-ssh-sign may not be available yet)
+# ── networking.nix ─────────────────────────────────────────────────────
+# This file is machine-specific (IPs, gateway, MAC, routes) and MUST come
+# from the running system, never from git.
+NET_SRC="/etc/nixos/networking.nix"
+NET_DST="$NIXOS_DIR/networking.nix"
+
+if [[ -f "$NET_SRC" ]]; then
+  echo "    Copying networking.nix from /etc/nixos/"
+  cp "$NET_SRC" "$NET_DST"
+  # Verify the copy is valid Nix
+  if ! head -1 "$NET_DST" | grep -q '{'; then
+    echo "    Error: copied file does not look like valid Nix" >&2
+    rm -f "$NET_DST"
+    exit 1
+  fi
+else
+  echo "    Warning: $NET_SRC not found" >&2
+  echo "    Continuing without networking.nix (may cause network issues)" >&2
+fi
+
+# ── Verify all imports exist ────────────────────────────────────────────
+MISSING=0
+for f in hardware-configuration.nix; do
+  if [[ ! -f "$NIXOS_DIR/$f" ]]; then
+    echo "    Error: required file $NIXOS_DIR/$f is missing" >&2
+    MISSING=1
+  fi
+done
+if [[ "$MISSING" -eq 1 ]]; then
+  echo "    Cannot proceed with missing required files" >&2
+  exit 1
+fi
+
+# ── nix-config git repo (required for Nix flakes) ──────────────────────
 if [[ ! -d "$NIX_CONFIG_DIR/.git" ]]; then
   echo "    Initialising git repo in $NIX_CONFIG_DIR..."
   git init "$NIX_CONFIG_DIR"
   git -C "$NIX_CONFIG_DIR" config commit.gpgsign false
   git -C "$NIX_CONFIG_DIR" config commit.sshsign false
   git -C "$NIX_CONFIG_DIR" add .
-  git -C "$NIX_CONFIG_DIR" commit -m "Initial nix-config from chezmoi" --allow-empty
+  git -C "$NIX_CONFIG_DIR" commit -m "Initial nix-config from chezmoi"
 else
   git -C "$NIX_CONFIG_DIR" config commit.gpgsign false
   git -C "$NIX_CONFIG_DIR" config commit.sshsign false
@@ -51,5 +94,6 @@ else
   fi
 fi
 
+# ── Apply NixOS configuration ──────────────────────────────────────────
 echo "    Switching NixOS configuration..."
-sudo nixos-rebuild switch --flake "$NIX_CONFIG_DIR#$HOSTNAME" --show-trace || true
+sudo nixos-rebuild switch --flake "$NIX_CONFIG_DIR#$HOSTNAME" --show-trace

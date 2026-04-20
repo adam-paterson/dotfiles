@@ -1,0 +1,8 @@
+[nix]
+systemPackages = []
+sshKeys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGnvDtrxaduGQBC/YkKm4QcEvS8Tbn+h8pPLDi5d6wch"]
+
+[nix.homePkgs]
+shared = ["git", "age"]
+work = []
+private = []

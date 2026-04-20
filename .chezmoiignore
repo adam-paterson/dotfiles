@@ -50,11 +50,17 @@ nix-config/modules/host-users.nix
 {{- if eq .chezmoi.os "darwin" }}
 
 # NixOS-specific config (only needed on Linux VPS)
-nix-config/modules/linux-system.nix
+nix-config/nixos.nix
 
 # NixOS-specific scripts
 .chezmoiscripts/run_onchange_after_01_init-nixos.sh
 {{- end }}
+
+# Machine-specific NixOS files — these must come from /etc/nixos/ on each server,
+# never from chezmoi source. They contain hardware UUIDs, filesystem layouts,
+# and network config unique to each machine.
+nix-config/nixos/hardware-configuration.nix
+nix-config/nixos/networking.nix
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Headless/server exclusions (no GUI)
