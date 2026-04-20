@@ -55,7 +55,13 @@
 {{- else if eq .platform "linux" }}
     let
       hostname = "{{ .hostname }}";
-      system = "{{ .chezmoi.arch }}-linux";
+      {{- $arch := .chezmoi.arch -}}
+      {{- if eq $arch "amd64" -}}
+        {{- $arch = "x86_64" -}}
+      {{- else if eq $arch "arm64" -}}
+        {{- $arch = "aarch64" -}}
+      {{- end -}}
+      system = "{{ $arch }}-linux";
     in
     {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
