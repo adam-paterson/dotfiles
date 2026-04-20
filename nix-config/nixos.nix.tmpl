@@ -32,15 +32,39 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  services = {
+services = {
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
-{{- if ne .chezmoi.username "root" }}
+{{- if .nixosUser }}
         PermitRootLogin = "no";
 {{- else }}
         PermitRootLogin = "prohibit-password";
+{{- end }}
+      };
+    };
+
+    logrotate.checkConfig = false;
+  };
+
+  users.users.root.openssh.authorizedKeys.keys = [
+{{- range .nix.sshKeys }}
+    {{ . | quote }}
+{{- end }}
+  ];
+
+{{- if .nixosUser }}
+  users.users.{{ .nixosUser }} = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+{{- range .nix.sshKeys }}
+      {{ . | quote }}
+{{- end }}
+    ];
+  };
 {{- end }}
       };
     };

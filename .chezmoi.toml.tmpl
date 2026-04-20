@@ -8,6 +8,7 @@ encryption = "age"
 {{ $gitUsername := promptStringOnce . "gitUsername" "Git username" "Adam Paterson" }}
 {{ $gitEmail := promptStringOnce . "gitEmail" "Git email" "hello@adampaterson.co.uk" }}
 {{ $timezone := promptStringOnce . "timezone" "Timezone" "Europe/London" }}
+{{ $nixosUser := promptStringOnce . "nixosUser" "NixOS user (empty to skip user creation)" "" }}
 {{ $installMasApps := promptBoolOnce . "installMasApps" "Install Mac App Store apps?" false }}
 
 [data]
@@ -22,6 +23,7 @@ installMasApps = {{ $installMasApps }}
 gitUsername = {{ $gitUsername | quote }}
 gitEmail = {{ $gitEmail | quote }}
 timezone = {{ $timezone | quote }}
+nixosUser = {{ $nixosUser | quote }}
 
 [edit]
 command = "nvim"
