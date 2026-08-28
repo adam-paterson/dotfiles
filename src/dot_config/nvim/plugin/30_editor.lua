@@ -3,8 +3,8 @@
 -- General editor plugins and configuration
 -- ═══════════════════════════════════════════════════════════
 
-local now, now_if_args, later, gh, autocommand =
-	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd
+local now, now_if_args, later, gh, autocommand, nmap_leader =
+	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd, Config.nmap_leader
 
 now(function()
 	require("mini.basics").setup({
@@ -246,4 +246,12 @@ end)
 
 later(function()
 	require("mini.visits").setup()
+end)
+
+now(function()
+  vim.pack.add({ gh 'MagicDuck/grug-far.nvim' })
+  require('grug-far').setup({})
+
+  nmap_leader('fR', '<Cmd>lua require("grug-far").open()<Cr>', 'Replace')
+  
 end)

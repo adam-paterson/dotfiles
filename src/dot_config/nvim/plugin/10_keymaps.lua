@@ -3,14 +3,15 @@
 -- This file contains definitions of custom general
 -- and Leader mappings.
 -- ═══════════════════════════════════════════════════════════
-local icons, icon, nmap, imap_expr, nmap_leader, xmap_leader =
-	Config.icons, Config.icon, Config.nmap, Config.imap_expr, Config.nmap_leader, Config.xmap_leader
+local icons, icon, nmap, imap_expr, nmap_leader, xmap_leader, tmap_leader =
+	Config.icons, Config.icon, Config.nmap, Config.imap_expr, Config.nmap_leader, Config.xmap_leader, Config.tmap_leader
 
 -- An example helper to create a Normal mode mapping
 
 -- ─ General ─────────────────────────────────────────────────
 imap_expr("<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]])
 imap_expr("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
+
 -- ─ Leader Mappings ─────────────────────────────────────────
 
 -- Create a global table with information about Leader groups in certain modes.
@@ -45,7 +46,11 @@ nmap_leader("bw", "<Cmd>lua MiniBufremove.wipeout()<CR>", icon("wipeout") .. " W
 nmap_leader("bW", "<Cmd>lua MiniBufremove.wipeout(0, true)<CR>", icon("wipeout") .. " Wipeout!")
 
 -- ─ [e] Explorer ─────────────────────────────────────────────
-local explore_at_file = "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>"
+-- Toggle explorer; opens anchored at current file (like nvim-tree)
+local explore_at_file = function()
+	local path = vim.api.nvim_buf_get_name(0)
+	if not MiniFiles.close() then MiniFiles.open(path ~= "" and path or nil) end
+end
 local explore_quickfix = function()
 	vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and "cclose" or "copen")
 end
@@ -177,5 +182,20 @@ nmap_leader("vL", "<Cmd>lua MiniVisits.remove_label()<CR>", icon("tag") .. " Rem
 
 -- q is for 'Quit'
 nmap("q", "<cmd>qa<CR>", icon("exit") .. " Quit")
+
+-- ─ Terminal ────────────────────────────────────────────────
+vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Focus on left window" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+xmap_leader('a', function ()
+  vim.cmd('normal! "+y')
+  vim.fn.jobstart({
+    "herdr",
+    "plugin",
+    "action",
+    "invoke",
+    "annotate.capture"
+  })
+end, "Annotate in herdr")
 
 -- stylua: ignore end

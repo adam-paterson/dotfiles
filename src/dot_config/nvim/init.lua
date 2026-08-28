@@ -67,6 +67,9 @@ end
 Config.xmap_leader = function(suffix, rhs, desc)
 	vim.keymap.set("x", "<Leader>" .. suffix, rhs, { desc = desc })
 end
+Config.tmap_leader = function(suffix, rhs, desc)
+	vim.keymap.set("v", "<Leader>" .. suffix, rhs, { desc = desc })
+end
 
 -- I hate this here, but it'll do for now
 -- this is for all other icons I cannot grab or re-use from MiniIcons

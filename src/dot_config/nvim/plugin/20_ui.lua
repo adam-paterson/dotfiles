@@ -31,13 +31,11 @@ end)
 -- ─ File explorers ─────────────────────────────────────
 
 now(function()
-  vim.pack.add({ gh 'nvim-tree/nvim-tree.lua'})
-
-  require('nvim-tree').setup()
-end)
-
-now(function()
 	require("mini.files").setup({
+    windows = {
+      preview = true,
+      width_focus = 35,
+    },
 		mappings = {
 			synchronize = "<C-s>",
 		},

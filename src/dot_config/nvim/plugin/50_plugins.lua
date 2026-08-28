@@ -25,6 +25,11 @@ now(function()
         override = function(bufnr)
           vim.notify(icon('diagnostics.hint') .. ' Applied chezmoi file')
         end
+      },
+      on_watch = {
+        override = function (bufnr)
+          vim.notify(icon('diagnostics.hint') .. ' This file will be automatically applied')
+        end
       }
     }
   })

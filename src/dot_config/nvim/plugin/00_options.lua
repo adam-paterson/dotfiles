@@ -21,7 +21,7 @@ vim.o.mousescroll = 'ver:25,hor:6' -- Customize mouse scroll
 vim.o.switchbuf   = 'usetab'       -- Use already opened buffers when switching
 vim.o.undofile    = true           -- Enable persistent undo
 vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
-vim.o.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus"
+vim.o.clipboard = "unnamedplus"
 vim.opt.autoread = true
 vim.opt.swapfile = false
 
