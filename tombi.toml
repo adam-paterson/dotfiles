@@ -1,0 +1,6 @@
+[files]
+include = ["**/*.toml", "**/*.toml.tmpl"]
+
+[[schemas]]
+path = "https://starship.rs/config-schema.json"
+include = ["src/dot_config/starship.toml.tmpl"]
