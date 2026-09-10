@@ -1,0 +1,12 @@
+[tools]
+ast-grep = "latest"
+"aqua:Wilfred/difftastic" = "latest"
+"aqua:cli/cli" = "latest"
+"aqua:direnv/direnv" = "latest"
+"aqua:dlvhdr/gh-dash" = "latest"
+"aqua:git-lfs/git-lfs" = "latest"
+"aqua:jesseduffield/lazygit" = "latest"
+"aqua:nektos/act" = "latest"
+"aqua:numtide/treefmt" = "latest"
+"aqua:twpayne/chezmoi" = "latest"
+"aqua:x-motemen/ghq" = "latest"

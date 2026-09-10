@@ -1,0 +1,48 @@
+{
+  "lastChangelogVersion": "0.84.2",
+  "defaultProvider": "opencode",
+  "defaultModel": "muse-spark-1.2-contributor-free",
+  "defaultThinkingLevel": "high",
+  "steeringMode": "one-at-a-time",
+  "transport": "sse",
+  "treeFilterMode": "all",
+  "theme": "dark",
+  "hideThinkingBlock": true,
+  "packages": [
+    "npm:@plannotator/pi-extension",
+    "npm:pi-web-access",
+    "npm:@ogulcancelik/pi-minimal-footer",
+    "npm:@dietrichgebert/ponytail",
+    "npm:pi-intercom",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-context-view",
+    "npm:pi-skill-dollar"
+  ],
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "followUpMode": "all",
+  "enableSkillCommands": true,
+  "enabledModels": [],
+  "quietStartup": true,
+  "subagents": {
+    "agentOverrides": {
+      "delegate": {
+        "model": "openai-codex/gpt-5.6-luna"
+      },
+      "oracle": {
+        "model": "openai-codex/gpt-5.6-sol"
+      },
+      "researcher": {
+        "model": "openai-codex/gpt-5.6-luna"
+      },
+      "reviewer": {
+        "model": "openai-codex/gpt-5.6-sol"
+      },
+      "scout": {
+        "model": "openai-codex/gpt-5.6-luna"
+      }
+    }
+  }
+}

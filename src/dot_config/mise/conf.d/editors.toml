@@ -1,0 +1,7 @@
+[tools]
+helix = "latest"
+neovim = "nightly"
+"conda:ghostscript" = "latest"
+"conda:imagemagick" = "latest"
+"github:tectonic-typesetting/tectonic" = "latest"
+"aqua:asciinema/asciinema" = "latest"

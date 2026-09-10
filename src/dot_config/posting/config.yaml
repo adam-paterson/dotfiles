@@ -1,0 +1,12 @@
+theme: kanagawa
+response:
+  prettify_json: true
+heading:
+  visible: false
+  show_host: false
+animation: "full"
+focus:
+  on_response: "body"
+  on_request_open: "body"
+command_palette:
+  theme_preview: true

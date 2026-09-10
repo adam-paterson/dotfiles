@@ -1,0 +1,21 @@
+[metadata]
+name = "just-recipes"
+description = "Browse Just recipes; F5 runs the selected recipe"
+requirements = ["just"]
+
+[source]
+command = "just --summary | tr '[:blank:]' '\\n'"
+shell = "bash"
+
+[preview]
+command = "just --show '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+f5 = "actions:run"
+
+[actions.run]
+description = "Run selected recipe"
+command = "just -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

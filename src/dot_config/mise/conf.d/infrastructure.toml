@@ -1,0 +1,6 @@
+[tools]
+azure-cli = { version = "latest", uvx_args = "--prerelease=allow", postinstall = "az extension add --name azure-devops" }
+cloudflared = "latest"
+gcloud = "latest"
+"aqua:derailed/k9s" = "latest"
+"aqua:terraform-linters/tflint" = "latest"

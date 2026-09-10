@@ -1,0 +1,22 @@
+[metadata]
+name = "mise-tools"
+description = "Browse active tools, versions and declaring configuration files"
+requirements = ["mise", "jq", "bat"]
+
+[source]
+command = "mise ls --current --json | jq -r 'to_entries[] | .key as $tool | .value[] | [$tool, .version, (.source.path // \"\")] | join(\"\t\")' "
+shell = "bash"
+output = "{split:\t:0}"
+
+[preview]
+command = "printf \"%s\\n\" '{replace:s/'/'\"'\"'/g}'; path='{split:\t:2|replace:s/'/'\"'\"'/g}'; if [ -n \"$path\" ]; then bat --color=always --style=numbers -- \"$path\"; fi"
+shell = "bash"
+
+[keybindings]
+ctrl-e = "actions:edit"
+
+[actions.edit]
+description = "Edit the declaring configuration"
+command = "path='{split:\t:2|replace:s/'/'\"'\"'/g}'; if [ -n \"$path\" ]; then ${EDITOR:-vi} -- \"$path\"; else printf \"No declaring configuration file\\n\" >&2; exit 1; fi"
+shell = "bash"
+mode = "execute"

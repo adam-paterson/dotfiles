@@ -1,0 +1,422 @@
+watch = 2.0
+
+[metadata]
+name = "herdr"
+description = "Browse and manage Herdr workspaces, agents, tabs, panes, worktrees, sessions, and integrations"
+requirements = ["herdr", "jq"]
+
+# Ctrl+S cycles these named entity sources. Rows are TSV internally; only the
+# Nerd Font display field is shown, while actions retain stable Herdr IDs.
+[source]
+display = "{split:\\t:4}"
+output = "{split:\\t:1}"
+no_sort = true
+shell = "bash"
+
+[[source.command]]
+name = "Workspaces"
+run = '''
+herdr workspace list 2>/dev/null | jq -r '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  def state:
+    if . == "working" then "󰔟 working"
+    elif . == "blocked" then "󰅖 blocked"
+    elif . == "done" then " done"
+    elif . == "idle" then "󰒲 idle"
+    else " unknown" end;
+  .result.workspaces[] |
+  [
+    "workspace",
+    .workspace_id,
+    .active_tab_id,
+    "-",
+    ("󰍹  " + (if .focused then "" else "" end) + "  " + (.agent_status | state) + "  " + (.label | clean) + "  ·  " + (.tab_count | tostring) + " tabs  " + (.pane_count | tostring) + " panes  ·  " + .workspace_id)
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Agents"
+run = '''
+herdr agent list 2>/dev/null | jq -r --arg home "$HOME" '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  def home($home): if startswith($home) then "~" + .[($home | length):] else . end;
+  def state:
+    if . == "working" then "󰔟 working"
+    elif . == "blocked" then "󰅖 blocked"
+    elif . == "done" then " done"
+    elif . == "idle" then "󰒲 idle"
+    else " unknown" end;
+  .result.agents[] |
+  [
+    "agent",
+    .pane_id,
+    .tab_id,
+    .workspace_id,
+    ("󰚩  " + (.agent_status | state) + "  " + ((.name // .agent // "-") | clean) + "  ·  " + ((.terminal_title_stripped // "-") | clean) + "  ·  " + ((.cwd // "-") | home($home) | clean) + "  ·  " + .pane_id)
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Needs attention"
+run = '''
+herdr agent list 2>/dev/null | jq -r --arg home "$HOME" '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  def home($home): if startswith($home) then "~" + .[($home | length):] else . end;
+  def state:
+    if . == "working" then "󰔟 working"
+    elif . == "blocked" then "󰅖 blocked"
+    elif . == "done" then " done"
+    else " unknown" end;
+  .result.agents[] |
+  select(.agent_status == "working" or .agent_status == "blocked" or .agent_status == "done" or .agent_status == "unknown") |
+  [
+    "agent",
+    .pane_id,
+    .tab_id,
+    .workspace_id,
+    ("󰚩  " + (.agent_status | state) + "  " + ((.name // .agent // "-") | clean) + "  ·  " + ((.terminal_title_stripped // "-") | clean) + "  ·  " + ((.cwd // "-") | home($home) | clean) + "  ·  " + .pane_id)
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Tabs"
+run = '''
+herdr tab list 2>/dev/null | jq -r '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  def state:
+    if . == "working" then "󰔟 working"
+    elif . == "blocked" then "󰅖 blocked"
+    elif . == "done" then " done"
+    elif . == "idle" then "󰒲 idle"
+    else " unknown" end;
+  .result.tabs[] |
+  [
+    "tab",
+    .tab_id,
+    .workspace_id,
+    "-",
+    ("󰓩  " + (if .focused then "" else "" end) + "  " + (.agent_status | state) + "  " + (.label | clean) + "  ·  " + (.pane_count | tostring) + " panes  ·  " + .tab_id)
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Panes"
+run = '''
+herdr pane list 2>/dev/null | jq -r --arg home "$HOME" '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  def home($home): if startswith($home) then "~" + .[($home | length):] else . end;
+  def state:
+    if . == "working" then "󰔟 working"
+    elif . == "blocked" then "󰅖 blocked"
+    elif . == "done" then " done"
+    elif . == "idle" then "󰒲 idle"
+    else " unknown" end;
+  .result.panes[] |
+  [
+    "pane",
+    .pane_id,
+    .tab_id,
+    .workspace_id,
+    ("  " + (if .focused then "" else "" end) + "  " + (.agent_status | state) + "  " + ((.agent // "shell") | clean) + "  ·  " + ((.terminal_title_stripped // "-") | clean) + "  ·  " + ((.cwd // "-") | home($home) | clean) + "  ·  " + .pane_id)
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Worktrees"
+run = '''
+herdr workspace list 2>/dev/null |
+  jq -r '.result.workspaces[].workspace_id' |
+  while IFS= read -r workspace; do
+    herdr worktree list --workspace "$workspace" 2>/dev/null || true
+  done |
+  jq -sr --arg home "$HOME" '
+    def clean: tostring | gsub("[\t\r\n]"; " ");
+    def home($home): if startswith($home) then "~" + .[($home | length):] else . end;
+    map(select(.result.worktrees?)) |
+    unique_by(.result.source.repo_key)[] |
+    .result.source.source_workspace_id as $source |
+    .result.worktrees[] |
+    (.open_workspace_id // "-") as $open |
+    (.branch // "(detached)") as $branch |
+    [
+      "worktree",
+      $source,
+      $open,
+      (.path | @base64),
+      ("  " + (if $open != "-" then " open" elif .is_prunable then "󰅖 prunable" else " available" end) + "  " + (.label | clean) + "  ·  " + ($branch | clean) + "  ·  " + (.path | home($home) | clean))
+    ] | @tsv
+  '
+'''
+
+[[source.command]]
+name = "Sessions"
+run = '''
+herdr session list --json 2>/dev/null | jq -r '
+  def clean: tostring | gsub("[\t\r\n]"; " ");
+  .sessions[] |
+  [
+    "session",
+    .name,
+    (if .running then "running" else "stopped" end),
+    (.session_dir | @base64),
+    ("󰆍  " + (if .running then " running" else "󰅙 stopped" end) + "  " + (.name | clean) + (if .default then "  ·  default" else "" end))
+  ] | @tsv
+'
+'''
+
+[[source.command]]
+name = "Integrations"
+run = '''
+herdr integration status 2>/dev/null | while IFS= read -r line; do
+  case "$line" in *:*) ;; *) continue ;; esac
+  name=${line%%:*}
+  detail=${line#*: }
+  state=${detail%% (*}
+  path=${detail##* (}
+  path=${path%)}
+  encoded=$(jq -rn --arg value "$path" '$value | @base64')
+  case "$state" in
+    current) marker='' ;;
+    outdated) marker='󰚰' ;;
+    'not installed') marker='󰅙' ;;
+    *) marker='' ;;
+  esac
+  printf 'integration\t%s\t%s\t%s\t󰏗  %s  %s  ·  %s\n' "$name" "$state" "$encoded" "$marker" "$name" "$state"
+done
+'''
+
+# Ctrl+F cycles from structured metadata to live terminal/topology output.
+[preview]
+cached = false
+shell = "bash"
+command = [
+  '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  workspace) herdr workspace get "$primary" 2>/dev/null | jq -C '.result.workspace' ;;
+  agent) herdr agent get "$primary" 2>/dev/null | jq -C '.result.agent' ;;
+  tab) herdr tab get "$primary" 2>/dev/null | jq -C '.result.tab' ;;
+  pane) herdr pane get "$primary" 2>/dev/null | jq -C '.result.pane' ;;
+  session) herdr session list --json 2>/dev/null | jq -C --arg name "$primary" '.sessions[] | select(.name == $name)' ;;
+  worktree)
+    path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+    printf '\033[1;34m%s\033[0m\n\n' "$path"
+    git -C "$path" status --short --branch 2>&1
+    ;;
+  integration) herdr integration status 2>/dev/null | awk -v name="$primary" 'index($0, name ":") == 1' ;;
+esac
+''',
+  '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  agent) herdr agent read "$primary" --source recent-unwrapped --lines 200 --format ansi 2>/dev/null ;;
+  pane) herdr pane read "$primary" --source recent-unwrapped --lines 200 --format ansi 2>/dev/null ;;
+  workspace)
+    printf '\033[1;34mTabs\033[0m\n'
+    herdr tab list --workspace "$primary" 2>/dev/null | jq -r '.result.tabs[] | "󰓩  \(.label)  ·  \(.agent_status)  ·  \(.pane_count) panes  ·  \(.tab_id)"'
+    printf '\n\033[1;34mPanes\033[0m\n'
+    herdr pane list --workspace "$primary" 2>/dev/null | jq -r '.result.panes[] | "  \(.agent // "shell")  ·  \(.agent_status)  ·  \(.terminal_title_stripped)  ·  \(.pane_id)"'
+    ;;
+  tab)
+    herdr pane list 2>/dev/null | jq -r --arg tab "$primary" '.result.panes[] | select(.tab_id == $tab) | "  \(.agent // "shell")  ·  \(.agent_status)  ·  \(.terminal_title_stripped)  ·  \(.pane_id)"'
+    ;;
+  worktree)
+    path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+    git -C "$path" --no-pager log --color=always --oneline --decorate -20 2>&1
+    ;;
+  session)
+    path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+    printf '\033[1;34m%s\033[0m\n\n' "$path"
+    ls -lah "$path" 2>&1 | head -100
+    ;;
+  integration)
+    path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+    if [ -f "$path" ]; then
+      if command -v bat >/dev/null 2>&1; then bat -n --color=always "$path"; else awk 'NR <= 200 { print }' "$path"; fi
+    else
+      printf 'Integration is not installed.\n'
+    fi
+    ;;
+esac
+''',
+]
+
+[ui]
+layout = "landscape"
+
+[ui.preview_panel]
+size = 62
+header = "{split:\\t:4}"
+scrollbar = true
+
+[keybindings]
+enter = "actions:open"
+ctrl-enter = "actions:takeover"
+ctrl-g = "actions:focus"
+ctrl-z = "actions:zoom"
+f2 = "actions:rename"
+ctrl-r = "reload_source"
+tab = "select_next_entry"
+backtab = "select_prev_entry"
+
+[actions.open]
+description = "Open/focus entity; attach to agents and sessions without takeover"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+secondary='{split:\t:2}'
+case "$entity" in
+  workspace) exec herdr workspace focus "$primary" ;;
+  agent) exec herdr agent attach "$primary" ;;
+  tab) exec herdr tab focus "$primary" ;;
+  pane)
+    if herdr agent get "$primary" >/dev/null 2>&1; then exec herdr agent attach "$primary"; fi
+    exec herdr tab focus "$secondary"
+    ;;
+  worktree)
+    if [ "$secondary" != "-" ]; then exec herdr workspace focus "$secondary"; fi
+    path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+    exec herdr worktree open --workspace "$primary" --path "$path" --focus
+    ;;
+  session) exec herdr session attach "$primary" ;;
+  integration) herdr integration status | awk -v name="$primary" 'index($0, name ":") == 1' ;;
+esac
+'''
+
+[actions.takeover]
+description = "Attach to the selected agent with takeover (Agents/Panes)"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  agent|pane)
+    if herdr agent get "$primary" >/dev/null 2>&1; then exec herdr agent attach "$primary" --takeover; fi
+    printf 'Pane %s does not contain a recognized agent.\n' "$primary"
+    ;;
+  *) printf 'Takeover applies only to Agents and agent-backed Panes.\n' ;;
+esac
+'''
+
+[actions.focus]
+description = "Focus the selected entity in the main Herdr UI"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+secondary='{split:\t:2}'
+case "$entity" in
+  workspace) herdr workspace focus "$primary" ;;
+  agent) herdr agent focus "$primary" ;;
+  tab) herdr tab focus "$primary" ;;
+  pane)
+    if herdr agent get "$primary" >/dev/null 2>&1; then herdr agent focus "$primary"; else herdr tab focus "$secondary"; fi
+    ;;
+  worktree)
+    if [ "$secondary" != "-" ]; then
+      herdr workspace focus "$secondary"
+    else
+      path=$(jq -rn --arg value '{split:\t:3}' '$value | @base64d')
+      herdr worktree open --workspace "$primary" --path "$path" --focus
+    fi
+    ;;
+  *) printf 'Focus applies to workspaces, agents, tabs, panes, and worktrees.\n' ;;
+esac
+'''
+
+[actions.rename]
+description = "Rename the selected workspace, agent, tab, or pane"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  workspace|agent|tab|pane)
+    printf 'New %s name (empty clears agent/pane): ' "$entity"
+    IFS= read -r label || exit 1
+    case "$entity" in
+      workspace) [ -n "$label" ] && herdr workspace rename "$primary" "$label" ;;
+      agent) if [ -n "$label" ]; then herdr agent rename "$primary" "$label"; else herdr agent rename "$primary" --clear; fi ;;
+      tab) [ -n "$label" ] && herdr tab rename "$primary" "$label" ;;
+      pane) if [ -n "$label" ]; then herdr pane rename "$primary" "$label"; else herdr pane rename "$primary" --clear; fi ;;
+    esac
+    ;;
+  *) printf 'Rename applies only to workspaces, agents, tabs, and panes.\n' ;;
+esac
+'''
+
+[actions.zoom]
+description = "Toggle zoom for the selected agent or pane"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  agent|pane) herdr pane zoom "$primary" --toggle ;;
+  *) printf 'Zoom applies only to Agents and Panes.\n' ;;
+esac
+'''
+
+[actions.close]
+description = "DESTRUCTIVE: close workspace/tab/pane (or agent pane), or stop session"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  workspace) herdr workspace close "$primary" ;;
+  agent|pane) herdr pane close "$primary" ;;
+  tab) herdr tab close "$primary" ;;
+  session) herdr session stop "$primary" --json ;;
+  *) printf 'Close applies to workspaces, agents, tabs, panes, and sessions.\n' ;;
+esac
+'''
+
+[actions.remove]
+description = "DESTRUCTIVE: remove an open worktree, delete a session, or uninstall an integration"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+secondary='{split:\t:2}'
+case "$entity" in
+  worktree)
+    if [ "$secondary" = "-" ]; then
+      printf 'Herdr can only remove a worktree that is open in a workspace.\n'
+    else
+      herdr worktree remove --workspace "$secondary"
+    fi
+    ;;
+  session) herdr session delete "$primary" --json ;;
+  integration) herdr integration uninstall "$primary" ;;
+  *) printf 'Remove applies only to Worktrees, Sessions, and Integrations.\n' ;;
+esac
+'''
+
+[actions.install]
+description = "Install or update the selected Herdr integration"
+shell = "bash"
+mode = "fork"
+command = '''
+entity='{split:\t:0}'
+primary='{split:\t:1}'
+case "$entity" in
+  integration) herdr integration install "$primary" ;;
+  *) printf 'Install applies only to Integrations.\n' ;;
+esac
+'''

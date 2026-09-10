@@ -29,6 +29,7 @@ now_if_args(function()
 		gh("nvim-treesitter/nvim-treesitter-textobjects"),
 	})
 
+	vim.treesitter.language.register("yaml", "yaml.ansible")
 	require("nvim-treesitter").setup()
 
 	require("nvim-treesitter-textobjects").setup({
@@ -117,7 +118,7 @@ now_if_args(function()
 		end,
 	})
 
-	vim.lsp.enable({ "astro", "jsonls", "lua_ls", "roslyn_ls", "tailwindcss", "tombi", "ts_ls" })
+	vim.lsp.enable({ "ansiblels", "astro", "jsonls", "lua_ls", "roslyn_ls", "tailwindcss", "tombi", "ts_ls" })
 	vim.lsp.codelens.run()
 end)
 
@@ -136,6 +137,7 @@ later(function()
 			javascript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
 			typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
 			typescriptreact = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+			["yaml.ansible"] = { "prettier" },
 			lua = { "stylua" },
 			toml = { "tombi" },
 		},

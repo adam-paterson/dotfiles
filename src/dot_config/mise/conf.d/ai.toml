@@ -1,0 +1,10 @@
+[tools]
+claude = "latest"
+"aqua:sigoden/aichat" = "latest"
+"aqua:openai/codex" = "latest"
+"aqua:anomalyco/opencode" = "latest"
+"npm:@github/copilot-language-server" = "1.463.0"
+"npm:@loongphy/codex-auth" = "latest"
+"npm:@mariozechner/pi-coding-agent" = "latest"
+"npm:@tobilu/qmd" = "latest"
+"npm:mcporter" = "latest"

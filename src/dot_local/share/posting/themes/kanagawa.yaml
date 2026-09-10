@@ -1,0 +1,29 @@
+name: kanagawa
+primary: '#7E9CD8'
+secondary: '#957FB8'
+accent: '#7FB4CA'
+background: '#1F1F28'
+surface: '#2A2A37'
+error: '#E82424'
+success: '#98BB6C'
+warning: '#FF9E3B'
+
+text_area:
+  gutter: '#54546D'
+
+url:
+  base: '#DCD7BA'
+  protocol: '#7FB4CA'
+
+syntax:
+  json_key: '#7E9CD8'
+  json_number: '#D27E99'
+  json_string: '#98BB6C'
+  json_boolean: '#FFA066'
+  json_null: '#727169'
+
+method:
+  get: 'underline #7FB4CA'
+  post: 'italic #98BB6C'
+  put: 'bold #C0A36E'
+  delete: 'strikethrough #E46876'

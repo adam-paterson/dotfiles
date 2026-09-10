@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Kanagawa Wave",
+    "base": "dark",
+    "GridModified": "DCA561",
+    "GridSelection": "2D4F67",
+    "GridRowOther": "C8C093",
+    "SQLSingleQuote": "98BB6C",
+    "SQLDoubleQuote": "98BB6C",
+    "SQLOther": "DCD7BA",
+    "SQLBacktickQuote": "C0A36E",
+    "SQLNumber": "D27E99",
+    "SQLCurrentQuery": "1F1F28",
+    "SQLErrorHighlight": "E82424",
+    "GridRowBool": "FFA066",
+    "SQLComment": "727169",
+    "GridRowNumber": "D27E99",
+    "GridDeleted": "43242B",
+    "GridRowNumbers": "727169",
+    "GridRowString": "98BB6C",
+    "GridRowDateTime": "7FB4CA",
+    "SQLKeyword": "957FB8",
+    "GridAdded": "2B3328",
+    "SQLInvisibleCharacter": "54546D",
+    "SQLBracketQuote": "7E9CD8",
+    "SQLSelectedTextBackground": "223249"
+  }
+]

@@ -1,0 +1,21 @@
+[metadata]
+name = "git-worktrees"
+description = "Browse worktrees; Enter returns the path, Ctrl-E opens the editor"
+requirements = ["git"]
+
+[source]
+command = "git worktree list --porcelain | awk '/^worktree / {sub(/^worktree /, \"\"); print}'"
+shell = "bash"
+
+[preview]
+command = "git -C '{replace:s/'/'\"'\"'/g}' status --short && git -C '{replace:s/'/'\"'\"'/g}' log -10 --oneline --color=always"
+shell = "bash"
+
+[keybindings]
+ctrl-e = "actions:edit"
+
+[actions.edit]
+description = "Open worktree in editor"
+command = "${EDITOR:-vi} -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

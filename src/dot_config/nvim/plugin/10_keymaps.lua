@@ -60,6 +60,7 @@ end
 
 nmap_leader("ee", explore_at_file, icon("explore") .. " File Explorer")
 nmap_leader("eE", "<Cmd>lua MiniFiles.open()<CR>", icon("explore") .. " File Explorer (Root)")
+nmap_leader("et", "<Cmd>NvimTreeToggle<CR>", icon("explore") .. " File Tree (toggle)")
 nmap_leader("en", "<Cmd>lua MiniNotify.show_history()<CR>", icon("chat") .. " Notifications")
 nmap_leader("eq", explore_quickfix, icon("quick") .. " Quickfix list")
 nmap_leader("el", explore_locations, icon("map") .. " Location list")
@@ -111,6 +112,10 @@ nmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", icon("eye") .. " Show
 xmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", icon("eye") .. " Show at selection")
 
 -- ─ [l] Languages ─────────────────────────────────────────────
+-- Share the Insert-mode completion prefix so mini.clue exposes inspection too.
+vim.keymap.set("i", "<C-x>h", vim.lsp.buf.hover, { desc = "Hover: symbol type and docs" })
+vim.keymap.set("i", "<C-x>a", vim.lsp.buf.signature_help, { desc = "Argument hints (signature help)" })
+
 nmap_leader("la", "<Cmd>lua vim.lsp.buf.code_action()<CR>", icon("action") .. " Actions")
 nmap_leader("ld", "<Cmd>lua vim.diagnostic.open_float()<CR>", icon("diagnostic") .. " Diagnostic")
 nmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', icon("format") .. " Format")

@@ -1,0 +1,13 @@
+[metadata]
+name = "listening-ports"
+description = "Browse macOS TCP listeners; Enter returns PID"
+requirements = ["lsof", "awk", "ps"]
+
+[source]
+command = "lsof -nP -iTCP -sTCP:LISTEN | awk 'NR > 1 {print $2 \"\t\" $1 \"\t\" $9}' "
+shell = "bash"
+output = "{split:\t:0}"
+
+[preview]
+command = "ps -p '{split:\t:0|replace:s/'/'\"'\"'/g}' -o pid,ppid,user,%cpu,%mem,comm; lsof -nP -a -p '{split:\t:0|replace:s/'/'\"'\"'/g}' -iTCP -sTCP:LISTEN"
+shell = "bash"

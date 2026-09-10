@@ -1,2 +1,27 @@
 {{- $user := "adampaterson" -}}
 
+[merge]
+  command = "nvim"
+  args = [
+    "-d",
+    "{{ "{{" }} .Destination {{ "}}" }}",
+    "{{ "{{" }} .Source {{ "}}" }}",
+    "{{ "{{" }} .Target {{ "}}" }}",
+  ]
+
+[git]
+  autoAdd = true
+  autoCommit = false
+
+[diff]
+  pager = "delta"
+
+format = "json"
+mode = "file"
+
+[update]
+  recurseSubmodules = true
+
+[onepassword]
+  cache = true
+  

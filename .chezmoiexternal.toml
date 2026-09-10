@@ -1,0 +1,6 @@
+["software-engineering-book-skills"]
+  type = "archive"
+  url = "https://github.com/ciembor/agent-rules-books/archive/refs/heads/main.zip"
+  include = ["*.md", "*.mini.md", "*.nano.md"]
+  refreshPeriod = "168h"
+  targetPath = ".agents/"

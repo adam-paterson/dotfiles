@@ -1,0 +1,22 @@
+[metadata]
+name = "docker-containers"
+description = "Browse all Docker containers without lifecycle actions"
+requirements = ["docker", "jq"]
+
+[source]
+command = "docker ps -a --format '{{.ID}}\\t{{.Names}}\\t{{.Image}}\\t{{.Status}}'"
+shell = "bash"
+output = "{split:\t:0}"
+
+[preview]
+command = "docker inspect '{split:\t:0|replace:s/'/'\"'\"'/g}' | jq -C '.[0] | .Name, .State, .Config.Image, .NetworkSettings.Ports'"
+shell = "bash"
+
+[keybindings]
+f4 = "actions:logs"
+
+[actions.logs]
+description = "Show the last 200 log lines"
+command = "docker logs --tail 200 '{split:\t:0|replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

@@ -1,0 +1,21 @@
+[metadata]
+name = "chezmoi-files"
+description = "Browse managed files; preview changes and edit their source"
+requirements = ["chezmoi"]
+
+[source]
+command = "chezmoi managed --include=files --exclude=encrypted --path-style=absolute"
+shell = "bash"
+
+[preview]
+command = "chezmoi diff --color=always -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+ctrl-e = "actions:edit"
+
+[actions.edit]
+description = "Edit the Chezmoi source, not the generated file"
+command = "chezmoi edit -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

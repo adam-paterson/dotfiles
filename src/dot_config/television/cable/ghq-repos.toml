@@ -1,0 +1,21 @@
+[metadata]
+name = "ghq-repos"
+description = "Browse ghq repositories; Enter returns the path, Ctrl-E opens the editor"
+requirements = ["ghq", "git"]
+
+[source]
+command = "ghq list --full-path"
+shell = "bash"
+
+[preview]
+command = "git -C '{replace:s/'/'\"'\"'/g}' status --short && git -C '{replace:s/'/'\"'\"'/g}' log -10 --oneline --color=always"
+shell = "bash"
+
+[keybindings]
+ctrl-e = "actions:edit"
+
+[actions.edit]
+description = "Open repository in editor"
+command = "${EDITOR:-vi} -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

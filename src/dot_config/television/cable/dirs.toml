@@ -1,0 +1,23 @@
+[metadata]
+name = "dirs"
+description = "Select from directories"
+requirements = ["fd"]
+
+[source]
+command = ["fd -t d", "fd -t d --hidden"]
+
+[preview]
+command = "eza --all --tree --level 3 --color=always '{}'"
+
+[keybindings]
+shortcut = "ctrl-d"
+
+[actions.cd]
+description = "Change directory to the selected entry"
+command = "cd '{}' && $SHELL"
+mode = "execute"
+
+[actions.goto_parent_dir]
+description = "Re-opens tv in the parent directory"
+command = "tv dirs .."
+mode = "execute"

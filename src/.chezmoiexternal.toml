@@ -1,0 +1,5 @@
+["software-engineering-book-skills"]
+  type = "git-repo"
+  url = "https://github.com/ciembor/agent-rules-books.git"
+  refreshPeriod = "168h"
+  targetPath = ".agents/references/sebooks"

@@ -1,0 +1,12 @@
+[metadata]
+name = "tldr"
+description = "Browse cached command help pages"
+requirements = ["tldr"]
+
+[source]
+command = "tldr --list"
+shell = "bash"
+
+[preview]
+command = "tldr --color always -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"

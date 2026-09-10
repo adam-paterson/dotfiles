@@ -1,0 +1,22 @@
+[metadata]
+name = "gh-issues"
+description = "Browse open GitHub issues for this repository"
+requirements = ["gh", "jq"]
+
+[source]
+command = "gh issue list --state open --limit 100 --json number,title,author | jq -r '.[] | [.number, .title, .author.login] | @tsv' "
+shell = "bash"
+output = "{split:\t:0}"
+
+[preview]
+command = "gh issue view '{split:\t:0|replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+f3 = "actions:open"
+
+[actions.open]
+description = "Open in browser"
+command = "gh issue view '{split:\t:0|replace:s/'/'\"'\"'/g}' --web"
+shell = "bash"
+mode = "execute"

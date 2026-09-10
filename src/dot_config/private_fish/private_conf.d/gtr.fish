@@ -1,0 +1,1 @@
+gtr init fish | source

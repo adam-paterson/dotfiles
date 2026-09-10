@@ -1,0 +1,21 @@
+[metadata]
+name = "mise-tasks"
+description = "Browse task definitions; F5 runs the selected task"
+requirements = ["mise"]
+
+[source]
+command = "mise tasks --name-only"
+shell = "bash"
+
+[preview]
+command = "mise tasks info '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+f5 = "actions:run"
+
+[actions.run]
+description = "Run the selected task"
+command = "mise run '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"

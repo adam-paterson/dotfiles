@@ -1,0 +1,22 @@
+# Global mise settings. Tools are grouped by domain in conf.d.
+# https://mise.jdx.dev/configuration.html
+
+[settings]
+auto_install = true
+experimental = true
+minimum_release_age = "0s"
+always_keep_download = false
+always_keep_install = false
+
+[settings.github]
+credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
+
+[env]
+_.path = ["./node_modules/.bin", "./bin"]
+
+[tools]
+"aqua:simeji/jid" = "latest"
+lazyssh = "latest"
+"npm:@tailwindcss/language-server" = "latest"
+pnpm = "10.34.5"
+television = "latest"

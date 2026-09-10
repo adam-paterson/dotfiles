@@ -3,8 +3,8 @@
 -- General user interface plugins and configuration
 -- ═══════════════════════════════════════════════════════════
 
-local now, now_if_args, later, gh, autocommand =
-	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd
+local now, now_if_args, later, gh, autocommand, nmap_leader  =
+	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd, Config.nmap_leader
 
 -- ─ Colorscheme ─────────────────────────────────────────────
 now(function()
@@ -17,7 +17,12 @@ later(function()
 	vim.pack.add({ gh("nvim-lualine/lualine.nvim") })
 	-- kanso ships a lualine theme; use it as the base and tweak what you need
 	local theme = require("lualine.themes.kanagawa")
-	require("lualine").setup({ options = { theme = theme } })
+	require("lualine").setup({
+		options = {
+			theme = theme,
+			disabled_filetypes = { statusline = { "toggleterm" } },
+		},
+	})
 end)
 
 -- ─ Dashboard / Starter ─────────────────────────────────────
@@ -29,7 +34,6 @@ now(function()
 end)
 
 -- ─ File explorers ─────────────────────────────────────
-
 now(function()
 	require("mini.files").setup({
     windows = {
@@ -40,6 +44,42 @@ now(function()
 			synchronize = "<C-s>",
 		},
 	})
+end)
+
+later(function()
+	vim.pack.add({ gh("nvim-tree/nvim-tree.lua") })
+	-- Keep mini.files in charge of opening directories; the tree is opt-in.
+	require("nvim-tree").setup({
+		disable_netrw = false,
+		hijack_netrw = false,
+		hijack_directories = { enable = false },
+		on_attach = function(bufnr)
+			local api = require("nvim-tree.api")
+			api.config.mappings.default_on_attach(bufnr)
+			vim.keymap.set("n", "h", api.node.navigate.parent_close, { buffer = bufnr, desc = "Close directory / parent" })
+			vim.keymap.set("n", "l", api.node.open.edit, { buffer = bufnr, desc = "Expand directory / open file" })
+		end,
+	})
+end)
+
+now(function ()
+  vim.pack.add({gh 'Bekaboo/dropbar.nvim' })
+
+  -- Keep terminal splits (e.g. the glow preview) chrome-free:
+  -- dropbar otherwise renders the `term://...` buffer name as a winbar.
+  local default_enable = require("dropbar.configs").opts.bar.enable
+  require("dropbar").setup({
+    bar = {
+      enable = function(buf, win, info)
+        return vim.bo[buf].ft ~= "toggleterm" and default_enable(buf, win, info)
+      end,
+    },
+  })
+
+  local dropbar_api = require("dropbar.api")
+  nmap_leader(";", dropbar_api.pick, "Pick a command from the dropbar")
+  nmap_leader("[;", dropbar_api.goto_context_start, "Previous command from the dropbar")
+  nmap_leader("];", dropbar_api.select_next_context, "Next command from the dropbar")
 end)
 
 -- ─ Key hints ─────────────────────────────────────────
@@ -54,6 +94,7 @@ later(function()
       -- This is defined in 'plugin/20_keymaps.lua' with Leader group descriptions
       Config.leader_group_clues,
       miniclue.gen_clues.builtin_completion(),
+      { mode = 'i', keys = '<C-x><C-o>', desc = 'LSP completion: properties / methods' },
       miniclue.gen_clues.g(),
       miniclue.gen_clues.marks(),
       miniclue.gen_clues.registers(),
@@ -84,6 +125,8 @@ later(function()
       { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
     },
   })
+	-- Keep Neovim's native multicursor command instead of mini.clue's macro mapping.
+	vim.keymap.del("n", "Q")
 end)
 
 -- ─ Animations ─────────────────────────────────────────

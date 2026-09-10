@@ -1,0 +1,29 @@
+[metadata]
+name = "gh-runs"
+description = "Browse recent GitHub workflow runs for this repository"
+requirements = ["gh", "jq"]
+
+[source]
+command = "gh run list --limit 50 --json databaseId,workflowName,headBranch,status,conclusion | jq -r '.[] | [.databaseId, .workflowName, .headBranch, .status, .conclusion] | @tsv' "
+shell = "bash"
+output = "{split:\t:0}"
+
+[preview]
+command = "gh run view '{split:\t:0|replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+f3 = "actions:open"
+f4 = "actions:logs"
+
+[actions.open]
+description = "Open run in browser"
+command = "gh run view '{split:\t:0|replace:s/'/'\"'\"'/g}' --web"
+shell = "bash"
+mode = "execute"
+
+[actions.logs]
+description = "Show failed job logs"
+command = "gh run view '{split:\t:0|replace:s/'/'\"'\"'/g}' --log-failed"
+shell = "bash"
+mode = "execute"

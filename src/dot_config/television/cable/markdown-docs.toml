@@ -1,0 +1,21 @@
+[metadata]
+name = "markdown-docs"
+description = "Browse project Markdown documentation with rendered previews"
+requirements = ["fd", "glow"]
+
+[source]
+command = "fd --type f --extension md --extension markdown"
+shell = "bash"
+
+[preview]
+command = "glow --style dark -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+
+[keybindings]
+ctrl-e = "actions:edit"
+
+[actions.edit]
+description = "Open document in editor"
+command = "${EDITOR:-vi} -- '{replace:s/'/'\"'\"'/g}'"
+shell = "bash"
+mode = "execute"
