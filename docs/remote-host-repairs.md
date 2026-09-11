@@ -1,6 +1,6 @@
 # Remote host repairs — 2026-09-11
 
-## Ansible change to carry back to the local provisioning repository
+## Ansible changes to apply together
 
 This host is Ubuntu 26.04. The compiler (`cc`), make, and unzip were missing.
 Installed `build-essential` and `unzip` on the host. Add this task to the Ubuntu
@@ -30,6 +30,65 @@ Graphics/terminfo findings from a headless terminal do not establish an SSH
 terminal problem. For remote clipboard use, test Neovim OSC52 in the actual
 SSH terminal; desktop clipboard packages alone will not provide a local display.
 
+### Provision the machine SSH key under its standard name
+
+The existing key is Ed25519 and GitHub accepts it as `adam-paterson`.
+Update the existing Ansible private-key provisioning task to write the same
+secret to `/home/adam/.ssh/id_ed25519` instead of
+`/home/adam/.ssh/chezmoi_deploy_key`. Do not generate a replacement key.
+Use the role's existing username/home variables where available.
+
+- Ensure `/home/adam/.ssh` is owned by `adam:adam` with mode `0700`.
+- Set the private-key destination to `id_ed25519`, owner/group `adam`,
+  mode `0600`, and `no_log: true` on the task handling secret content.
+  Disable task diffs with `diff: false`.
+- If provisioning the public key, use `id_ed25519.pub` with mode `0644`.
+- Update all Ansible references to `chezmoi_deploy_key`, including clone
+  tasks' `key_file`, `GIT_SSH_COMMAND`, templates, and bootstrap scripts.
+  An explicit key path in bootstrap tasks must now use `id_ed25519`.
+- Keep the key secret in the existing secret store, outside chezmoi/Git.
+
+SSH discovers `~/.ssh/id_ed25519` automatically. No global `IdentityFile`
+entry or repository `core.sshCommand` override is needed for this setup.
+This changes the filename, not which public key is registered with GitHub.
+
+Migration on this already-provisioned host, in order:
+
+1. Check for an existing `id_ed25519` before provisioning; stop if it is a
+   different key rather than overwriting it. Provision the existing secret
+   at the new path and verify its public-key fingerprint matches the old key.
+2. Remove the temporary `Host *` / `IdentityFile ~/.ssh/chezmoi_deploy_key`
+   stanza from `~/.ssh/config`, preserving any unrelated SSH configuration.
+   That stanza was added manually during diagnosis, not by blockinfile;
+   removing an Ansible managed block alone will not remove it.
+3. Remove any dotfiles-repository `core.sshCommand` override if still present
+   (already removed on this host).
+4. Verify `ssh -T -o BatchMode=yes git@github.com` reports successful account
+   authentication (GitHub normally returns exit status 1 for this successful
+   shell-access test), then run `git push --dry-run origin main` from the
+   dotfiles checkout. This tests access without publishing changes.
+5. Once verification succeeds and all provisioning references are updated,
+   remove the obsolete `chezmoi_deploy_key` file.
+
+Current host state: the old key filename and temporary SSH config still work;
+this standard-filename migration is documented here but has not been applied.
+The earlier advice to retain the custom filename and provision a global SSH
+config stanza is superseded by this section.
+
+### Preserve service-account authentication
+
+Ansible already provisions `/home/adam/.config/op/service-account-token`.
+Keep that directory at `0700` and the token file at `0600`, owned by `adam`.
+The file should contain the token followed by a newline. Keep secret-writing
+tasks under `no_log: true` and `diff: false`; do not put the value into Git.
+
+The Fish change in this dotfiles repository exports `OP_SERVICE_ACCOUNT_TOKEN`
+from that file when no token is already set. Apply the chezmoi changes after
+Ansible provisions the file; new Fish sessions can then use plain `op`.
+For Ansible tasks invoking `op`, explicitly supply the environment or retain
+the existing `op-service` wrapper: non-Fish tasks do not inherit Fish startup
+configuration. The wrapper is also still referenced by mise authentication.
+
 ## Chezmoi changes
 
 Both live files and their chezmoi sources were updated:
@@ -49,8 +108,10 @@ Both live files and their chezmoi sources were updated:
   Assumes the default mise data directory, as used on this host.
 
 The existing `run_after_90-install-mise-tools.sh` installs these tools on
-chezmoi apply. Existing staged and unstaged changes were preserved; no commit
-or push was made. Carry these changes back to the local source repository.
+chezmoi apply. Also carry back the Fish service-account environment change in
+`src/dot_config/private_fish/private_conf.d/1password.fish`. These dotfiles
+changes accompany the Ansible tasks above; the Ansible repository is on the
+local machine and has not been edited from this host.
 
 ## Exact-version trust review
 
