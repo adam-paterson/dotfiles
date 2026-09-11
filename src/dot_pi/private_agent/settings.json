@@ -9,7 +9,7 @@
   "theme": "dark",
   "hideThinkingBlock": true,
   "packages": [
-    "npm:@plannotator/pi-extension",
+    "~/.local/share/mise/installs/npm-plannotator-pi-extension/latest/node_modules/@plannotator/pi-extension",
     "npm:pi-web-access",
     "npm:@ogulcancelik/pi-minimal-footer",
     "npm:@dietrichgebert/ponytail",

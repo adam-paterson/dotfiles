@@ -1,1 +1,3 @@
-usage g completion-init fish | source
+if command -q usage
+    usage g completion-init fish | source
+end

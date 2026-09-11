@@ -9,7 +9,8 @@ always_keep_download = false
 always_keep_install = false
 
 [settings.github]
-credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
+# Use the VPS service account when provisioned; keep desktop keychain authentication.
+credential_command = 'if [ "$MISE_CREDENTIAL_HOST" = github.com ] && [ -x "$HOME/.local/bin/op-service" ]; then "$HOME/.local/bin/op-service" read "op://Seraph/Seraph/GITHUB_TOKEN"; else gh auth token --hostname "$MISE_CREDENTIAL_HOST"; fi'
 
 [env]
 _.path = ["./node_modules/.bin", "./bin"]
