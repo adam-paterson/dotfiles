@@ -30,20 +30,23 @@ mouse-shift-capture = never
 clipboard-write = allow
 clipboard-read = allow
 
-# Macos
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS
 macos-option-as-alt = true
 macos-titlebar-proxy-icon = hidden
 macos-titlebar-style = hidden
 macos-window-buttons = hidden
 macos-window-shadow = true
-quit-after-last-window-closed = true
+{{ end -}}
 
 window-decoration = auto
 window-padding-y = 10
 window-padding-x = 10
 window-padding-balance = true
 window-padding-color = background
+{{ if eq .chezmoi.os "darwin" -}}
 window-colorspace = display-p3
+{{ end -}}
 
 font-thicken = true
 

@@ -1,4 +1,0 @@
-# This file contains fish universal variable definitions.
-# VERSION: 3.0
-SETUVAR --export CARAPACE_BRIDGES:zsh\x2cfish\x2cbash\x2cinshellisense
-SETUVAR fish_user_paths:/Users/adampaterson/\x2elocal/share/mise/installs/neovim/nightly/bin\x1e/Users/adampaterson/\x2elocal/share/mise/installs/atuin/latest/atuin\x2daarch64\x2dapple\x2ddarwin\x1e/Users/adampaterson/\x2edotnet/tools\x1e/Users/adampaterson/\x2elocal/bin

@@ -14,8 +14,12 @@ end
 
 alias c clear
 alias code vim
-alias pbc pbcopy
-alias pbp pbpaste
+if command -q pbcopy
+    alias pbc pbcopy
+end
+if command -q pbpaste
+    alias pbp pbpaste
+end
 alias scratch 'nvim -c "setlocal buftype=nofile"'
 alias vimdiff 'nvim -d'
 alias wr wrangler

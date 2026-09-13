@@ -1,2 +1,2 @@
-fish_add_path "$HOME/.local/bin"
-fish_add_path "$HOME/.dotnet/tools"
+fish_add_path --path "$HOME/.local/bin"
+fish_add_path --path "$HOME/.dotnet/tools"

@@ -1,0 +1,12 @@
+# Runtime state belongs to each machine, not the shared dotfiles.
+.config/fish/fish_variables
+.config/nvim/.git
+
+{{ if ne .chezmoi.os "darwin" -}}
+.config/aerospace
+.config/fish/conf.d/brew.fish
+.config/fish/conf.d/orbstack.fish
+.config/fish/completions/docker.fish
+.config/fish/completions/kubectl.fish
+.config/fish/completions/orbctl.fish
+{{ end -}}
