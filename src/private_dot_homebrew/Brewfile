@@ -1,0 +1,245 @@
+tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
+# GNU compiler collection for arm-none-eabi
+brew "arm-none-eabi-gcc"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Package manager for the Lua programming language
+brew "luarocks"
+# Move files and folders to the trash
+brew "macos-trash"
+# Mac App Store command-line interface
+brew "mas"
+# Deep clean and optimize your Mac
+brew "mole"
+# Remote terminal application
+brew "mosh"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Command-line tool to customize Spotify client
+brew "spicetify-cli"
+# Very fast implementation of tldr in Rust
+brew "tealdeer"
+# Tool for creating isolated virtual python environments
+brew "virtualenv"
+# Internet file retriever
+brew "wget"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+# Git worktree manager with editor and AI tool integration
+brew "coderabbitai/tap/git-gtr"
+# A window border system for macOS
+brew "felixkratz/formulae/borders"
+# Custom macOS statusbar with shell plugin, interaction and graph support
+brew "felixkratz/formulae/sketchybar"
+# Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
+brew "rjyo/moshi/moshi-hook"
+cask "aerospace"
+# OpenAI's official ChatGPT desktop app
+cask "chatgpt"
+# OpenAI's official browser with ChatGPT built in
+cask "chatgpt-atlas"
+# Ghostty-based terminal with vertical tabs and notifications for AI coding agents
+cask "cmux"
+# Voice and text chat software
+cask "discord"
+# Window peeking utility app
+cask "dockdoor"
+cask "font-0xproto-nerd-font"
+cask "font-3270-nerd-font"
+cask "font-adwaita-mono-nerd-font"
+cask "font-agave-nerd-font"
+cask "font-anonymice-nerd-font"
+cask "font-arimo-nerd-font"
+cask "font-atkynson-mono-nerd-font"
+cask "font-aurulent-sans-mono-nerd-font"
+cask "font-bigblue-terminal-nerd-font"
+cask "font-bitstream-vera-sans-mono-nerd-font"
+cask "font-blex-mono-nerd-font"
+cask "font-caskaydia-cove-nerd-font"
+cask "font-caskaydia-mono-nerd-font"
+cask "font-code-new-roman-nerd-font"
+cask "font-comic-shanns-mono-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-ibm-plex-mono"
+cask "font-maple-mono-nf"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Web browser
+cask "google-chrome"
+# Desktop automation application
+cask "hammerspoon"
+cask "humanlayer"
+# Free and open-source media player
+cask "iina"
+# Keyboard customiser
+cask "karabiner-elements"
+# Blocks all Keyboard and TouchBar input
+cask "keyboardcleantool"
+# Privacy-first, open-source platform for knowledge sharing and management
+cask "logseq"
+# App to write, plan, collaborate, and get organised
+cask "notion"
+# Open-source software for live streaming and screen recording
+cask "obs"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
+# Replacement for Docker Desktop
+cask "orbstack"
+# Control your tools with a few keystrokes
+cask "raycast"
+# Collection of apps available by subscription
+cask "setapp"
+# PDF presentation tool
+cask "slidepilot"
+# Sound and audio controller
+cask "soundsource"
+# System monitor for the menu bar
+cask "stats"
+# Mesh VPN based on WireGuard
+cask "tailscale-app"
+# Messaging app with a focus on speed and security
+cask "telegram"
+# Open-source code editor
+cask "visual-studio-code"
+# Native desktop client for WhatsApp
+cask "whatsapp"
+mas "Codye", id: 1516894961
+mas "Fantastical", id: 975937182
+mas "Goodnotes", id: 1444383602
+mas "Keeper Password Manager", id: 414781829
+mas "Kindle", id: 302584613
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft OneNote", id: 784801555
+mas "Microsoft Outlook", id: 985367838
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft To Do", id: 1274495053
+mas "Microsoft Word", id: 462054704
+mas "Notability", id: 360593530
+mas "OneDrive", id: 823766827
+mas "Telegram", id: 747648890
+mas "TestFlight", id: 899247664
+mas "Todoist", id: 585829637
+mas "Windows App", id: 1295203466
+vscode "1yib.rust-bundle"
+vscode "actboy168.lua-debug"
+vscode "akamud.vscode-theme-onedark"
+vscode "akamud.vscode-theme-onelight"
+vscode "amazonwebservices.codewhisperer-for-command-line-companion"
+vscode "antfu.icons-carbon"
+vscode "antfu.theme-vitesse"
+vscode "astro-build.astro-vscode"
+vscode "batisteo.vscode-django"
+vscode "bbenoist.nix"
+vscode "bierner.github-markdown-preview"
+vscode "bierner.markdown-checkbox"
+vscode "bierner.markdown-emoji"
+vscode "bierner.markdown-footnotes"
+vscode "bierner.markdown-mermaid"
+vscode "bierner.markdown-preview-github-styles"
+vscode "bierner.markdown-yaml-preamble"
+vscode "biomejs.biome"
+vscode "bradlc.vscode-tailwindcss"
+vscode "catppuccin.catppuccin-vsc"
+vscode "catppuccin.catppuccin-vsc-icons"
+vscode "christian-kohler.npm-intellisense"
+vscode "coderabbit.coderabbit-vscode"
+vscode "cweijan.vscode-postgresql-client2"
+vscode "davidanson.vscode-markdownlint"
+vscode "dbaeumer.vscode-eslint"
+vscode "donjayamanne.python-environment-manager"
+vscode "donjayamanne.python-extension-pack"
+vscode "dorianmassoulier.repomix-runner"
+vscode "drilko.fastendpoints"
+vscode "dustypomerleau.rust-syntax"
+vscode "dvirtz.parquet-viewer"
+vscode "eamodio.gitlens"
+vscode "esbenp.prettier-vscode"
+vscode "figma.figma-vscode-extension"
+vscode "fill-labs.dependi"
+vscode "formulahendry.auto-close-tag"
+vscode "formulahendry.auto-complete-tag"
+vscode "gerane.theme-github"
+vscode "github.codespaces"
+vscode "github.github-vscode-theme"
+vscode "github.remotehub"
+vscode "github.vscode-github-actions"
+vscode "github.vscode-pull-request-github"
+vscode "golang.go"
+vscode "hubspot.hubl"
+vscode "janisdd.vscode-edit-csv"
+vscode "jjk.jjk"
+vscode "jnoortheen.nix-ide"
+vscode "johnnymorganz.stylua"
+vscode "kevinrose.vsc-python-indent"
+vscode "kokakiwi.vscode-just"
+vscode "linear.linear-connect"
+vscode "mechatroner.rainbow-csv"
+vscode "mkhl.direnv"
+vscode "mkloubert.vscode-http-client"
+vscode "monokai.theme-monokai-pro-vscode"
+vscode "ms-azure-devops.azure-pipelines"
+vscode "ms-azuretools.vscode-azure-github-copilot"
+vscode "ms-azuretools.vscode-azure-mcp-server"
+vscode "ms-azuretools.vscode-azureresourcegroups"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-dotnettools.csdevkit"
+vscode "ms-dotnettools.csharp"
+vscode "ms-dotnettools.vscode-dotnet-runtime"
+vscode "ms-mssql.data-workspace-vscode"
+vscode "ms-mssql.mssql"
+vscode "ms-mssql.sql-bindings-vscode"
+vscode "ms-mssql.sql-database-projects-vscode"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode.azure-repos"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-repositories"
+vscode "ms-vscode.vscode-typescript-next"
+vscode "ms-windows-ai-studio.windows-ai-studio"
+vscode "mtxr.sqltools"
+vscode "naumovs.color-highlight"
+vscode "njpwerner.autodocstring"
+vscode "nrwl.angular-console"
+vscode "ohziinteractivestudio.ohzi-vscode-glb-viewer"
+vscode "openai.chatgpt"
+vscode "oven.bun-vscode"
+vscode "oxc.oxc-vscode"
+vscode "pkief.material-icon-theme"
+vscode "qufiwefefwoyn.kanagawa"
+vscode "redhat.vscode-xml"
+vscode "redhat.vscode-yaml"
+vscode "rust-lang.rust-analyzer"
+vscode "sanjulaganepola.github-local-actions"
+vscode "shyykoserhiy.vscode-spotify"
+vscode "skellock.just"
+vscode "source-craft-community.csharp-devkit-extended"
+vscode "sst-dev.opencode"
+vscode "stivo.tailwind-fold"
+vscode "stuartwang.luapanda"
+vscode "subframe7536.custom-ui-style"
+vscode "tamasfe.even-better-toml"
+vscode "tonybaloney.vscode-pets"
+vscode "typescriptteam.native-preview"
+vscode "wholroyd.jinja"
+vscode "yinfei.luahelper"
+go "cmd/go"
+go "cmd/gofmt"
+cargo "gitprofile"
+uv "mcp-proxy"
+uv "specify-cli", source: "git+https://github.com/github/spec-kit.git"
+uv "terminal-bench"
+uv "trafilatura"
+uv "zmk"
+npm "@agentclientprotocol/codex-acp"
+npm "@plannotator/pi-extension"
+npm "prime-agent"

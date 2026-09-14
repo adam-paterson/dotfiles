@@ -1,10 +1,10 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 command_timeout = 2000
-palette = "kanso_ink"
+palette = "catppuccin"
 add_newline = true
 
-format = """$directory$character"""
+format = """$hostname$directory$character"""
 
 right_format = """$git_branch$git_state$git_status"""
 
@@ -17,8 +17,10 @@ disabled = true
 
 [hostname]
 ssh_only = true
-ssh_symbol = " "
-disabled = true
+ssh_symbol = " "
+format = "[$ssh_symbol$hostname]($style) "
+style = "bold bright_yellow"
+disabled = false
 
 [directory]
 style = "muted dimmed"

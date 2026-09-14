@@ -26,6 +26,7 @@ Project-specific instructions may add further constraints.
 - Do not narrate routine tool use; explain consequential actions and decisions.
 - Surface material assumptions, uncertainty, trade-offs, and inferences.
 - Refer to files using precise paths.
+- You MUST use the skill `unslop`
 
 ## Execution
 

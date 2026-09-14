@@ -8,21 +8,16 @@ local now, now_if_args, later, gh, autocommand, nmap_leader  =
 
 -- ─ Colorscheme ─────────────────────────────────────────────
 now(function()
-	vim.pack.add({ gh("rebelot/kanagawa.nvim") })
-	vim.cmd("colorscheme kanagawa-wave")
+	-- vim.pack.add({ gh("rebelot/kanagawa.nvim") })
+	-- vim.cmd("colorscheme kanagawa-wave")
+
+  vim.pack.add({gh "catppuccin/nvim"})
+  vim.cmd("colorscheme catppuccin-nvim")
 end)
 
 -- ─ Statusline ──────────────────────────────────────────────
 later(function()
 	vim.pack.add({ gh("nvim-lualine/lualine.nvim") })
-	-- kanso ships a lualine theme; use it as the base and tweak what you need
-	local theme = require("lualine.themes.kanagawa")
-	require("lualine").setup({
-		options = {
-			theme = theme,
-			disabled_filetypes = { statusline = { "toggleterm" } },
-		},
-	})
 end)
 
 -- ─ Dashboard / Starter ─────────────────────────────────────

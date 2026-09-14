@@ -9,6 +9,8 @@ next_agent = "prefix+right"
 previous_agent = "prefix+left"
 next_workspace = "prefix+down"
 previous_workspace = "prefix+up"
+detach = "prefix+d"
+reload_config = "prefix+comma"
 
 # Custom commands use the same binding syntax.
 # type = "shell" runs detached in the background.
@@ -16,26 +18,6 @@ previous_workspace = "prefix+up"
 # type = "popup" opens a session-modal terminal without changing the tab layout.
 # Popup width and height accept terminal cells or percentages such as "80%".
 # On Windows, command strings run through cmd.exe /d /c.
-
-[[keys.command]]
-key = "prefix+shift+m"
-type = "plugin_action"
-command = "mirror.start"  # start / resume the daemon
-
-[[keys.command]]
-key = "prefix+shift+s"
-type = "plugin_action"
-command = "mirror.pause"  # freeze syncing; start again to resume
-
-[[keys.command]]
-key = "prefix+shift+b"  # "bring back" (shift+r is native reload_config)
-type = "plugin_action"
-command = "mirror.restore"  # un-close mirrors you closed locally
-
-[[keys.command]]
-key = "prefix+alt+d"  # destructive: closes ALL mirrors + clears state
-type = "plugin_action"
-command = "mirror.teardown"  # stop mirroring everything (start to resume)
 
 # HerderAnnotate
 [[keys.command]]
@@ -55,6 +37,41 @@ key = "prefix+m"
 type = "plugin_action"
 command = "annotate.manage"
 description = "Manage annotations"
+
+# Override herdr's built-in "new worktree" key (prefix+shift+g) with worktrunk's
+# default-branch switch/create picker:
+[[keys.command]]
+key = "prefix+shift+g"
+type = "plugin_action"
+command = "worktrunk.open"
+description = "Worktree: switch / create from default branch"
+
+# Optional: bind current-branch creation separately.
+[[keys.command]]
+key = "prefix+shift+c"
+type = "plugin_action"
+command = "worktrunk.open-current"
+description = "Worktree: switch / create from current branch"
+
+# Optional: include remote-tracking branches for this picker.
+[[keys.command]]
+key = "prefix+shift+r"
+type = "plugin_action"
+command = "worktrunk.open-with-remotes"
+description = "Worktree: switch / create from local or remote branches"
+
+[[keys.command]]
+key = "prefix+shift+d"
+type = "plugin_action"
+command = "worktrunk.remove"
+description = "Worktree: remove"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "plugin_action"
+command = "worktrunk.merge"
+description = "Worktree: merge into the target branch"
+
 
 [worktrees]
 directory = ".worktrees"
@@ -82,7 +99,7 @@ pane_gaps = true
 # A token occurrence may be styled with { token = "workspace", fg = "#89b4fa", bold = true, dim = false }.
 # Omitted style fields preserve the contextual default.
 agent_panel_sort = "priority"
-
+#
 [ui.sidebar.agents]
 row_gap = 1
 rows = [
@@ -91,14 +108,14 @@ rows = [
   [{"token" = "pane", bold = true, dim = false, fg = "#dcd7ba"}],
   [{"token" = "workspace", bold = false, dim = true}],
 ]
-# Optional canonical agent IDs replace the default rows for matching agents.
-# [ui.sidebar.agents.rows_by_agent]
-# claude = [["state_icon", "workspace", "tab"], ["terminal_title_stripped"], ["agent"]]
-
-# Expanded space rows. Built-ins are state_icon, state_text, workspace, branch, and git_status.
-# Custom values reported through workspace metadata use a $name token, for example $jj_status.
-# Inline token styles accept strict #RGB/#RRGGBB foregrounds plus bold and dim booleans.
-
+# # Optional canonical agent IDs replace the default rows for matching agents.
+# # [ui.sidebar.agents.rows_by_agent]
+# # claude = [["state_icon", "workspace", "tab"], ["terminal_title_stripped"], ["agent"]]
+#
+# # Expanded space rows. Built-ins are state_icon, state_text, workspace, branch, and git_status.
+# # Custom values reported through workspace metadata use a $name token, for example $jj_status.
+# # Inline token styles accept strict #RGB/#RRGGBB foregrounds plus bold and dim booleans.
+#
 [ui.sidebar.spaces]
 row_gap = 1
 rows = [
@@ -106,7 +123,7 @@ rows = [
   ["branch"],
   ["git_status"]
 ]
-
+#
 # Accent color for highlights, borders, and navigation UI.
 # Accepts: hex (#89b4fa), named colors (cyan, blue, magenta), or rgb(r,g,b)
 # accent = "cyan"
@@ -194,27 +211,27 @@ pane_history = true
 # scrollback_limit_bytes = 10000000
 
 [theme]
-name = "terminal"
+name = "catppuccin-mocha"
 auto_switch = false
 
-[theme.custom]
-accent = "#c8c093"
-panel_bg = "#090618"
-sidebar_bg = "#1f1f28"
-active_row_bg = "#090618"
-selection_bg = "#2d4f67"
-
-surface0 = "#090618"
-surface1 = "#2d4f67"
-surface_dim = "#090618"
-overlay0 = "#727169"
-overlay1 = "#2d4f67"
-text = "#dcd7ba"
-subtext0 = "#c8c093"
-mauve = "#957FB8"
-green = "#76946A"
-yellow = "#e6c384"
-red = "#C34043"
-blue = "#7e9cd8"
-teal = "#7AA89F"
-peach = "#FFA066"
+# [theme.custom]
+# accent = "#c8c093"
+# panel_bg = "#090618"
+# sidebar_bg = "#1f1f28"
+# active_row_bg = "#090618"
+# selection_bg = "#2d4f67"
+#
+# surface0 = "#090618"
+# surface1 = "#2d4f67"
+# surface_dim = "#090618"
+# overlay0 = "#727169"
+# overlay1 = "#2d4f67"
+# text = "#dcd7ba"
+# subtext0 = "#c8c093"
+# mauve = "#957FB8"
+# green = "#76946A"
+# yellow = "#e6c384"
+# red = "#C34043"
+# blue = "#7e9cd8"
+# teal = "#7AA89F"
+# peach = "#FFA066"

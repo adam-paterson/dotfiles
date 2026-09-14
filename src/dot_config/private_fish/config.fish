@@ -9,6 +9,6 @@ if command -q mise
     mise hook-env --force -s fish | source
 end
 
-if status is-interactive; and command -q atuin
-  atuin pty-proxy init fish | source
+if status is-interactive; and command -q atuin; and test "$HERDR_ENV" != 1
+  source (atuin pty-proxy init fish | psub)
 end

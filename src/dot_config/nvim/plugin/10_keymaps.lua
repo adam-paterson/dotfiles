@@ -19,6 +19,15 @@ imap_expr("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
 -- Add an entry if you create a new group.
 Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>b", desc = icon("buffer") .. " Buffer" },
+	function()
+		if not vim.wo.diff then
+			return {}
+		end
+		return {
+			{ mode = "n", keys = "<Leader>gm", desc = icon("diff") .. " Merge/Diff" },
+			{ mode = "n", keys = "<Leader>gmg", desc = "Take hunk from panel" },
+		}
+	end,
 	{ mode = "n", keys = "<Leader>e", desc = icon("explore") .. " Explore/Edit" },
 	{ mode = "n", keys = "<Leader>f", desc = icon("search") .. " Find" },
 	{ mode = "n", keys = "<Leader>g", desc = icon("git") .. " Git" },

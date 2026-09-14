@@ -2,6 +2,13 @@ worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
 
 
 [projects]
+
+[projects."ssh.dev.azure.com/v3/idhl/*".commit.generation]
+command = "MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --safe-mode --setting-sources='user' --system-prompt=''"
+
+[projects."ssh.dev.azure.com/v3/idhl/*".list.custom-columns.Ticket]
+template = "{{ vars.ticket }}"
+
 # # User Configuration
 #
 # Create with `wt config create`. Values shown are defaults unless noted otherwise.
@@ -100,7 +107,7 @@ command = "pi -p --model openai-codex/gpt-5.6-luna --thinking off"
 # Persistent flag values for `wt list`. Override on command line as needed.
 #
 [list]
-summary = true    # Enable LLM branch summaries (requires [commit.generation])
+# summary = true    # Enable LLM branch summaries (requires [commit.generation])
 #
 full = true       # Show CI status and LLM summaries (--full)
 branches = true   # Include branches without worktrees (--branches)

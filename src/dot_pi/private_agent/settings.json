@@ -1,15 +1,16 @@
 {
-  "lastChangelogVersion": "0.84.2",
-  "defaultProvider": "opencode",
-  "defaultModel": "muse-spark-1.2-contributor-free",
-  "defaultThinkingLevel": "high",
+  "lastChangelogVersion": "0.85.1",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6-astra",
+  "defaultThinkingLevel": "medium",
   "steeringMode": "one-at-a-time",
   "transport": "sse",
   "treeFilterMode": "all",
   "theme": "dark",
   "hideThinkingBlock": true,
+  "tuiMode": "fullscreen",
   "packages": [
-    "~/.local/share/mise/installs/npm-plannotator-pi-extension/latest/node_modules/@plannotator/pi-extension",
+    "npm:@plannotator/pi-extension",
     "npm:pi-web-access",
     "npm:@ogulcancelik/pi-minimal-footer",
     "npm:@dietrichgebert/ponytail",
@@ -17,32 +18,91 @@
     "npm:pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-context-view",
-    "npm:pi-skill-dollar"
+    "npm:pi-skill-dollar",
+    "npm:pi-mcp-adapter"
   ],
   "terminal": {
-    "showTerminalProgress": true
+    "showTerminalProgress": true,
+    "clearOnShrink": true
   },
   "followUpMode": "all",
-  "enableSkillCommands": true,
-  "enabledModels": [],
+  "enabledModels": [
+    "opencode-go/glm-5.3",
+    "opencode-go/kimi-k3",
+    "opencode-go/qwen3.8-max",
+    "opencode/muse-spark-1.3",
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/muse-spark-1.3-contributor",
+    "openai-codex/gpt-6-astra",
+    "openai-codex/gpt-5.6-luna",
+    "openai-codex/gpt-5.6-terra",
+    "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-5.3-codex-spark"
+  ],
   "quietStartup": true,
   "subagents": {
+    "defaultModel": "openai-codex/gpt-5.6-sol",
+    "defaultThinking": "medium",
     "agentOverrides": {
       "delegate": {
-        "model": "openai-codex/gpt-5.6-luna"
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "medium",
+        "defaultContext": "fresh",
+        "fallbackModels": false
       },
       "oracle": {
-        "model": "openai-codex/gpt-5.6-sol"
+        "model": "openai-codex/gpt-6-astra",
+        "thinking": "xhigh",
+        "defaultContext": "fork",
+        "fallbackModels": false
       },
       "researcher": {
-        "model": "openai-codex/gpt-5.6-luna"
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "low",
+        "defaultContext": "fresh",
+        "fallbackModels": false
       },
       "reviewer": {
-        "model": "openai-codex/gpt-5.6-sol"
+        "model": "openai-codex/gpt-6-astra",
+        "thinking": "xhigh",
+        "defaultContext": "fresh",
+        "fallbackModels": false
       },
       "scout": {
-        "model": "openai-codex/gpt-5.6-luna"
+        "description": "Locate local files, symbols and exact passages; hand interpretation to synthesizer or oracle",
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "low",
+        "defaultContext": "fresh",
+        "fallbackModels": false,
+        "tools": ["read", "grep", "find", "ls"],
+        "output": false
+      },
+      "worker": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "medium",
+        "defaultContext": "fork",
+        "fallbackModels": false
+      },
+      "synthesizer": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "high",
+        "defaultContext": "fresh",
+        "fallbackModels": false
+      },
+      "risk-reviewer": {
+        "model": "github-copilot/claude-opus-5",
+        "thinking": "high",
+        "defaultContext": "fresh",
+        "fallbackModels": false
       }
     }
-  }
+  },
+  "editorPaddingX": 0,
+  "outputPad": 1,
+  "showCacheMissNotices": true,
+  "doubleEscapeAction": "tree",
+  "warnings": {
+    "anthropicExtraUsage": true
+  },
+  "fullscreenExitOutput": "transcript"
 }
