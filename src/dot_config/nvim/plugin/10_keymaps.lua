@@ -19,6 +19,7 @@ imap_expr("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
 -- Add an entry if you create a new group.
 Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>b", desc = icon("buffer") .. " Buffer" },
+	{ mode = "n", keys = "<Leader>d", desc = icon("play") .. " Debug" },
 	function()
 		if not Config.is_native_diff() then
 			return {}
@@ -38,6 +39,7 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>t", desc = icon("terminal") .. " Terminal" },
 	{ mode = "n", keys = "<Leader>v", desc = icon("eye") .. " Visits" },
 
+	{ mode = "x", keys = "<Leader>d", desc = icon("play") .. " Debug" },
 	{ mode = "x", keys = "<Leader>g", desc = icon("git") .. " Git" },
 	{ mode = "x", keys = "<Leader>l", desc = icon("code") .. " Language" },
 }
