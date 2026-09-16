@@ -12,7 +12,7 @@ with tempfile.TemporaryDirectory() as directory:
     source = root / "source"
     source.mkdir()
     shutil.copy(SOURCE / ".chezmoiignore", source)
-    for name in ["dot_config/aerospace", "dot_config/private_fish", "dot_config/ghostty"]:
+    for name in [".chezmoidata", "dot_config/aerospace", "dot_config/private_fish", "dot_config/ghostty"]:
         shutil.copytree(SOURCE / name, source / name)
     # Accidental captures must stay ignored even if they reappear in the source.
     (source / "dot_config/private_fish/private_fish_variables").write_text("captured Mac state\n")
@@ -33,7 +33,10 @@ with tempfile.TemporaryDirectory() as directory:
         env = {**os.environ, "HOME": str(home), "XDG_CONFIG_HOME": str(home / ".config")}
         cli = ["chezmoi", "--source", str(source), "--destination", str(home),
                "--config", str(config), "--persistent-state", str(home / "state.db"),
-               "--override-data", json.dumps({"chezmoi": {"os": platform}})]
+               "--override-data", json.dumps({"chezmoi": {
+                   "os": platform,
+                   "hostname": "MACBOOK-002531" if platform == "darwin" else "seraph",
+               }})]
         def run(*args):
             return subprocess.check_output(cli + list(args), env=env, text=True)
         managed = set(run("managed", "--path-style=relative").splitlines())

@@ -36,7 +36,7 @@
       "CronList"
     ]
   },
-  "model": "opus[1m]",
+  "model": "sonnet",
   "disableClaudeAiConnectors": true,
   "hooks": {
     "PermissionRequest": [

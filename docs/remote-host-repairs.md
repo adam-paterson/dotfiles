@@ -109,7 +109,9 @@ Both live files and their chezmoi sources were updated:
 
 The existing `run_after_90-install-mise-tools.sh` installs these tools on
 chezmoi apply. Also carry back the Fish service-account environment change in
-`src/dot_config/private_fish/private_conf.d/1password.fish`. These dotfiles
+`src/dot_config/private_fish/private_conf.d/1password.fish.tmpl`. See
+[1Password Environments](1password-environments.md) for the beta CLI and required
+Environment access. These dotfiles
 changes accompany the Ansible tasks above; the Ansible repository is on the
 local machine and has not been edited from this host.
 
