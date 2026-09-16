@@ -1,3 +1,4 @@
 [tools]
-op = "latest"
+# Environments are only available in beta builds, not the stable channel.
+op = "2.39.0-beta.02"
 "aqua:FiloSottile/age" = "latest"

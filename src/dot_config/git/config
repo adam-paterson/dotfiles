@@ -1,0 +1,66 @@
+# Portable Git defaults managed by chezmoi.
+# Machine/vendor/generated overrides belong in ~/.config/git/local.gitconfig,
+# included by ~/.gitconfig after this XDG config has loaded.
+
+[alias]
+	br = branch
+	ci = commit
+	co = checkout
+	last = log -1 HEAD
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	st = status -sb
+	unstage = reset HEAD --
+
+[color]
+	ui = true
+
+[core]
+	editor = nvim
+	longpaths = true
+	pager = delta
+	excludesFile = ~/.config/git/ignore
+
+[delta]
+	dark = true
+	features = catppuccin-mocha
+	hyperlinks = true
+	line-numbers = true
+	navigate = true
+	side-by-side = true
+
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/allowed_signers
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[commit]
+	gpgsign = true
+
+[init]
+	defaultBranch = main
+
+[interactive]
+	diffFilter = delta --color-only
+
+[merge]
+	autoStash = true
+	conflictStyle = zdiff3
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[rebase]
+	autoStash = true
+
+[tag]
+	gpgSign = true
+
+[user]
+	email = hello@adampaterson.co.uk
+	name = Adam Paterson
+	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn
+

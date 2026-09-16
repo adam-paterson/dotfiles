@@ -3,6 +3,7 @@
 .config/nvim/.git
 
 {{ if ne .chezmoi.os "darwin" -}}
+.homebrew/
 .config/aerospace
 .config/fish/conf.d/brew.fish
 .config/fish/conf.d/orbstack.fish

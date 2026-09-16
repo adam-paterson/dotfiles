@@ -20,11 +20,11 @@ imap_expr("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
 Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>b", desc = icon("buffer") .. " Buffer" },
 	function()
-		if not vim.wo.diff then
+		if not Config.is_native_diff() then
 			return {}
 		end
 		return {
-			{ mode = "n", keys = "<Leader>gm", desc = icon("diff") .. " Merge/Diff" },
+			{ mode = "n", keys = "<Leader>gm", desc = icon("diff") .. " Native merge/diff" },
 			{ mode = "n", keys = "<Leader>gmg", desc = "Take hunk from panel" },
 		}
 	end,
@@ -107,12 +107,16 @@ nmap_leader("fV", "<Cmd>Pick visit_paths<CR>", icon("eye") .. " Visit paths (cwd
 local git_log_cmd = [[Git log --pretty=format:\%h\ \%as\ │\ \%s --topo-order]]
 local git_log_buf_cmd = git_log_cmd .. " --follow -- %"
 
-nmap_leader("ga", "<Cmd>Git diff --cached<CR>", icon("diff") .. " Added diff")
-nmap_leader("gA", "<Cmd>Git diff --cached -- %<CR>", icon("diff") .. " Added diff buffer")
+-- Lowercase opens the repository view; uppercase limits it to this file.
+nmap_leader("ga", "<Cmd>DiffviewOpen --cached<CR>", icon("diff") .. " Staged diff (repo)")
+nmap_leader("gA", "<Cmd>DiffviewOpen --cached -- %<CR>", icon("diff") .. " Staged diff (file)")
 nmap_leader("gc", "<Cmd>Git commit<CR>", icon("commit") .. " Commit")
 nmap_leader("gC", "<Cmd>Git commit --amend<CR>", icon("commit") .. " Commit amend")
-nmap_leader("gd", "<Cmd>Git diff<CR>", icon("diff") .. " Diff")
-nmap_leader("gD", "<Cmd>Git diff -- %<CR>", icon("diff") .. " Diff buffer")
+nmap_leader("gd", "<Cmd>DiffviewOpen<CR>", icon("diff") .. " Diff (repo)")
+nmap_leader("gD", "<Cmd>DiffviewOpen -- %<CR>", icon("diff") .. " Diff (file)")
+nmap_leader("gh", "<Cmd>DiffviewFileHistory<CR>", icon("history") .. " History (repo)")
+nmap_leader("gH", "<Cmd>DiffviewFileHistory %<CR>", icon("history") .. " History (file)")
+nmap_leader("gq", "<Cmd>DiffviewClose<CR>", icon("exit") .. " Close diff view")
 nmap_leader("gl", "<Cmd>" .. git_log_cmd .. "<CR>", icon("history") .. " Log")
 nmap_leader("gL", "<Cmd>" .. git_log_buf_cmd .. "<CR>", icon("history") .. " Log buffer")
 nmap_leader("go", "<Cmd>lua MiniDiff.toggle_overlay()<CR>", icon("toggle") .. " Toggle overlay")

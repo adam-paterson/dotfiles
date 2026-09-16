@@ -11,6 +11,7 @@ next_workspace = "prefix+down"
 previous_workspace = "prefix+up"
 detach = "prefix+d"
 reload_config = "prefix+comma"
+goto = "prefix+t"
 
 # Custom commands use the same binding syntax.
 # type = "shell" runs detached in the background.
@@ -18,6 +19,14 @@ reload_config = "prefix+comma"
 # type = "popup" opens a session-modal terminal without changing the tab layout.
 # Popup width and height accept terminal cells or percentages such as "80%".
 # On Windows, command strings run through cmd.exe /d /c.
+
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "lazygit"
+description = "Open LazyGit"
+width = "80%"
+height = "80%"
 
 # HerderAnnotate
 [[keys.command]]
@@ -38,8 +47,6 @@ type = "plugin_action"
 command = "annotate.manage"
 description = "Manage annotations"
 
-# Override herdr's built-in "new worktree" key (prefix+shift+g) with worktrunk's
-# default-branch switch/create picker:
 [[keys.command]]
 key = "prefix+shift+g"
 type = "plugin_action"
@@ -88,6 +95,13 @@ prompt_new_workspace_name = true
 pane_borders = "always"
 pane_gaps = true
 
+tab_bar_right = [
+  { type = "zoom" },
+  { type = "hostname" },
+  { type = "datetime", format = "%H:%M" },
+]
+tab_bar_right_separator = "  "
+
 
 # Agent panel ordering: "spaces" (grouped by space) or "priority" (attention queue).
 # "workspaces" is accepted as an alias for "spaces".
@@ -99,14 +113,15 @@ pane_gaps = true
 # A token occurrence may be styled with { token = "workspace", fg = "#89b4fa", bold = true, dim = false }.
 # Omitted style fields preserve the contextual default.
 agent_panel_sort = "priority"
-#
+
 [ui.sidebar.agents]
 row_gap = 1
 rows = [
-  ["state_icon", {token = "terminal_title", dim = true, fg = "#727169"}, {token = "machine", rules = [{equals = "Local", fg = "#2d4f67"}, {starts_with = "", fg = "#7AA89F"}]}],
-  [{"token" = "tab", bold = true, dim = false, fg = "#957FB8"}],
-  [{"token" = "pane", bold = true, dim = false, fg = "#dcd7ba"}],
-  [{"token" = "workspace", bold = false, dim = true}],
+  ["state_icon", {token = "terminal_title_stripped", dim = false}],
+  [{"token" = "tab", bold = true, dim = false}],
+  [{"token" = "pane", bold = true, dim = false}],
+  [{"token" = "$worktree", bold = false, fg = "#94e2d5"}],
+  [{"token" = "workspace", bold = false, dim = true}, "agent", "machine"],
 ]
 # # Optional canonical agent IDs replace the default rows for matching agents.
 # # [ui.sidebar.agents.rows_by_agent]
@@ -119,14 +134,10 @@ rows = [
 [ui.sidebar.spaces]
 row_gap = 1
 rows = [
-  ["state_icon", {token = "workspace", dim = false, bold = true, fg = "#c8c093"}],
+  [{token = "workspace", dim = false, bold = false}],
   ["branch"],
   ["git_status"]
 ]
-#
-# Accent color for highlights, borders, and navigation UI.
-# Accepts: hex (#89b4fa), named colors (cyan, blue, magenta), or rgb(r,g,b)
-# accent = "cyan"
 
 # Background notification popup delivery
 [ui.toast]
@@ -214,24 +225,23 @@ pane_history = true
 name = "catppuccin-mocha"
 auto_switch = false
 
-# [theme.custom]
-# accent = "#c8c093"
-# panel_bg = "#090618"
-# sidebar_bg = "#1f1f28"
-# active_row_bg = "#090618"
-# selection_bg = "#2d4f67"
-#
-# surface0 = "#090618"
-# surface1 = "#2d4f67"
-# surface_dim = "#090618"
-# overlay0 = "#727169"
-# overlay1 = "#2d4f67"
-# text = "#dcd7ba"
-# subtext0 = "#c8c093"
-# mauve = "#957FB8"
-# green = "#76946A"
-# yellow = "#e6c384"
-# red = "#C34043"
-# blue = "#7e9cd8"
-# teal = "#7AA89F"
-# peach = "#FFA066"
+[theme.custom]
+accent = "#f5e0dc"
+panel_bg = "#1e1e2e"
+sidebar_bg = "#1e1e2e"
+active_row_bg = "#313244"
+selection_bg = "#6c7086"
+surface0 = "#313244"
+surface1 = "#45475a"
+surface_dim = "#313244"
+overlay0 = "#6c7086"
+overlay1 = "#7f849c"
+text = "#cdd6f4"
+subtext0 = "#bac2de"
+mauve = "#cba6f7"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+red = "#f38ba8"
+blue = "#89b4fa"
+teal = "#94e2d5"
+peach = "#fab387"

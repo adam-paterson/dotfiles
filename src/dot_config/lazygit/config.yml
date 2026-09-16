@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+
+disableStartupPopups: true
+git:
+  autoFetch: true
+  autoRefresh: true
+  autoForwardBranches: onlyMainBranches
+  fetchAll: true
+  autoStageResolvedConflicts: true
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName} --}
+  ignoreWhitespaceInDiffView: false
+  diffContextSize: 3
+  renameSimilarityThreshold: 50
+  overrideGpg: false
+  disableForcePushing: false
+  parseEmoji: false
+  localBranchSortOrder: date
+  remoteBranchSortOrder: date
+  truncateCopiedCommitHashesTo: 5
+  diffRenderers:
+    - command: "hunk pager --mode split --line-numbers"
+    - command: "delta"
+

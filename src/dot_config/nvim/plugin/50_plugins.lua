@@ -12,7 +12,8 @@ now(function()
 
 	require("chezmoi").setup({
 		edit = {
-			watch = true,
+			-- Apply explicitly after review, never while saving merge work.
+			watch = false,
 			force = false,
 		},
 		events = {
@@ -33,14 +34,6 @@ now(function()
 			},
 		},
 	})
-
-	autocommand({ "BufRead", "BufNewFile" }, { os.getenv("HOME") .. "/.local/share/chezmoi/*" }, function(ev)
-		local bufnr = ev.buf
-		local edit_watch = function()
-			require("chezmoi.commands.__edit").watch(bufnr)
-		end
-		vim.schedule(edit_watch)
-	end)
 end)
 
 later(function()
@@ -94,7 +87,7 @@ later(function()
 
 	require("diffview").setup({
 		enhanced_diff_hl = true,
-		show_help_hints = false,
+		show_help_hints = true,
 		view = {
 			default = { winbar_info = false },
 			merge_tool = {
@@ -117,13 +110,19 @@ later(function()
 		},
 		keymaps = {
 			view = {
+				-- Preserve the global explorer and buffer key groups.
+				{ "n", "<leader>e", false },
+				{ "n", "<leader>b", false },
 				{ "n", "<tab>", actions.select_next_entry, { desc = "Next file" } },
 				{ "n", "<s-tab>", actions.select_prev_entry, { desc = "Prev file" } },
 				{ "n", "<leader>gf", actions.toggle_files, { desc = "Toggle file panel" } },
-				{ "n", "<leader>e", actions.focus_files, { desc = "Focus file panel" } },
+				{ "n", "<leader>gF", actions.focus_files, { desc = "Focus file panel" } },
 				{ "n", "q", actions.close, { desc = "Close diffview" } },
 			},
 			file_panel = {
+				{ "n", "<leader>e", false },
+				{ "n", "<leader>b", false },
+				{ "n", "<leader>gF", actions.focus_files, { desc = "Focus file panel" } },
 				{ "n", "j", actions.next_entry, { desc = "Next entry" } },
 				{ "n", "k", actions.prev_entry, { desc = "Prev entry" } },
 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff" } },
@@ -138,6 +137,10 @@ later(function()
 				{ "n", "q", actions.close, { desc = "Close diffview" } },
 			},
 			file_history_panel = {
+				{ "n", "<leader>e", false },
+				{ "n", "<leader>b", false },
+				{ "n", "<leader>gf", actions.toggle_files, { desc = "Toggle file panel" } },
+				{ "n", "<leader>gF", actions.focus_files, { desc = "Focus file panel" } },
 				{ "n", "j", actions.next_entry, { desc = "Next entry" } },
 				{ "n", "k", actions.prev_entry, { desc = "Prev entry" } },
 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff" } },
@@ -146,9 +149,4 @@ later(function()
 			},
 		},
 	})
-
-	nmap_leader("gd", "<cmd>DiffviewOpen<cr>", icon("diff") .. " Diff view (working copy)")
-	nmap_leader("gc", "<cmd>DiffviewClose<cr>", icon("exit") .. " Close diff view")
-	nmap_leader("gh", "<cmd>DiffviewFileHistory %<cr>", icon("history") .. " File history (current)")
-	nmap_leader("gH", "<cmd>DiffviewFileHistory<cr>", icon("history") .. " File history (repo)")
 end)

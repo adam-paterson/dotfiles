@@ -78,9 +78,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/sickn33/antigravity-awesome-skills.git",
       "skillPath": "skills/github-workflow-automation/SKILL.md",
-      "skillFolderHash": "5b3b136fbd0e2974859bbfacdaa42ff85f3728b6",
+      "skillFolderHash": "14000a84e8e8bf43c70e4753c63a1e4481a85827",
       "installedAt": "2026-02-11T20:57:26.598Z",
-      "updatedAt": "2026-08-28T14:17:29.231Z"
+      "updatedAt": "2026-09-13T09:04:15.086Z"
     },
     "github-actions-pipeline-creator": {
       "source": "patricio0312rev/skills",
@@ -114,9 +114,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/anthropics/skills.git",
       "skillPath": "skills/frontend-design/SKILL.md",
-      "skillFolderHash": "0d5b74a14bdf3ebcd64f352d06376a2ef05ed296",
+      "skillFolderHash": "d79e2a5bb4df4a386c2adcdd9ab8709bba28c3f6",
       "installedAt": "2026-02-20T17:44:50.327Z",
-      "updatedAt": "2026-08-28T14:16:53.290Z"
+      "updatedAt": "2026-09-13T09:04:04.290Z"
     },
     "clickhouse-best-practices": {
       "source": "clickhouse/agent-skills",
@@ -161,7 +161,7 @@
       "skillPath": "skills/sanity-best-practices/SKILL.md",
       "skillFolderHash": "06a93f8ecfbc200dad97b9f5dfd8474a04a37383",
       "installedAt": "2026-04-01T13:48:29.261Z",
-      "updatedAt": "2026-08-28T14:17:54.603Z"
+      "updatedAt": "2026-09-13T09:04:19.197Z"
     },
     "seo-aeo-best-practices": {
       "source": "sanity-io/agent-toolkit",
@@ -241,9 +241,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/higgsfield-ai/skills.git",
       "skillPath": "higgsfield-generate/SKILL.md",
-      "skillFolderHash": "b6f4fc952204d771c04acba0b2f7c655ea848a41",
+      "skillFolderHash": "58b49c59146cbd93106a9fca8c5a8d082abba645",
       "installedAt": "2026-05-29T12:19:27.906Z",
-      "updatedAt": "2026-08-28T14:19:16.204Z"
+      "updatedAt": "2026-09-13T09:04:20.999Z"
     },
     "higgsfield-marketplace-cards": {
       "source": "higgsfield-ai/skills",
@@ -277,18 +277,8 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/JuliusBrussee/caveman.git",
       "skillPath": "skills/caveman/SKILL.md",
-      "skillFolderHash": "75d927c628bcb304f061e193c80c21d617a314e5",
+      "skillFolderHash": "efae5ae14e1ace5f456e895abb9e5643925a754c",
       "installedAt": "2026-05-29T13:17:08.684Z",
-      "updatedAt": "2026-08-28T14:19:37.394Z"
-    },
-    "diagnose": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/engineering/diagnose/SKILL.md",
-      "skillFolderHash": "43d464d0e9d1049b9d525975c0f7367ab7e01a5f",
-      "pluginName": "mattpocock-skills",
-      "installedAt": "2026-05-29T13:17:08.685Z",
       "updatedAt": "2026-06-11T11:58:04.804Z"
     },
     "grill-me": {
@@ -431,42 +421,6 @@
       "skillFolderHash": "0aea91a3599a4bf7aeec17e3262d4cbcfcbeec23",
       "installedAt": "2026-05-29T13:17:08.693Z",
       "updatedAt": "2026-08-28T14:18:16.657Z"
-    },
-    "obsidian-vault": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/personal/obsidian-vault/SKILL.md",
-      "skillFolderHash": "1e814d168a215762391895aee58f4de06c8e3b7f",
-      "installedAt": "2026-05-29T13:17:08.693Z",
-      "updatedAt": "2026-07-01T13:26:52.297Z"
-    },
-    "qa": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/deprecated/qa/SKILL.md",
-      "skillFolderHash": "3eed5beeb18e77776349782ed087ee4560fd69c5",
-      "installedAt": "2026-05-29T13:17:08.694Z",
-      "updatedAt": "2026-07-09T12:37:22.972Z"
-    },
-    "request-refactor-plan": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/deprecated/request-refactor-plan/SKILL.md",
-      "skillFolderHash": "603d197e4306ad8f1d8c4595d5aab4296b2d1f82",
-      "installedAt": "2026-05-29T13:17:08.694Z",
-      "updatedAt": "2026-07-27T09:14:25.333Z"
-    },
-    "review": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/in-progress/review/SKILL.md",
-      "skillFolderHash": "756c8dd5c0f097682b45ff10d64ca23087b19159",
-      "installedAt": "2026-05-29T13:17:08.694Z",
-      "updatedAt": "2026-06-11T11:58:04.823Z"
     },
     "scaffold-exercises": {
       "source": "mattpocock/skills",

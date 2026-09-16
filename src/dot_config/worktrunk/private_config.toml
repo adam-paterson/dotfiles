@@ -1,10 +1,14 @@
 worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
 
+[post-switch]
+herdr = '''
+if [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ]; then
+  herdr pane report-metadata "$HERDR_PANE_ID" \
+    --source worktrunk --token worktree={{ worktree_name }}
+fi
+'''
 
 [projects]
-
-[projects."ssh.dev.azure.com/v3/idhl/*".commit.generation]
-command = "MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --safe-mode --setting-sources='user' --system-prompt=''"
 
 [projects."ssh.dev.azure.com/v3/idhl/*".list.custom-columns.Ticket]
 template = "{{ vars.ticket }}"

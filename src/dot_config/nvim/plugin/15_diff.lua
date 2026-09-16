@@ -1,4 +1,9 @@
 -- Shared by nvim -d, :diffsplit, and merge tools that use native diff mode.
+Config.is_native_diff = function()
+	local diffview = package.loaded["diffview.lib"]
+	return vim.wo.diff and not (diffview and diffview.get_current_view())
+end
+
 local function diff_windows()
 	local windows = vim.tbl_filter(function(win)
 		return vim.wo[win].diff
@@ -10,7 +15,7 @@ local function diff_windows()
 end
 
 local function choose_panel(index, obtain)
-	if not vim.wo.diff then
+	if not Config.is_native_diff() then
 		vim.notify("Use diff-panel shortcuts from a diff window", vim.log.levels.WARN)
 		return
 	end
@@ -75,7 +80,7 @@ local function sync_mappings()
 		end
 	end
 	mapped_buffer = nil
-	if vim.wo.diff then
+	if Config.is_native_diff() then
 		mapped_buffer = vim.api.nvim_get_current_buf()
 		for _, map in ipairs(mappings) do
 			vim.keymap.set("n", "<leader>gm" .. map[1], map[2], { buffer = mapped_buffer, desc = map[3] })

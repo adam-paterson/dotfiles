@@ -1,0 +1,5 @@
+theme = "catppuccin-mocha"
+mode = "split"
+watch = true
+line_numbers = true
+menu_bar = false

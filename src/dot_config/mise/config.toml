@@ -16,7 +16,9 @@ credential_command = 'if [ "$MISE_CREDENTIAL_HOST" = github.com ] && [ -x "$HOME
 _.path = ["./node_modules/.bin", "./bin"]
 
 [tools]
+"aqua:fish-shell/fish-shell" = "latest"
 "aqua:simeji/jid" = "latest"
+cloc = { version = "latest", bin = "cloc", platforms = { linux-arm64 = { asset_pattern = "cloc-{{ version }}.pl" }, linux-x64 = { asset_pattern = "cloc-{{ version }}.pl" }, macos-arm64 = { asset_pattern = "cloc-{{ version }}.pl" }, macos-x64 = { asset_pattern = "cloc-{{ version }}.pl" }, windows-x64 = { asset_pattern = "cloc-{{ version }}.exe" } } }
 lazyssh = "latest"
 "npm:@tailwindcss/language-server" = "latest"
 pnpm = "10.34.5"
