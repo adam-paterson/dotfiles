@@ -25,8 +25,6 @@ brew "virtualenv"
 brew "wget"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
-# Git worktree manager with editor and AI tool integration
-brew "coderabbitai/tap/git-gtr"
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support

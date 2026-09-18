@@ -1,0 +1,10 @@
+# Retired shell integrations on both macOS and Linux.
+.config/fish/conf.d/gtr.fish
+.config/fish/completions/git-gtr.fish
+.config/fish/conf.d/usage.fish
+# PATH setup now precedes a single mise activation.
+.config/fish/conf.d/brew.fish
+.config/fish/conf.d/orbstack.fish
+.config/fish/conf.d/paths.fish
+.config/fish/conf.d/00-mise.fish
+.config/fish/conf.d/zz-nvim.fish

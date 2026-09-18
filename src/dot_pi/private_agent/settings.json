@@ -47,53 +47,45 @@
       "delegate": {
         "model": "openai-codex/gpt-5.6-sol",
         "thinking": "medium",
-        "defaultContext": "fresh",
-        "fallbackModels": false
+        "defaultContext": "fresh"
       },
       "oracle": {
         "model": "openai-codex/gpt-6-astra",
         "thinking": "xhigh",
-        "defaultContext": "fork",
-        "fallbackModels": false
+        "defaultContext": "fork"
       },
       "researcher": {
         "model": "openai-codex/gpt-5.6-sol",
         "thinking": "low",
-        "defaultContext": "fresh",
-        "fallbackModels": false
+        "defaultContext": "fresh"
       },
       "reviewer": {
         "model": "openai-codex/gpt-6-astra",
         "thinking": "xhigh",
-        "defaultContext": "fresh",
-        "fallbackModels": false
+        "defaultContext": "fresh"
       },
       "scout": {
         "description": "Locate local files, symbols and exact passages; hand interpretation to synthesizer or oracle",
         "model": "openai-codex/gpt-5.6-sol",
         "thinking": "low",
         "defaultContext": "fresh",
-        "fallbackModels": false,
         "tools": ["read", "grep", "find", "ls"],
         "output": false
       },
       "worker": {
         "model": "openai-codex/gpt-5.6-sol",
         "thinking": "medium",
-        "defaultContext": "fork",
-        "fallbackModels": false
+        "defaultContext": "fork"
       },
       "synthesizer": {
         "model": "openai-codex/gpt-5.6-sol",
         "thinking": "high",
-        "defaultContext": "fresh",
-        "fallbackModels": false
+        "defaultContext": "fresh"
       },
       "risk-reviewer": {
         "model": "github-copilot/claude-opus-5",
         "thinking": "high",
-        "defaultContext": "fresh",
-        "fallbackModels": false
+        "defaultContext": "fresh"
       }
     }
   },

@@ -7,7 +7,6 @@ Refs: $XDG_CONFIG/.agents/references/*.nano.md -> full.md when required.
 - ff: for file search
 - ast-grep: for symbol search
 - herdr: terminal multiplexer with agent support
-- gtr: worktree management
 
 ## MCP Tools
 - See /mcporter skill. Prefer over direct MCP

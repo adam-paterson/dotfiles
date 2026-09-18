@@ -37,6 +37,7 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>o", desc = icon("other") .. " Other" },
 	{ mode = "n", keys = "<Leader>s", desc = icon("save") .. " Session" },
 	{ mode = "n", keys = "<Leader>t", desc = icon("terminal") .. " Terminal" },
+	{ mode = "n", keys = "<Leader>u", desc = icon("paint") .. " UI" },
 	{ mode = "n", keys = "<Leader>v", desc = icon("eye") .. " Visits" },
 
 	{ mode = "x", keys = "<Leader>d", desc = icon("play") .. " Debug" },
@@ -180,6 +181,36 @@ nmap_leader("sw", "<Cmd>lua MiniSessions.write()<CR>", icon("save") .. " Write c
 -- t is for 'Terminal'
 nmap_leader("tT", "<Cmd>horizontal term<CR>", icon("terminal") .. " Terminal (horizontal)")
 nmap_leader("tt", "<Cmd>vertical term<CR>", icon("terminal") .. " Terminal (vertical)")
+
+-- u is for 'UI'. Toggles for on-screen elements. See docs/nvim-ui-toggles.md
+local ui_toggle = function(option)
+	return function() vim.wo[option] = not vim.wo[option] end
+end
+
+nmap_leader("ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, icon("toggle") .. " Animations")
+nmap_leader("ub", "<Cmd>lua vim.o.background = (vim.o.background == 'dark' and 'light' or 'dark')<CR>", icon("paint") .. " Background dark/light")
+nmap_leader("uc", ui_toggle("cursorline"), icon("toggle") .. " Cursorline")
+nmap_leader("uC", function() vim.wo.colorcolumn = vim.wo.colorcolumn == "" and "+1" or "" end, icon("toggle") .. " Color column")
+nmap_leader("ud", function()
+	local f = { bufnr = 0 }
+	vim.diagnostic.enable(not vim.diagnostic.is_enabled(f), f)
+end, icon("diagnostic") .. " Diagnostics")
+nmap_leader("ug", function() vim.wo.signcolumn = vim.wo.signcolumn == "no" and "yes" or "no" end, icon("toggle") .. " Sign column")
+nmap_leader("uh", function() vim.cmd(vim.g.syntax_on and "syntax off" or "syntax enable") end, icon("toggle") .. " Syntax highlighting")
+nmap_leader("ui", function()
+	local f = { bufnr = 0 }
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(f), f)
+end, icon("diagnostics.hint") .. " Inlay hints")
+nmap_leader("ul", ui_toggle("list"), icon("toggle") .. " Whitespace characters")
+nmap_leader("un", ui_toggle("number"), icon("toggle") .. " Line numbers")
+nmap_leader("ur", ui_toggle("relativenumber"), icon("toggle") .. " Relative numbers")
+nmap_leader("us", ui_toggle("spell"), icon("toggle") .. " Spell")
+nmap_leader("ux", function() vim.wo.conceallevel = (vim.wo.conceallevel + 1) % 4 end, icon("toggle") .. " Conceal level")
+-- Wrap also sets 'linebreak' so wrapped lines break at word boundaries.
+nmap_leader("uw", function()
+	vim.wo.wrap = not vim.wo.wrap
+	vim.wo.linebreak = vim.wo.wrap
+end, icon("toggle") .. " Wrap")
 
 -- v is for 'Visits'. Common usage:
 -- - `<Leader>vv` - add    "core" label to current file.
