@@ -8,6 +8,7 @@ dependencies:
     - git: adam-paterson/skills
       skills:
         - huh
+        - to-gherkin
     - git: mattpocock/skills
       skills:
         - grilling

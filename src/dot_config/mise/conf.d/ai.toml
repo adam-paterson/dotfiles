@@ -1,4 +1,5 @@
 [tools]
+"github:microsoft/apm" = "0.31.0"
 claude = "latest"
 "aqua:sigoden/aichat" = "latest"
 "aqua:openai/codex" = "latest"
