@@ -12,9 +12,8 @@ now(function()
 
 	require("chezmoi").setup({
 		edit = {
-			-- Apply explicitly after review, never while saving merge work.
-			watch = false,
-			force = false,
+			watch = true,
+			force = true,
 		},
 		events = {
 			on_open = {

@@ -1,0 +1,15 @@
+name: global-skills
+version: 1.0.0
+targets:
+  - agent-skills
+  - claude
+dependencies:
+  apm:
+    - git: adam-paterson/skills
+      skills:
+        - huh
+    - git: mattpocock/skills
+      skills:
+        - grilling
+        - grill-with-docs
+        - domain-modeling

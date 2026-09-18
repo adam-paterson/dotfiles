@@ -67,7 +67,7 @@ os.execvp(args[0], args)
            "TERM": "dumb", "CALL_LOG": str(root / "calls.json"), "SENTINEL": str(root / "injected")}
 
     for hostname, environment_id, auth in [
-        ("MACBOOK-002531.local", "4nkxoouuuii3ubgohy7ykhqzsm", "desktop"),
+        ("MACBOOK-002531.local", "4nkxoouuuii3ubgohy7ykhqzsm", "service-account"),
         ("Seraph", "wqadrv3ix5cxwrv642dxae6puy", "service-account"),
         ("Travelbook.example", "aaaaaaaaaaaaaaaaaaaaaaaaaa", "desktop"),
         ("buildbox", "bbbbbbbbbbbbbbbbbbbbbbbbbb", "service-account"),

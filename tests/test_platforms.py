@@ -12,6 +12,7 @@ with tempfile.TemporaryDirectory() as directory:
     source = root / "source"
     source.mkdir()
     shutil.copy(SOURCE / ".chezmoiignore", source)
+    shutil.copy(SOURCE / ".chezmoiremove", source)
     for name in [".chezmoidata", "dot_config/aerospace", "dot_config/private_fish", "dot_config/ghostty"]:
         shutil.copytree(SOURCE / name, source / name)
     # Accidental captures must stay ignored even if they reappear in the source.
@@ -42,18 +43,28 @@ with tempfile.TemporaryDirectory() as directory:
         managed = set(run("managed", "--path-style=relative").splitlines())
         assert ".config/fish/fish_variables" not in managed
         assert not any("/.git" in path for path in managed)
-        for path in [".config/aerospace/aerospace.toml", ".config/fish/conf.d/brew.fish",
-                     ".config/fish/conf.d/orbstack.fish", ".config/fish/completions/orbctl.fish"]:
+        for path in [".config/aerospace/aerospace.toml", ".config/fish/conf.d/00-brew.fish",
+                     ".config/fish/conf.d/00-orbstack.fish", ".config/fish/completions/orbctl.fish"]:
             assert (path in managed) == (platform == "darwin"), (platform, path)
         lock = json.loads(run("cat", str(home / ".config/nvim/nvim-pack-lock.json")))
         assert "diffview.nvim" in lock["plugins"]
         ghostty = run("cat", str(home / ".config/ghostty/config"))
         assert ("macos-option-as-alt" in ghostty) == (platform == "darwin")
-        run("apply", "--no-tty", "--parent-dirs", str(home / ".config/fish/conf.d/paths.fish"))
+        run("apply", "--no-tty", "--parent-dirs", str(home / ".config/fish/conf.d/00-paths.fish"))
         subprocess.run(["fish", "--no-config", "-c",
-                        'source "$HOME/.config/fish/conf.d/paths.fish"; '
+                        'source "$HOME/.config/fish/conf.d/00-paths.fish"; '
                         'contains -- "$HOME/.local/bin" $PATH; or exit 1; '
                         'contains -- "$HOME/.dotnet/tools" $PATH; or exit 1'],
                        env=env, check=True)
+        retired = [home / ".config/fish/conf.d/gtr.fish",
+                   home / ".config/fish/completions/git-gtr.fish",
+                   home / ".config/fish/conf.d/usage.fish",
+                   *(home / ".config/fish/conf.d" / name for name in
+                     ["brew.fish", "orbstack.fish", "paths.fish", "00-mise.fish", "zz-nvim.fish"])]
+        for path in retired:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("# Retired shell integration\n")
+        run("apply", "--no-tty", "--exclude=scripts", *(str(path) for path in retired))
+        assert all(not path.exists() for path in retired)
         assert state.read_text() == "# Local runtime state\n"
-        print(f"PASS: {platform} file selection, native paths, shared Diffview, preserved Fish state")
+        print(f"PASS: {platform} file selection, native paths, shared Diffview, retired hook removal, preserved Fish state")
