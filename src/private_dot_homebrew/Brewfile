@@ -1,8 +1,48 @@
+tap "apolloio/apollo-io-cli"
+tap "azure/azd", trusted: { casks: ["azd"] }
+tap "ctrlspice/otel-desktop-viewer", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
-# GNU compiler collection for arm-none-eabi
-brew "arm-none-eabi-gcc"
+tap "largemodgames/spotatui", "https://github.com/LargeModGames/homebrew-spotatui"
+tap "rjyo/moshi", trusted: true
+tap "romaintb/terminalist", trusted: true
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@3"
+# GNU compiler collection for arm-none-eabi
+brew "arm-none-eabi-gcc"
+# Code searching, linting, rewriting
+brew "ast-grep"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Yet another cross-platform graphical process/system monitor
+brew "bottom"
+# Statistics utility to count lines of code
+brew "cloc"
+# Dependency manager for Cocoa projects
+brew "cocoapods"
+# TIFF library and utilities
+brew "libtiff"
+# More intuitive version of du in rust
+brew "dust"
+# Select default apps for documents and URL schemes on macOS
+brew "duti"
+# Modern, maintained replacement for ls
+brew "eza"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
+# Monitor a directory for changes and run a shell command
+brew "fswatch"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
+# Review-first terminal diff viewer for agent-authored changesets
+brew "hunk"
+# Command-line benchmarking tool
+brew "hyperfine"
 # Package manager for the Lua programming language
 brew "luarocks"
 # Move files and folders to the trash
@@ -13,6 +53,12 @@ brew "mas"
 brew "mole"
 # Remote terminal application
 brew "mosh"
+# Tool for sending events from shell scripts & similar environments
+brew "otel-cli"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Modern replacement for ps written in Rust
+brew "procs"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Command-line tool to customize Spotify client
@@ -25,12 +71,24 @@ brew "virtualenv"
 brew "wget"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# Apollo.io CLI for searching people, companies, and more
+brew "apolloio/apollo-io-cli/apollo-io-cli", trusted: true
+# Azure Developer CLI
+brew "azure/azd/azd", trusted: true
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
+# Spotify client for the terminal written in Rust, powered by Ratatui
+brew "largemodgames/spotatui/spotatui", trusted: true
 # Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
 brew "rjyo/moshi/moshi-hook"
+# A terminal-based Todoist client with modern TUI interface
+brew "romaintb/terminalist/terminalist"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Command-line interface for 1Password
+cask "1password-cli"
 cask "aerospace"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
@@ -59,6 +117,8 @@ cask "font-code-new-roman-nerd-font"
 cask "font-comic-shanns-mono-nerd-font"
 cask "font-fira-code-nerd-font"
 cask "font-ibm-plex-mono"
+cask "font-iosevka-nerd-font"
+cask "font-iosevka-term-nerd-font"
 cask "font-maple-mono-nf"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
@@ -75,6 +135,8 @@ cask "karabiner-elements"
 cask "keyboardcleantool"
 # Privacy-first, open-source platform for knowledge sharing and management
 cask "logseq"
+# Markdown editor
+cask "markedit"
 # App to write, plan, collaborate, and get organised
 cask "notion"
 # Open-source software for live streaming and screen recording
@@ -83,6 +145,10 @@ cask "obs"
 cask "obsidian"
 # Replacement for Docker Desktop
 cask "orbstack"
+# otel-desktop-viewer is a CLI tool for receiving OpenTelemetry traces, metrics, and logs on your local machine.
+cask "ctrlspice/otel-desktop-viewer/otel-desktop-viewer"
+# Command-line shell and scripting language
+cask "powershell@preview"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Collection of apps available by subscription
@@ -91,6 +157,8 @@ cask "setapp"
 cask "slidepilot"
 # Sound and audio controller
 cask "soundsource"
+# Music streaming service
+cask "spotify"
 # System monitor for the menu bar
 cask "stats"
 # Mesh VPN based on WireGuard
@@ -101,23 +169,6 @@ cask "telegram"
 cask "visual-studio-code"
 # Native desktop client for WhatsApp
 cask "whatsapp"
-mas "Codye", id: 1516894961
-mas "Fantastical", id: 975937182
-mas "Goodnotes", id: 1444383602
-mas "Keeper Password Manager", id: 414781829
-mas "Kindle", id: 302584613
-mas "Microsoft Excel", id: 462058435
-mas "Microsoft OneNote", id: 784801555
-mas "Microsoft Outlook", id: 985367838
-mas "Microsoft PowerPoint", id: 462062816
-mas "Microsoft To Do", id: 1274495053
-mas "Microsoft Word", id: 462054704
-mas "Notability", id: 360593530
-mas "OneDrive", id: 823766827
-mas "Telegram", id: 747648890
-mas "TestFlight", id: 899247664
-mas "Todoist", id: 585829637
-mas "Windows App", id: 1295203466
 vscode "1yib.rust-bundle"
 vscode "actboy168.lua-debug"
 vscode "akamud.vscode-theme-onedark"
@@ -228,6 +279,9 @@ vscode "subframe7536.custom-ui-style"
 vscode "tamasfe.even-better-toml"
 vscode "tonybaloney.vscode-pets"
 vscode "typescriptteam.native-preview"
+vscode "unifiedjs.vscode-mdx"
+vscode "vitest.explorer"
+vscode "voidzero.vite-plus-extension-pack"
 vscode "wholroyd.jinja"
 vscode "yinfei.luahelper"
 go "cmd/go"
@@ -238,6 +292,3 @@ uv "specify-cli", source: "git+https://github.com/github/spec-kit.git"
 uv "terminal-bench"
 uv "trafilatura"
 uv "zmk"
-npm "@agentclientprotocol/codex-acp"
-npm "@plannotator/pi-extension"
-npm "prime-agent"
