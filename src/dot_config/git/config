@@ -10,6 +10,12 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	st = status -sb
 	unstage = reset HEAD --
+  dlog = -c diff.external=difft log --ext-diff
+  dshow = -c diff.external=difft show --ext-diff
+  ddiff = -c diff.external=difft diff
+  dl = -c diff.external=difft log -p --ext-diff
+  ds = -c diff.external=difft show --ext-diff
+  dft = -c diff.external=difft diff
 
 [color]
 	ui = true
@@ -17,8 +23,10 @@
 [core]
 	editor = nvim
 	longpaths = true
-	pager = delta
 	excludesFile = ~/.config/git/ignore
+
+[pager]
+  difftool = true
 
 [delta]
 	dark = true
@@ -42,6 +50,14 @@
 
 [interactive]
 	diffFilter = delta --color-only
+
+[diff]
+  external = difft diff
+  tool = difftastic
+
+[difftool "difftastic"]
+  prompt = false
+  cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
 [merge]
 	autoStash = true

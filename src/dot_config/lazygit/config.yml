@@ -18,6 +18,8 @@ git:
   remoteBranchSortOrder: date
   truncateCopiedCommitHashesTo: 5
   diffRenderers:
+    - type: extDiff
+      command: difft --color=always --context={{diffContext}}
     - command: "hunk pager --mode split --line-numbers"
     - command: "delta"
 
