@@ -134,7 +134,12 @@ safely("later", function()
 end)
 
 safely("later", function()
-	require("mini.pick").setup()
+	require("mini.pick").setup({
+    window = {
+      prompt_caret = "󰗧 ",
+      prompt_prefix = "󰘧 "
+    }
+  })
 end)
 
 safely("now", function()

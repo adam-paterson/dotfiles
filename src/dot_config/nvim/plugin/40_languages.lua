@@ -152,6 +152,16 @@ safely("later", function()
   require("aerial").setup()
 end)
 
+safely("later", function()
+	vim.pack.add({ gh("folke/trouble.nvim") })
+
+	require("trouble").setup({
+		focus = true,
+		auto_close = true,
+		win = { position = "bottom", size = 10 },
+	})
+end)
+
 -- ─ Snippets ─────────────────────────────────────────────────
 safely("later", function()
 	vim.pack.add({ gh("rafamadriz/friendly-snippets"), gh("L3MON4D3/LuaSnip") })

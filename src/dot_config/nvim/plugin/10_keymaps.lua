@@ -40,6 +40,7 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>t", desc = icon("terminal") .. " Terminal" },
 	{ mode = "n", keys = "<Leader>u", desc = icon("paint") .. " UI" },
 	{ mode = "n", keys = "<Leader>v", desc = icon("eye") .. " Visits" },
+	{ mode = "n", keys = "<Leader>x", desc = icon("diagnostic") .. " Trouble" },
 
 	{ mode = "x", keys = "<Leader>d", desc = icon("play") .. " Debug" },
 	{ mode = "x", keys = "<Leader>g", desc = icon("git") .. " Git" },
@@ -240,6 +241,13 @@ nmap_leader("vv", '<Cmd>lua MiniVisits.add_label("core")<CR>', icon("star") .. '
 nmap_leader("vV", '<Cmd>lua MiniVisits.remove_label("core")<CR>', icon("star_o") .. ' Remove "core" label')
 nmap_leader("vl", "<Cmd>lua MiniVisits.add_label()<CR>", icon("tag") .. " Add label")
 nmap_leader("vL", "<Cmd>lua MiniVisits.remove_label()<CR>", icon("tag") .. " Remove label")
+
+-- x is for 'Trouble'. mini.pick's marked results can be sent to quickfix.
+nmap_leader("xx", "<Cmd>Trouble diagnostics toggle<CR>", icon("diagnostic") .. " Diagnostics (workspace)")
+nmap_leader("xX", "<Cmd>Trouble diagnostics toggle filter.buf=0<CR>", icon("diagnostic") .. " Diagnostics (buffer)")
+nmap_leader("xq", "<Cmd>Trouble qflist toggle<CR>", icon("quick") .. " Quickfix (Trouble)")
+nmap_leader("xl", "<Cmd>Trouble loclist toggle<CR>", icon("list") .. " Location list (Trouble)")
+nmap_leader("xL", "<Cmd>Trouble lsp toggle<CR>", icon("link") .. " LSP results (Trouble)")
 
 -- q is for 'Quit'
 nmap("q", "<cmd>qa<CR>", icon("exit") .. " Quit")
