@@ -148,6 +148,11 @@ nmap_leader("lw", '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>', icon("tag")
 
 nmap_leader("ll", "<Cmd>lua vim.lsp.codelens.run()<CR>", icon("lens") .. " Run CodeLens")
 
+nmap_leader("lo", "<Cmd>AerialToggle!<CR>", icon("list") .. " Outline toggle (Aerial)")
+nmap_leader("lO", "<Cmd>AerialNavToggle<CR>", icon("tag") .. " Symbol navigator (Aerial)")
+nmap_leader("ln", "<Cmd>AerialNext<CR>", icon("tag") .. " Next symbol (Aerial)")
+nmap_leader("lp", "<Cmd>AerialPrev<CR>", icon("tag") .. " Previous symbol (Aerial)")
+
 xmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', icon("format") .. " Format selection")
 
 -- m is for 'Map'. Common usage:

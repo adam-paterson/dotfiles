@@ -140,8 +140,15 @@ later(function()
 			["yaml.ansible"] = { "prettier" },
 			lua = { "stylua" },
 			toml = { "tombi" },
+      markdown = { "oxfmt" },
 		},
 	})
+end)
+
+later(function ()
+  vim.pack.add({gh("stevearc/aerial.nvim")})
+
+  require("aerial").setup()
 end)
 
 -- ─ Snippets ─────────────────────────────────────────────────

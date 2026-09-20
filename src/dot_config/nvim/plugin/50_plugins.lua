@@ -50,32 +50,26 @@ later(function()
 
 	nmap_leader("gg", "<Cmd>lua _lazygit_toggle()<CR>", icon("git") .. " LazyGit")
 
-  local Glow = nil
-  function _glow_markdown_preview()
-    if Glow and Glow:is_open() then
-      Glow:close()
-      return
-    end
-    local file = vim.api.nvim_buf_get_name(0)
-    if file == "" or vim.bo.filetype ~= "markdown" then
-      vim.notify("Markdown preview: not a markdown buffer", vim.log.levels.WARN)
-      return
-    end
-    if Glow then Glow:shutdown() end
-    Glow = Terminal:new({
-      cmd = "glow " .. vim.fn.shellescape(file),
-      direction = "vertical",
-      close_on_exit = false,
-      display_name = "markdown",
-      on_open = function(term)
-        vim.cmd("stopinsert")
-        vim.api.nvim_set_option_value("winbar", "", { win = term.window })
-      end,
-    })
-    Glow:open(math.floor(vim.o.columns * 0.4))
-  end
+end)
 
-  nmap_leader("om", "<Cmd>lua _glow_markdown_preview()<Cr>", "Markdown Preview")
+later(function()
+	vim.pack.add({ gh("OXY2DEV/markview.nvim") })
+
+	require("markview").setup({
+		markdown_inline = {
+			tags = {
+				enable = true,
+				default = {
+					hl = "MarkviewCodeInfo",
+					padding_left = "",
+					padding_left_hl = "MarkviewCodeFg",
+					padding_right = "",
+					padding_right_hl = "MarkviewCodeFg",
+				},
+			},
+		},
+	})
+
 end)
 
 
