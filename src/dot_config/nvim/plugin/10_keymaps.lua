@@ -35,6 +35,7 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>l", desc = icon("code") .. " Language" },
 	{ mode = "n", keys = "<Leader>m", desc = icon("map") .. " Map" },
 	{ mode = "n", keys = "<Leader>o", desc = icon("other") .. " Other" },
+	{ mode = "n", keys = "<Leader>p", desc = icon("gears") .. " Plugins" },
 	{ mode = "n", keys = "<Leader>s", desc = icon("save") .. " Session" },
 	{ mode = "n", keys = "<Leader>t", desc = icon("terminal") .. " Terminal" },
 	{ mode = "n", keys = "<Leader>u", desc = icon("paint") .. " UI" },
@@ -170,6 +171,10 @@ nmap_leader("or", "<Cmd>lua MiniMisc.resize_window()<CR>", icon("resize") .. " R
 nmap_leader("ot", "<Cmd>lua MiniTrailspace.trim()<CR>", icon("trim") .. " Trim trailspace")
 nmap_leader("oz", "<Cmd>lua MiniMisc.zoom()<CR>", icon("zoom") .. " Zoom toggle")
 nmap_leader("oc", '<Cmd>lua require("chezmoi.pick").mini()<CR>', icon("other") .. " Chezmoi pick")
+
+-- p is for 'Plugins'. Updates open vim.pack's confirmation buffer.
+nmap_leader("pu", vim.pack.update, icon("refresh") .. " Update plugins")
+nmap_leader("pl", function() vim.print(vim.pack.get()) end, icon("list") .. " List plugins")
 
 -- s is for 'Session'. Common usage:
 -- - `<Leader>sn` - start new session

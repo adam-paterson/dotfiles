@@ -3,8 +3,9 @@
 -- TS, DAP, LSP configurations for programming languages.
 -- ═══════════════════════════════════════════════════════════
 
-local add = vim.pack.add
-local now_if_args, later, autocommand, gh = Config.now_if_args, Config.later, Config.new_automd, Config.gh
+local safely = require("mini.misc").safely
+local when_args = vim.fn.argc(-1) > 0 and "now" or "later"
+local gh = Config.gh
 
 -- ─ Chezmoi templates ─────────────────────────────────────────────
 -- *.tmpl files get the filetype of their base name, so e.g.
@@ -17,14 +18,14 @@ Config.new_autocmd({ "BufRead", "BufNewFile" }, "*.tmpl", function(ev)
 end, "Set filetype from chezmoi template base name")
 
 -- ─ Tree-sitter ─────────────────────────────────────────────────
-now_if_args(function()
+safely(when_args, function()
 	-- Define hook to update tree-sitter parsers after plugin is updated
 	local ts_update = function()
 		vim.cmd("TSUpdate")
 	end
 	Config.on_packchanged("nvim-treesitter", { "update" }, ts_update, ":TSUpdate")
 
-	add({
+	vim.pack.add({
 		gh("nvim-treesitter/nvim-treesitter"),
 		gh("nvim-treesitter/nvim-treesitter-textobjects"),
 	})
@@ -86,8 +87,8 @@ now_if_args(function()
 end)
 
 -- ─ Language servers ─────────────────────────────────────────────────
-now_if_args(function()
-	add({ gh("neovim/nvim-lspconfig"), gh("b0o/schemastore.nvim") })
+safely(when_args, function()
+	vim.pack.add({ gh("neovim/nvim-lspconfig"), gh("b0o/schemastore.nvim") })
 
 	-- Lua LS can complete Neovim and plugin APIs when their source is in its
 	-- library. Plugins that publish EmmyLua annotations get the best results.
@@ -123,8 +124,8 @@ now_if_args(function()
 end)
 
 -- ─ Formatters ─────────────────────────────────────────────────
-later(function()
-	add({ gh("stevearc/conform.nvim") })
+safely("later", function()
+	vim.pack.add({ gh("stevearc/conform.nvim") })
 
 	require("conform").setup({
 		default_format_opts = {
@@ -145,16 +146,15 @@ later(function()
 	})
 end)
 
-later(function ()
+safely("later", function()
   vim.pack.add({gh("stevearc/aerial.nvim")})
 
   require("aerial").setup()
 end)
 
 -- ─ Snippets ─────────────────────────────────────────────────
-later(function()
-	add({ gh("rafamadriz/friendly-snippets") })
-	add({ gh("L3MON4D3/LuaSnip") })
+safely("later", function()
+	vim.pack.add({ gh("rafamadriz/friendly-snippets"), gh("L3MON4D3/LuaSnip") })
 
 	require("luasnip").setup({
 		region_check_events = "CursorMoved,CursorHold,InsertEnter",

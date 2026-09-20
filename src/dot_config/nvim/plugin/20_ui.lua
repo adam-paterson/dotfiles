@@ -3,11 +3,11 @@
 -- General user interface plugins and configuration
 -- ═══════════════════════════════════════════════════════════
 
-local now, now_if_args, later, gh, autocommand, nmap_leader  =
-	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd, Config.nmap_leader
+local safely = require("mini.misc").safely
+local gh, nmap_leader = Config.gh, Config.nmap_leader
 
 -- ─ Colorscheme ─────────────────────────────────────────────
-now(function()
+safely("now", function()
 	-- vim.pack.add({ gh("rebelot/kanagawa.nvim") })
 	-- vim.cmd("colorscheme kanagawa-wave")
 
@@ -16,12 +16,12 @@ now(function()
 end)
 
 -- ─ Statusline ──────────────────────────────────────────────
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("nvim-lualine/lualine.nvim") })
 end)
 
 -- ─ Dashboard / Starter ─────────────────────────────────────
-now(function()
+safely("now", function()
 	require("mini.starter").setup({
 		header = "Hello",
 		footer = "Bum",
@@ -29,7 +29,7 @@ now(function()
 end)
 
 -- ─ File explorers ─────────────────────────────────────
-now(function()
+safely("now", function()
 	require("mini.files").setup({
     windows = {
       preview = true,
@@ -41,7 +41,7 @@ now(function()
 	})
 end)
 
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("nvim-tree/nvim-tree.lua") })
 	-- Keep mini.files in charge of opening directories; the tree is opt-in.
 	require("nvim-tree").setup({
@@ -57,7 +57,7 @@ later(function()
 	})
 end)
 
-now(function ()
+safely("now", function()
   vim.pack.add({gh 'Bekaboo/dropbar.nvim' })
 
   -- Keep terminal splits (e.g. the glow preview) chrome-free:
@@ -79,7 +79,7 @@ end)
 
 -- ─ Key hints ─────────────────────────────────────────
 
-later(function()
+safely("later", function()
 	local miniclue = require("mini.clue")
   -- stylua: ignore
   miniclue.setup({
@@ -125,18 +125,18 @@ later(function()
 end)
 
 -- ─ Animations ─────────────────────────────────────────
-later(function()
+safely("later", function()
 	require("mini.animate").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.cmdline").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.pick").setup()
 end)
 
-now(function()
+safely("now", function()
 	require("mini.notify").setup()
 end)

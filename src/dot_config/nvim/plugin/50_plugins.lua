@@ -1,13 +1,13 @@
-now, later, gh, autocommand, nmap_leader, icon =
-	Config.now, Config.later, Config.gh, Config.new_autocmd, Config.nmap_leader, Config.icon
+local safely = require("mini.misc").safely
+local gh, nmap_leader, icon = Config.gh, Config.nmap_leader, Config.icon
 
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("olimorris/codecompanion.nvim") })
 
 	require("codecompanion").setup({})
 end)
 
-now(function()
+safely("now", function()
 	vim.pack.add({ gh("nvim-lua/plenary.nvim"), gh("xvzc/chezmoi.nvim") })
 
 	require("chezmoi").setup({
@@ -35,7 +35,7 @@ now(function()
 	})
 end)
 
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("akinsho/toggleterm.nvim") })
 
 	require("toggleterm").setup()
@@ -52,7 +52,7 @@ later(function()
 
 end)
 
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("OXY2DEV/markview.nvim") })
 
 	require("markview").setup({
@@ -73,7 +73,7 @@ later(function()
 end)
 
 
-later(function()
+safely("later", function()
 	vim.pack.add({ gh("sindrets/diffview.nvim") })
 
 	local actions = require("diffview.actions")

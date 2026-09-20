@@ -3,10 +3,11 @@
 -- General editor plugins and configuration
 -- ═══════════════════════════════════════════════════════════
 
-local now, now_if_args, later, gh, autocommand, nmap_leader =
-	Config.now, Config.now_if_args, Config.later, Config.gh, Config.new_autocmd, Config.nmap_leader
+local safely = require("mini.misc").safely
+local when_args = vim.fn.argc(-1) > 0 and "now" or "later"
+local gh, nmap_leader = Config.gh, Config.nmap_leader
 
-now(function()
+safely("now", function()
 	require("mini.basics").setup({
 		-- Manage options in 'plugin/10_options.lua' for didactic purposes
 		options = { basic = false },
@@ -20,7 +21,7 @@ now(function()
 end)
 
 -- Miscellaneous small but useful functions.
-now_if_args(function()
+safely(when_args, function()
 	require("mini.misc").setup()
 
 	-- Change current working directory based on the current file path.
@@ -33,15 +34,15 @@ now_if_args(function()
 	MiniMisc.setup_termbg_sync()
 end)
 
-now(function()
+safely("now", function()
 	require("mini.sessions").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.extra").setup()
 end)
 
-later(function()
+safely("later", function()
 	local ai = require("mini.ai")
 	ai.setup({
 		custom_textobjects = {
@@ -52,35 +53,35 @@ later(function()
 	})
 end)
 
-later(function()
+safely("later", function()
 	require("mini.align").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.bracketed").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.bufremove").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.cursorword").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.comment").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.diff").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.git").setup()
 end)
 
-later(function()
+safely("later", function()
 	local hipatterns = require("mini.hipatterns")
 	local hi_words = MiniExtra.gen_highlighter.words
 	hipatterns.setup({
@@ -98,23 +99,23 @@ later(function()
 	})
 end)
 
-later(function()
+safely("later", function()
 	require("mini.indentscope").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.input").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.jump").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.jump2d").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.keymap").setup()
 	-- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
 	MiniKeymap.map_multistep(
@@ -132,7 +133,7 @@ later(function()
 	MiniKeymap.map_multistep("i", "<BS>", { "minipairs_bs" })
 end)
 
-later(function()
+safely("later", function()
 	local map = require("mini.map")
 	map.setup({
 		-- Use Braille dots to encode text
@@ -155,7 +156,7 @@ later(function()
 	end
 end)
 
-now_if_args(function()
+safely(when_args, function()
 	-- Customize post-processing of LSP responses for a better user experience.
 	-- Don't show 'Text' suggestions (usually noisy) and show snippets last.
 	local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
@@ -183,11 +184,11 @@ now_if_args(function()
 	-- signature features through 'mini.completion'.
 	vim.lsp.config("*", { capabilities = MiniCompletion.get_lsp_capabilities() })
 end)
-later(function()
+safely("later", function()
 	require("mini.move").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.operators").setup()
 
 	-- Create mappings for swapping adjacent arguments. Notes:
@@ -200,12 +201,12 @@ later(function()
 	vim.keymap.set("n", ")", "gxiagxina", { remap = true, desc = "Swap arg right" })
 end)
 
-later(function()
+safely("later", function()
 	-- Create pairs not only in Insert, but also in Command line mode
 	require("mini.pairs").setup({ modes = { command = true } })
 end)
 
-later(function()
+safely("later", function()
 	-- Define language patterns to work better with 'friendly-snippets'
 	local latex_patterns = { "latex/**/*.json", "**/latex.json" }
 	local lang_patterns = {
@@ -232,23 +233,23 @@ later(function()
 	-- MiniSnippets.start_lsp_server()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.splitjoin").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.surround").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.trailspace").setup()
 end)
 
-later(function()
+safely("later", function()
 	require("mini.visits").setup()
 end)
 
-now(function()
+safely("now", function()
   vim.pack.add({ gh 'MagicDuck/grug-far.nvim' })
   require('grug-far').setup({})
 

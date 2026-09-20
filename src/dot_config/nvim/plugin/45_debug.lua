@@ -1,5 +1,5 @@
 -- Language adapters and project launch configurations are configured separately.
-Config.later(function()
+require("mini.misc").safely("later", function()
 	vim.pack.add({
 		Config.gh("mfussenegger/nvim-dap"),
 		Config.gh("nvim-neotest/nvim-nio"),

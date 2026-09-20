@@ -130,8 +130,8 @@ local diagnostic_opts = {
   update_in_insert = false,
 }
 
--- Use `later()` to avoid sourcing `vim.diagnostic` on startup
-Config.later(function() vim.diagnostic.config(diagnostic_opts) end)
+-- Defer sourcing `vim.diagnostic` until after startup
+require("mini.misc").safely("later", function() vim.diagnostic.config(diagnostic_opts) end)
 
 vim.g['conjure#extract#tree_sitter#enabled'] = true
 
