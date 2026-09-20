@@ -35,6 +35,7 @@
     },
     "artifacts": {
       "baseUrl": "https://artifacts.adampaterson.dev/mcp",
+      "lifecycle": "keep-alive",
       "headers": {
         "Authorization": "Bearer ${ARTIFACT_SERVER_AGENT_TOKEN}"
       },

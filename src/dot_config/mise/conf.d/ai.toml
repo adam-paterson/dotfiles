@@ -9,3 +9,4 @@ claude = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:@tobilu/qmd" = "latest"
 "npm:@plannotator/pi-extension" = { version = "latest", trust_policy_excludes = ["@pierre/theme@2.0.0"]}
+"npm:@caveman-ai/cli" = "latest"

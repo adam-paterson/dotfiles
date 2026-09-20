@@ -6,11 +6,8 @@ targets:
 dependencies:
   apm:
     - git: adam-paterson/skills
-      skills:
-        - huh
-        - to-gherkin
     - git: mattpocock/skills
-      skills:
-        - grilling
-        - grill-with-docs
-        - domain-modeling
+    - git: juliusbrussee/caveman
+      path: skills/caveman
+    - git: humanlayer/skills
+      path: plugins/show-me/skills/show-me

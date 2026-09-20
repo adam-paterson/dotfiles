@@ -23,9 +23,14 @@ end)
 -- ─ Dashboard / Starter ─────────────────────────────────────
 safely("now", function()
 	require("mini.starter").setup({
-		header = "Hello",
-		footer = "Bum",
+		header = table.concat(vim.fn.readfile(vim.fn.stdpath("config") .. "/logo.txt"), "\n"),
+		footer = "Type to filter · Enter to open\n↑/↓ to move · Esc to clear",
 	})
+	local color_header = function()
+		vim.api.nvim_set_hl(0, "MiniStarterHeader", { link = "MiniIconsOrange" })
+	end
+	color_header()
+	Config.new_autocmd("ColorScheme", "*", color_header, "Keep the starter fox orange")
 end)
 
 -- ─ File explorers ─────────────────────────────────────
