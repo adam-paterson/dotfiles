@@ -10,12 +10,12 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	st = status -sb
 	unstage = reset HEAD --
-  dlog = -c diff.external=difft log --ext-diff
-  dshow = -c diff.external=difft show --ext-diff
-  ddiff = -c diff.external=difft diff
-  dl = -c diff.external=difft log -p --ext-diff
-  ds = -c diff.external=difft show --ext-diff
-  dft = -c diff.external=difft diff
+  dlog = -c 'diff.external=difft --display=side-by-side-show-both' log --ext-diff
+  dshow = -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
+  ddiff = -c 'diff.external=difft --display=side-by-side-show-both' diff
+  dl = -c 'diff.external=difft --display=side-by-side-show-both' log -p --ext-diff
+  ds = -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
+  dft = -c 'diff.external=difft --display=side-by-side-show-both' diff
 
 [color]
 	ui = true
@@ -24,6 +24,7 @@
 	editor = nvim
 	longpaths = true
 	excludesFile = ~/.config/git/ignore
+	pager = less -R
 
 [pager]
   difftool = true
@@ -40,7 +41,7 @@
 	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = ~/.config/git/allowed_signers
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	program = {{ if eq .chezmoi.os "darwin" }}/Applications/1Password.app/Contents/MacOS/op-ssh-sign{{ else }}ssh-keygen{{ end }}
 
 [commit]
 	gpgsign = true
@@ -52,12 +53,14 @@
 	diffFilter = delta --color-only
 
 [diff]
-  external = difft diff
+  external = difft --display=side-by-side-show-both
   tool = difftastic
 
-[difftool "difftastic"]
+[difftool]
   prompt = false
-  cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
+
+[difftool "difftastic"]
+  cmd = difft --display=side-by-side-show-both "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
 [merge]
 	autoStash = true
@@ -78,5 +81,4 @@
 [user]
 	email = hello@adampaterson.co.uk
 	name = Adam Paterson
-	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn
-
+	signingKey = {{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" }}"{{ .chezmoi.homeDir }}/.ssh/id_ed25519"{{ else }}ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn{{ end }}

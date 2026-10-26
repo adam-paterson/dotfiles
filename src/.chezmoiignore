@@ -5,9 +5,18 @@
 {{ if ne .chezmoi.os "darwin" -}}
 .homebrew/
 .config/aerospace
+.config/borders
 .config/fish/conf.d/00-brew.fish
 .config/fish/conf.d/00-orbstack.fish
 .config/fish/completions/docker.fish
 .config/fish/completions/kubectl.fish
 .config/fish/completions/orbctl.fish
+{{ end -}}
+
+# Seraph is headless; other Linux hosts may have a desktop.
+{{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+.config/ghostty
+.config/tableplus
+.config/spotatui
+.config/mise/conf.d/entertainment.toml
 {{ end -}}

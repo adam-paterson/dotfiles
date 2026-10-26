@@ -14,7 +14,9 @@
   autoCommit = false
 
 [diff]
-  pager = "delta"
+  command = "difft"
+  args = ["--display=side-by-side-show-both", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
+  pager = "less -R"
 
 format = "json"
 mode = "file"
@@ -24,4 +26,3 @@ mode = "file"
 
 [onepassword]
   cache = true
-  

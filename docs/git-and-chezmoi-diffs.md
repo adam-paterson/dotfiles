@@ -1,7 +1,7 @@
 # Git and chezmoi diffs
 
 Use Diffview for Git changes and conflicts, native Neovim diff for chezmoi merges,
-and delta for read-only terminal diffs. Fugitive is not required; `:Git` is provided
+and Difftastic for read-only terminal diffs. Fugitive is not required; `:Git` is provided
 by mini.git. `Space gg` opens LazyGit.
 
 ## Neovim keys
@@ -72,10 +72,27 @@ are only active in native diff windows, not Diffview's Git layouts.
 
 ## Terminal diffs
 
-`git diff`, `git diff --cached`, `git show`, and `chezmoi diff` use delta on this
-machine. In delta's pager, `n` / `N` navigate differences and `q` quits.
-The Git pager settings currently live in unmanaged `~/.config/git/config`;
-`~/.config/git/local.gitconfig` no longer overrides the pager.
+`git diff`, `git diff --cached`, `git difftool`, `chezmoi diff`, and
+`wt step diff` use Difftastic. LazyGit already selects Difftastic as its first
+diff renderer. Git and chezmoi use `less -R` for scrolling; press `q` to quit.
+Difftastic compares files, so it cannot replace a general-purpose text pager.
+
+Git requires `--ext-diff` for history commands. Use `git show --ext-diff` or
+`git log -p --ext-diff`, or the existing `git ds` and `git dl` aliases.
+Plain `git show` and `git log -p` still produce Git patches.
+
+Worktrunk 0.79's picker uses Git plumbing that ignores `diff.external`. Its
+preview therefore keeps `delta --paging=never`; use `wt step diff` for Difftastic.
+Interactive staging keeps delta's patch-compatible filter. Neovim's chezmoi diff
+buffer explicitly requests the built-in patch format, and merge tools are unchanged.
+Use `git diff --no-ext-diff` or `chezmoi diff --use-builtin-diff` when a patch is needed.
+
+Portable Git settings live in the managed `src/dot_config/git/config.tmpl`.
+The chezmoi diff defaults live in `src/.chezmoi.toml.tmpl` and the active
+`~/.config/chezmoi/chezmoi.toml`.
+
+Run `python3 tests/test_terminal_diffs.py` to check the CLI integrations in
+temporary repositories without changing real dotfiles.
 
 ## Verification
 

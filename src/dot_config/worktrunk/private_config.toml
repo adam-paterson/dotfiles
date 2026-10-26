@@ -8,6 +8,11 @@ if [ "${HERDR_ENV:-}" = 1 ] && [ -n "${HERDR_PANE_ID:-}" ]; then
 fi
 '''
 
+# The picker consumes patches and ignores diff.external in Worktrunk 0.79.
+# wt step diff uses Git's Difftastic configuration instead.
+[switch.picker]
+pager = "delta --paging=never"
+
 [projects]
 
 [projects."ssh.dev.azure.com/v3/idhl/*".list.custom-columns.Ticket]
