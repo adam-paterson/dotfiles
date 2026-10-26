@@ -1,0 +1,10 @@
+{
+  "name": "nvim-astro-tools",
+  "private": true,
+  "description": "Editor-only Astro formatting and JavaScript TypeScript SDK; independent of project compiler versions.",
+  "dependencies": {
+    "prettier": "3.9.8",
+    "prettier-plugin-astro": "1.1.0",
+    "typescript": "6.0.3"
+  }
+}

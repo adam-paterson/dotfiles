@@ -48,7 +48,7 @@ local function attach(buf, source)
   end, "Toggle apply-on-save")
 
   map("d", function()
-    local result = vim.system({ "chezmoi", "diff", "--no-pager", "--source-path", "--", source }, { text = true }):wait()
+    local result = vim.system({ "chezmoi", "diff", "--use-builtin-diff", "--no-pager", "--source-path", "--", source }, { text = true }):wait()
     if result.code ~= 0 then
       vim.notify(result.stderr, vim.log.levels.ERROR)
       return

@@ -1,4 +1,9 @@
--- nvim-lspconfig's lsp/astro.lua already supplies cmd, filetypes, root_markers,
--- and resolves typescript.tsdk from workspace-local typescript via before_init.
--- Add only overrides here (merged over lspconfig's config), same as lua_ls.lua.
-return {}
+-- Astro needs the JavaScript TypeScript SDK, which native TypeScript 7 no
+-- longer ships. Keep the editor SDK independent of the project's compiler.
+return {
+	init_options = {
+		typescript = {
+			tsdk = vim.fn.stdpath("config") .. "/tools/node_modules/typescript/lib",
+		},
+	},
+}

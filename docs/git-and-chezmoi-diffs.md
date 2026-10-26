@@ -94,6 +94,14 @@ The chezmoi diff defaults live in `src/.chezmoi.toml.tmpl` and the active
 Run `python3 tests/test_terminal_diffs.py` to check the CLI integrations in
 temporary repositories without changing real dotfiles.
 
+## Gentle Shell changes overlay prototype
+
+A throwaway static mockup of a dark terminal-style Git changes overlay lives at
+[`docs/gentle-shell-changes-view-prototype.html`](gentle-shell-changes-view-prototype.html).
+Open it directly in a browser to review the split file-list / diff-preview layout,
+status badges, changed-line counts, and refresh/open actions. It uses sample data
+only and does not access this repository.
+
 ## Verification
 
 Run `python3 tests/test_diff_workflow.py` with Neovim and the configured plugins

@@ -33,3 +33,6 @@ zoxide = "latest"
 "aqua:sxyazi/yazi" = "latest"
 "aqua:tealdeer-rs/tealdeer" = "latest"
 "aqua:dduan/tre" = "latest"
+{{ if ne (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+"npm:@doist/todoist-cli" = "latest"
+{{ end -}}

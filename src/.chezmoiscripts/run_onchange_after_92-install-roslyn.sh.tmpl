@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+# Keep the server compatible with the pinned roslyn.nvim plugin.
+version=5.12.0-1.26453.19
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+dotnet tool update roslyn-language-server \
+  --tool-path "$HOME/.config/nvim/tools/roslyn" \
+  --version "$version" \
+  --source https://pkgs.dev.azure.com/azure-public/vside/_packaging/vs-impl/nuget/v3/index.json

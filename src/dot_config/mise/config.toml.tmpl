@@ -1,0 +1,35 @@
+# Global mise settings. Tools are grouped by domain in conf.d.
+# https://mise.jdx.dev/configuration.html
+
+[settings]
+auto_install = true
+experimental = true
+minimum_release_age = "0s"
+always_keep_download = false
+always_keep_install = false
+# Keep false for now. The floating registry (mise.jdx.dev/registry/latest.tar.zst)
+# still spells four tools' PyPI backends as `pipx:`, which mise no longer accepts
+# (it lists `pypi`), so bare shorthands like `azure-cli` resolve to no backend.
+# The registry baked into mise is spelled correctly. Flip back to true once
+# upstream republishes the registry with the current spelling.
+registry_floating = false
+
+[settings.github]
+# Use the VPS service account when provisioned; keep desktop keychain authentication.
+credential_command = 'if [ "$MISE_CREDENTIAL_HOST" = github.com ] && [ -x "$HOME/.local/bin/op-service" ]; then "$HOME/.local/bin/op-service" read "op://Seraph/Seraph/GITHUB_TOKEN"; else gh auth token --hostname "$MISE_CREDENTIAL_HOST"; fi'
+
+[env]
+_.path = ["./node_modules/.bin", "./bin"]
+
+[tools]
+"aqua:fish-shell/fish-shell" = "latest"
+"aqua:simeji/jid" = "latest"
+{{ if ne (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+"cargo:plannotator-tui" = "0.9.4"
+viteplus = "1.4.0"
+{{ end -}}
+{{ `cloc = { version = "latest", bin = "cloc", platforms = { linux-arm64 = { asset_pattern = "cloc-{{ version }}.pl" }, linux-x64 = { asset_pattern = "cloc-{{ version }}.pl" }, macos-arm64 = { asset_pattern = "cloc-{{ version }}.pl" }, macos-x64 = { asset_pattern = "cloc-{{ version }}.pl" }, windows-x64 = { asset_pattern = "cloc-{{ version }}.exe" } } }` }}
+lazyssh = "latest"
+"npm:@tailwindcss/language-server" = "latest"
+pnpm = "12.15.0"
+television = "latest"

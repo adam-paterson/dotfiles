@@ -1,12 +1,13 @@
 """Real chezmoi + headless Neovim checks, isolated from the user's dotfiles."""
+
 import json
 import os
-from pathlib import Path
 import shlex
 import shutil
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
 
 class ChezmoiBuffers(unittest.TestCase):
@@ -29,7 +30,10 @@ class ChezmoiBuffers(unittest.TestCase):
             (source / "dot_direct source").write_text("direct\n")
             (destination / ".direct source").write_text("direct\n")
             settings = root / "chezmoi.toml"
-            settings.write_text(f"sourceDir = {json.dumps(str(source))}\ndestDir = {json.dumps(str(destination))}\n")
+            settings.write_text(
+                f"sourceDir = {json.dumps(str(source))}\ndestDir = {json.dumps(str(destination))}\n"
+                '[diff]\ncommand = "false"\n'  # The editor must bypass external renderers.
+            )
             wrapper = bin_dir / "chezmoi"
             wrapper.write_text("#!/bin/sh\nexec " + shlex.join([
                 chezmoi, "--config", str(settings), "--persistent-state", str(root / "state.db"),
@@ -99,7 +103,7 @@ print('PASS: redirect, templates, local mappings, auto-apply, diff, watch toggle
             result = subprocess.run(
                 [nvim, "--headless", "-u", "NONE", "--noplugin", "-l", str(lua)],
                 env={**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"]},
-                text=True, capture_output=True, timeout=30,
+                text=True, capture_output=True, timeout=30, check=False,
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 

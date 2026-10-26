@@ -17,7 +17,7 @@ end)
 
 -- ─ Statusline ──────────────────────────────────────────────
 safely("later", function()
-	vim.pack.add({ gh("nvim-lualine/lualine.nvim") })
+	require("mini.statusline").setup()
 end)
 
 -- ─ Dashboard / Starter ─────────────────────────────────────

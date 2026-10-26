@@ -1,6 +1,8 @@
 # Runtime state belongs to each machine, not the shared dotfiles.
 .config/fish/fish_variables
 .config/nvim/.git
+.config/nvim/tools/node_modules
+.config/nvim/tools/roslyn
 
 {{ if ne .chezmoi.os "darwin" -}}
 .homebrew/
@@ -19,4 +21,8 @@
 .config/tableplus
 .config/spotatui
 .config/mise/conf.d/entertainment.toml
+.config/herdr/*.mp3
+.config/sqlfluff
+.config/nvim/plugin/41_dotnet.lua
+.chezmoiscripts/92-install-roslyn.sh
 {{ end -}}

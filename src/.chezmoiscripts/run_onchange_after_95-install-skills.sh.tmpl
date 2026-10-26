@@ -1,0 +1,68 @@
+#!/bin/sh
+set -eu
+
+# skills-lock: {{ include "skills-lock.json" | sha256sum }}
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+cd "$HOME"
+python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+
+home = Path.home()
+lock = json.loads((home / "skills-lock.json").read_text())
+if lock.get("version") != 1 or not isinstance(lock.get("skills"), dict):
+    raise SystemExit("Invalid skills-lock.json")
+skills = home / ".agents/skills"
+missing = {}
+for name, entry in lock["skills"].items():
+    if not name or name in {".", ".."} or "/" in name or "\\" in name:
+        raise SystemExit(f"Invalid skill name: {name!r}")
+    if not os.path.lexists(skills / name):
+        missing[name] = entry
+
+if missing:
+    # Native restore replaces selected directories and can report partial success.
+    # Restore away from live skills, then check the entire batch before copying.
+    with tempfile.TemporaryDirectory(prefix="chezmoi-skills-") as directory:
+        stage = Path(directory)
+        (stage / "skills-lock.json").write_text(json.dumps({"version": 1, "skills": missing}))
+        subprocess.run(["npx", "--yes", "skills@1.7.0", "experimental_install"], cwd=stage, check=True)
+        restored = stage / ".agents/skills"
+        failed = [name for name in missing if not (restored / name / "SKILL.md").is_file()]
+        if failed:
+            raise SystemExit("Skills restore incomplete: " + ", ".join(failed))
+        skills.mkdir(parents=True, exist_ok=True)
+        for name in missing:
+            if not os.path.lexists(skills / name):
+                shutil.copytree(restored / name, skills / name, symlinks=True)
+        print(f"Installed {len(missing)} missing skills; existing skills preserved")
+else:
+    print("All selected skills already present; existing skills preserved")
+PY
+
+# Amp reads .agents/skills directly, so no second link is needed.
+# Preserve existing agent-specific skills in the other harnesses.
+for target in \
+    "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills" \
+    "${CODEX_HOME:-$HOME/.codex}/skills" \
+    "$HOME/.cursor/skills" \
+    "$HOME/.gemini/skills" \
+    "$HOME/.copilot/skills" \
+    "${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills" \
+    "$HOME/.pi/agent/skills" \
+    "$HOME/.continue/skills" \
+    "$HOME/.factory/skills" \
+    "$HOME/.kiro/skills"; do
+    mkdir -p "$target"
+    for skill in "$HOME"/.agents/skills/*; do
+        [ -f "$skill/SKILL.md" ] || continue
+        link="$target/${skill##*/}"
+        if [ ! -e "$link" ] && [ ! -L "$link" ]; then
+            ln -s "$skill" "$link"
+        fi
+    done
+done

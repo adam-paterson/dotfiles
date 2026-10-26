@@ -1,0 +1,122 @@
+{{- $seraph := eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+{
+  "lastChangelogVersion": "{{ if $seraph }}0.85.1{{ else }}1.3.0{{ end }}",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6-astra",
+  "defaultThinkingLevel": "medium",
+{{ if not $seraph }}
+  "defaultTools": ["+codemode"],
+  "codemode": { "inlineBudget": 1000 },
+{{ end }}
+  "steeringMode": "one-at-a-time",
+  "transport": "sse",
+  "treeFilterMode": "all",
+  "theme": "dark",
+  "hideThinkingBlock": {{ if $seraph }}true{{ else }}false{{ end }},
+  "tuiMode": "fullscreen",
+  "packages": [
+    "npm:@plannotator/pi-extension",
+    "npm:pi-web-access",
+{{ if $seraph }}
+    "npm:@ogulcancelik/pi-minimal-footer",
+    "npm:@dietrichgebert/ponytail",
+{{ end }}
+    "npm:pi-intercom",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-context-view",
+    "npm:pi-skill-dollar",
+{{ if $seraph }}
+    "npm:pi-mcp-adapter"
+{{ else }}
+    "npm:pi-lens"
+{{ end }}
+  ],
+  "terminal": {
+    "showTerminalProgress": true,
+    "clearOnShrink": true
+  },
+  "followUpMode": "all",
+  "enabledModels": [
+    "opencode-go/glm-5.3",
+    "opencode-go/kimi-k3",
+    "opencode-go/qwen3.8-max",
+    "opencode/muse-spark-1.3",
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/muse-spark-1.3-contributor",
+    "openai-codex/gpt-6-astra",
+    "openai-codex/gpt-5.6-luna",
+    "openai-codex/gpt-5.6-terra",
+{{ if $seraph }}
+    "openai-codex/gpt-5.6-sol",
+{{ else }}
+    "openai-codex/gpt-6.1-sol",
+{{ end }}
+    "openai-codex/gpt-5.3-codex-spark"
+  ],
+  "quietStartup": true,
+  "subagents": {
+{{ if $seraph }}
+    "defaultModel": "openai-codex/gpt-5.6-sol",
+    "defaultThinking": "medium",
+    "agentOverrides": {
+      "delegate": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "medium",
+        "defaultContext": "fresh"
+      },
+      "oracle": {
+        "model": "openai-codex/gpt-6-astra",
+        "thinking": "xhigh",
+        "defaultContext": "fork"
+      },
+      "researcher": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "low",
+        "defaultContext": "fresh"
+      },
+      "reviewer": {
+        "model": "openai-codex/gpt-6-astra",
+        "thinking": "xhigh",
+        "defaultContext": "fresh"
+      },
+      "scout": {
+        "description": "Locate local files, symbols and exact passages; hand interpretation to synthesizer or oracle",
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "low",
+        "defaultContext": "fresh",
+        "tools": ["read", "grep", "find", "ls"],
+        "output": false
+      },
+      "worker": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "medium",
+        "defaultContext": "fork"
+      },
+      "synthesizer": {
+        "model": "openai-codex/gpt-5.6-sol",
+        "thinking": "high",
+        "defaultContext": "fresh"
+      },
+      "risk-reviewer": {
+        "model": "github-copilot/claude-opus-5",
+        "thinking": "high",
+        "defaultContext": "fresh"
+      }
+    }
+{{ else }}
+    "defaultModel": "openai-codex/gpt-6-sol",
+    "defaultThinking": "medium",
+    "disableBuiltins": true,
+    "agentOverrides": {}
+{{ end }}
+  },
+  "editorPaddingX": 0,
+  "outputPad": 1,
+  "showCacheMissNotices": true,
+  "doubleEscapeAction": "tree",
+  "warnings": {
+    "anthropicExtraUsage": true
+  },
+  "fullscreenExitOutput": "transcript"
+}

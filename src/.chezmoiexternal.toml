@@ -3,3 +3,11 @@
   url = "https://github.com/ciembor/agent-rules-books.git"
   refreshPeriod = "168h"
   targetPath = ".agents/references/sebooks"
+
+# Sibling references used by pstack skills. Skills themselves use npx skills.
+["pstack-references"]
+  type = "archive"
+  url = "https://github.com/cursor/plugins/archive/c5149ef275fa7be41e3ffe5e79c8fc16efcaeedc.tar.gz"
+  stripComponents = 2
+  include = ["*/pstack/README.md", "*/pstack/docs/**", "*/pstack/agents/**"]
+  targetPath = ".agents"

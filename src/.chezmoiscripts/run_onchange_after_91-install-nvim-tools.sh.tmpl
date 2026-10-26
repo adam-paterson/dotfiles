@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+# Reinstall when the editor tool manifest or lockfile changes.
+# manifest: {{ include "dot_config/nvim/tools/package.json" | sha256sum }}
+# lockfile: {{ include "dot_config/nvim/tools/package-lock.json" | sha256sum }}
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+cd "$HOME/.config/nvim/tools"
+npm ci --ignore-scripts --no-audit --no-fund

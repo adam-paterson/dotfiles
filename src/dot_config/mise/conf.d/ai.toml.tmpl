@@ -1,12 +1,22 @@
+{{- $seraph := eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
 [tools]
-"github:microsoft/apm" = "0.31.0"
 claude = "latest"
 "aqua:sigoden/aichat" = "latest"
 "aqua:openai/codex" = "latest"
+{{ if $seraph -}}
 "aqua:anomalyco/opencode" = "latest"
-"npm:@github/copilot-language-server" = "1.463.0"
 "npm:@loongphy/codex-auth" = "latest"
+"npm:@github/copilot-language-server" = "1.558.0"
+{{ else -}}
+"opencode" = "latest"
+"npm:@github/copilot-language-server" = "1.561.0"
+{{ end -}}
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:@tobilu/qmd" = "latest"
 "npm:@plannotator/pi-extension" = { version = "latest", trust_policy_excludes = ["@pierre/theme@2.0.0"]}
+{{ if not $seraph -}}
 "npm:@caveman-ai/cli" = "latest"
+"npm:gentle-pi" = "latest"
+"cargo:plannotator-tui" = "latest"
+"npm:@colbymchenry/codegraph" = "latest"
+{{ end -}}

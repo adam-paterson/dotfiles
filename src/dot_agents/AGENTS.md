@@ -52,6 +52,8 @@ When principles conflict, prioritise correctness, clarity, locality of change, c
 - Minimise public APIs and design volatile integrations so they can be replaced or deleted cleanly.
 - Treat errors as part of each interface; preserve context and never silently swallow failures.
 - Test observable behaviour and invariants rather than implementation structure.
+- Prefer established, well-maintained libraries when they reduce overall complexity or improve reliability. Do not reimplement common functionality without a clear reason.
+- Lean on the dependencies already in the project before writing your own implementation or adding packages. Do not assume a library lacks a capability without checking its documentation and types.
 
 ## Software design books
 There are references to classic software design patterns and methodologies available to you. You should lookup these references

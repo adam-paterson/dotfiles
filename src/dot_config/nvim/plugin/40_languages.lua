@@ -119,7 +119,10 @@ safely(when_args, function()
 		end,
 	})
 
-	vim.lsp.enable({ "ansiblels", "astro", "jsonls", "lua_ls", "roslyn_ls", "tailwindcss", "tombi", "ts_ls" })
+	vim.lsp.enable({ "ansiblels", "astro", "jsonls", "lua_ls", "tailwindcss", "tombi", "ts_ls" })
+	if vim.fn.executable("oxlint") == 1 then
+		vim.lsp.enable("oxlint")
+	end
 	vim.lsp.codelens.run()
 end)
 
@@ -129,17 +132,32 @@ safely("later", function()
 
 	require("conform").setup({
 		default_format_opts = {
-			async = true,
 			lsp_format = "fallback",
-			timeout_ms = 500,
+			timeout_ms = 3000,
+		},
+		formatters = {
+			astro_prettier = {
+				inherit = "prettier",
+				command = vim.fn.stdpath("config") .. "/tools/node_modules/.bin/prettier",
+				prepend_args = {
+					"--plugin",
+					vim.fn.stdpath("config") .. "/tools/node_modules/prettier-plugin-astro/dist/index.js",
+				},
+			},
+			sqlfluff = {
+				args = { "format", "--stdin-filename", "$FILENAME", "-" },
+				require_cwd = false,
+			},
 		},
 		formatters_by_ft = {
-			astro = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+			-- Astro requires its Prettier plugin; oxfmt does not support it.
+			astro = { "astro_prettier" },
 			javascript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
 			typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
 			typescriptreact = { "oxfmt", "biome", "prettierd", stop_after_first = true },
 			["yaml.ansible"] = { "prettier" },
 			lua = { "stylua" },
+			sql = { "sqlfluff" },
 			toml = { "tombi" },
       markdown = { "oxfmt" },
 		},

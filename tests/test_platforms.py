@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+import tomllib
 
 SOURCE = Path(__file__).resolve().parents[1] / "src"
 with tempfile.TemporaryDirectory() as directory:
@@ -15,7 +16,7 @@ with tempfile.TemporaryDirectory() as directory:
     shutil.copy(SOURCE / ".chezmoiremove", source)
     for name in [".chezmoidata", "dot_config/aerospace", "dot_config/private_fish", "dot_config/ghostty",
                  "dot_config/tableplus",
-                 "dot_config/herdr", "dot_config/mise", "dot_config/git", "private_dot_homebrew"]:
+                 "dot_config/herdr", "dot_config/mise", "dot_config/git", "dot_pi", "private_dot_homebrew"]:
         shutil.copytree(SOURCE / name, source / name)
     # Accidental captures must stay ignored even if they reappear in the source.
     for name in ["dot_config/borders/executable_bordersrc", "dot_config/private_spotatui/private_config.yml"]:
@@ -27,6 +28,11 @@ with tempfile.TemporaryDirectory() as directory:
     metadata.parent.mkdir(parents=True)
     metadata.write_text("captured git metadata\n")
     shutil.copy(SOURCE / "dot_config/nvim/nvim-pack-lock.json", metadata.parent.parent)
+    for name in ["dot_config/nvim/plugin/41_dotnet.lua",
+                 ".chezmoiscripts/run_onchange_after_92-install-roslyn.sh.tmpl"]:
+        target = source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(SOURCE / name, target)
     for platform, hostname in [("linux", "seraph"), ("linux", "SERAPH.example.net"),
                                ("linux", "desktop"), ("darwin", "MACBOOK-002531")]:
         headless = hostname.lower().split(".")[0] == "seraph"
@@ -63,6 +69,33 @@ with tempfile.TemporaryDirectory() as directory:
         for path in [".config/herdr/config.toml", ".config/mise/conf.d/cli.toml",
                      ".config/mise/conf.d/editors.toml", ".config/mise/conf.d/languages.toml"]:
             assert path in managed, (hostname, path)
+        sounds = tomllib.loads(run("cat", str(home / ".config/herdr/config.toml")))["ui"]["sound"]
+        assert sounds["enabled"] == (not headless)
+        assert (".config/herdr/request.mp3" in managed) == (not headless)
+        for path in [".config/nvim/plugin/41_dotnet.lua", ".chezmoiscripts/92-install-roslyn.sh"]:
+            assert (path in managed) == (not headless), (hostname, path)
+        tools = {}
+        for name in ["config.toml", "conf.d/ai.toml", "conf.d/cli.toml",
+                     "conf.d/languages.toml", "conf.d/security.toml"]:
+            tools.update(tomllib.loads(run("cat", str(home / ".config/mise" / name)))["tools"])
+        assert "github:microsoft/apm" not in tools
+        assert tools["op"] == "2.41.1" and tools["pnpm"] == "12.15.0"
+        assert tools["npm:@github/copilot-language-server"] == ("1.558.0" if headless else "1.561.0")
+        for name in ["npm:gentle-pi", "cargo:plannotator-tui", "npm:@colbymchenry/codegraph",
+                     "npm:@doist/todoist-cli", "oxlint", "pipx:sqlfluff", "viteplus"]:
+            assert (name in tools) == (not headless), (hostname, name)
+        assert tools["cloc"]["platforms"]["linux-arm64"]["asset_pattern"] == "cloc-{{ version }}.pl"
+        pi = json.loads(run("cat", str(home / ".pi/agent/settings.json")))
+        if headless:
+            assert not pi["subagents"].get("disableBuiltins", False)
+            assert len(pi["subagents"]["agentOverrides"]) == 8
+            assert pi["subagents"]["agentOverrides"]["scout"]["tools"] == ["read", "grep", "find", "ls"]
+            assert "npm:pi-mcp-adapter" in pi["packages"]
+            assert "defaultTools" not in pi
+        else:
+            assert pi["subagents"]["disableBuiltins"]
+            assert pi["subagents"]["agentOverrides"] == {}
+            assert pi["defaultTools"] == ["+codemode"]
         git_config = run("cat", str(home / ".config/git/config"))
         signer = subprocess.check_output(
             ["git", "config", "--file", "/dev/stdin", "--get", "gpg.ssh.program"],
@@ -83,7 +116,7 @@ with tempfile.TemporaryDirectory() as directory:
         if not headless:
             ghostty = run("cat", str(home / ".config/ghostty/config"))
             assert ("macos-option-as-alt" in ghostty) == (platform == "darwin")
-        run("apply", "--no-tty", "--parent-dirs", str(home / ".config/fish/conf.d/00-paths.fish"))
+        run("apply", "--no-tty", "--parent-dirs", "--exclude=scripts", str(home / ".config/fish/conf.d/00-paths.fish"))
         subprocess.run(["fish", "--no-config", "-c",
                         'source "$HOME/.config/fish/conf.d/00-paths.fish"; '
                         'contains -- "$HOME/.local/bin" $PATH; or exit 1; '

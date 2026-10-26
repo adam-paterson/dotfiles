@@ -136,7 +136,7 @@ vim.keymap.set("i", "<C-x>a", vim.lsp.buf.signature_help, { desc = "Argument hin
 
 nmap_leader("la", "<Cmd>lua vim.lsp.buf.code_action()<CR>", icon("action") .. " Actions")
 nmap_leader("ld", "<Cmd>lua vim.diagnostic.open_float()<CR>", icon("diagnostic") .. " Diagnostic")
-nmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', icon("format") .. " Format")
+nmap_leader("lf", '<Cmd>lua require("conform").format({ async = true })<CR>', icon("format") .. " Format")
 nmap_leader("lh", "<Cmd>lua vim.lsp.buf.hover()<CR>", icon("hover") .. " Hover")
 
 nmap_leader("li", '<Cmd>Pick lsp scope="implementation"<CR>', icon("gears") .. " Implementations")
@@ -155,7 +155,7 @@ nmap_leader("lO", "<Cmd>AerialNavToggle<CR>", icon("tag") .. " Symbol navigator 
 nmap_leader("ln", "<Cmd>AerialNext<CR>", icon("tag") .. " Next symbol (Aerial)")
 nmap_leader("lp", "<Cmd>AerialPrev<CR>", icon("tag") .. " Previous symbol (Aerial)")
 
-xmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', icon("format") .. " Format selection")
+xmap_leader("lf", '<Cmd>lua require("conform").format({ async = true })<CR>', icon("format") .. " Format selection")
 
 -- m is for 'Map'. Common usage:
 -- - `<Leader>mt` - toggle map from 'mini.map' (closed by default)
