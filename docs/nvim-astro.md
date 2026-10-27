@@ -1,9 +1,16 @@
-# Astro editing in Neovim
+# Astro and TypeScript editing in Neovim
 
 Astro completion uses `astro-ls` installed through mise. Its TypeScript SDK is
 installed separately under `~/.config/nvim/tools`: TypeScript 7 is a native
 compiler and does not ship the JavaScript SDK required by the Astro server.
 This editor-only SDK does not change a project's compiler or dependencies.
+
+JavaScript and TypeScript use the same editor-owned SDK as a fallback through
+`typescript-language-server`'s `tsserver.fallbackPath` option. A usable workspace
+SDK takes precedence, including one hoisted to a monorepo's parent directory.
+Projects without a JS SDK, including native-only TypeScript 7 projects, use the
+editor SDK. Diagnostics in that case reflect the editor SDK's TypeScript version,
+not the project's native compiler. Astro continues to use the editor SDK directly.
 
 Manual formatting is **Space l f** in normal mode (or with a selection):
 
@@ -31,10 +38,15 @@ requests completion manually.
 From the chezmoi repository, with the config applied and tools installed:
 
 ```sh
+nvim --headless -u NONE -l tests/test_nvim_typescript.lua
 nvim --headless -u NONE -l tests/test_nvim_formatting.lua
 nvim --headless /absolute/project/src/pages/index.astro \
   '+lua dofile("tests/test_nvim_astro.lua")'
 ```
+
+The TypeScript check uses temporary projects and the actual language server.
+It verifies SDK selection, type-error diagnostics, and string-method completions
+with no SDK, a native-only SDK layout, a project-local JS SDK, and a hoisted JS SDK.
 
 The integration check edits only the in-memory buffer and exits without saving.
 It verifies that Astro initializes, suggests the actual containing directory in
