@@ -1,10 +1,9 @@
-{{- $seraph := eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
 {
-  "lastChangelogVersion": "{{ if $seraph }}0.85.1{{ else }}1.3.0{{ end }}",
+  "lastChangelogVersion": "{{ if .headless }}0.85.1{{ else }}1.3.0{{ end }}",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-astra",
   "defaultThinkingLevel": "medium",
-{{ if not $seraph }}
+{{ if not .headless }}
   "defaultTools": ["+codemode"],
   "codemode": { "inlineBudget": 1000 },
 {{ end }}
@@ -12,12 +11,12 @@
   "transport": "sse",
   "treeFilterMode": "all",
   "theme": "dark",
-  "hideThinkingBlock": {{ if $seraph }}true{{ else }}false{{ end }},
+  "hideThinkingBlock": {{ if .headless }}true{{ else }}false{{ end }},
   "tuiMode": "fullscreen",
   "packages": [
-    "npm:@plannotator/pi-extension",
+    "{{ .chezmoi.homeDir }}/.local/share/mise/installs/npm-plannotator-pi-extension/latest/node_modules/@plannotator/pi-extension",
     "npm:pi-web-access",
-{{ if $seraph }}
+{{ if .headless }}
     "npm:@ogulcancelik/pi-minimal-footer",
     "npm:@dietrichgebert/ponytail",
 {{ end }}
@@ -26,7 +25,7 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-context-view",
     "npm:pi-skill-dollar",
-{{ if $seraph }}
+{{ if .headless }}
     "npm:pi-mcp-adapter"
 {{ else }}
     "npm:pi-lens"
@@ -47,7 +46,7 @@
     "openai-codex/gpt-6-astra",
     "openai-codex/gpt-5.6-luna",
     "openai-codex/gpt-5.6-terra",
-{{ if $seraph }}
+{{ if .headless }}
     "openai-codex/gpt-5.6-sol",
 {{ else }}
     "openai-codex/gpt-6.1-sol",
@@ -56,7 +55,7 @@
   ],
   "quietStartup": true,
   "subagents": {
-{{ if $seraph }}
+{{ if .headless }}
     "defaultModel": "openai-codex/gpt-5.6-sol",
     "defaultThinking": "medium",
     "agentOverrides": {

@@ -1,0 +1,16 @@
+[tools]
+claude = "latest"  # Claude Code terminal agent
+# Explicit backend avoids different registry defaults on different mise versions.
+"aqua:anomalyco/opencode" = "latest"  # OpenCode terminal agent
+"aqua:openai/codex" = "latest"  # Codex terminal agent
+"aqua:sigoden/aichat" = "latest"  # LLM CLI, REPL, and retrieval tools
+"npm:@caveman-ai/cli" = "latest"  # Agent wrapper, context compression, and usage metering
+"npm:@colbymchenry/codegraph" = "latest"  # Local code index and MCP server; used by mcporter
+"npm:@earendil-works/pi-coding-agent" = "latest"  # Pi terminal agent
+"npm:@loongphy/codex-auth" = "latest"  # Codex account switching; supports device-code login
+"npm:@tobilu/qmd" = "latest"  # Local document search; semantic search downloads models, GPU optional
+"npm:gentle-pi" = "latest"  # Gentle Shell terminal interface for Pi
+
+"cargo:plannotator-tui" = "latest"  # Terminal Markdown annotation and review
+# Browser review works remotely through port forwarding; this is not GUI-only.
+"npm:@plannotator/pi-extension" = { version = "latest", trust_policy_excludes = ["@pierre/theme@2.0.0"] }

@@ -15,14 +15,16 @@
 .config/fish/completions/orbctl.fish
 {{ end -}}
 
-# Seraph is headless; other Linux hosts may have a desktop.
-{{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+# Select the machine profile in chezmoi's local [data] section.
+{{ if .headless -}}
+.homebrew/
+.config/aerospace
+.config/borders
+.config/fish/conf.d/00-orbstack.fish
 .config/ghostty
 .config/tableplus
 .config/spotatui
-.config/mise/conf.d/entertainment.toml
 .config/herdr/*.mp3
-.config/sqlfluff
 .config/nvim/plugin/41_dotnet.lua
 .chezmoiscripts/92-install-roslyn.sh
 {{ end -}}

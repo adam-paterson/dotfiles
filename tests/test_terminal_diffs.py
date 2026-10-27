@@ -93,7 +93,7 @@ def check():
         config = root / "chezmoi.toml"
         config.write_text(
             f"sourceDir = {json.dumps(str(source))}\ndestDir = {json.dumps(str(home))}\n"
-            + run("chezmoi", "execute-template", input=template)
+            + run("chezmoi", "execute-template", "--init", input=template)
         )
         chezmoi = ["chezmoi", "--config", str(config), "--persistent-state", str(root / "state.db"),
                    "--cache", str(root / "cache"), "--no-tty", "--no-pager"]

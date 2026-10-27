@@ -1,5 +1,38 @@
 # Remote host repairs — 2026-09-11
 
+## Machine profiles
+
+Templates select headless or GUI configuration using `headless` in the local
+`~/.config/chezmoi/chezmoi.toml`, not the hostname:
+
+```toml
+[data]
+  headless = true
+```
+
+Use `true` on a headless machine and `false` on a GUI machine. `chezmoi init`
+asks once and saves the answer. Reinitialization preserves the saved value,
+including `false`. OS checks remain separate for macOS-only integrations.
+
+Headless machines omit desktop applications, sounds, the desktop Brewfile, and
+the current .NET/Razor setup. Mise's CLI toolchain is shared across profiles;
+see [tool ownership and prerequisites](mise.md). Pi's existing model/role
+selections remain unchanged. Ignoring a path does not uninstall applications
+or delete existing configuration when a machine changes profiles.
+
+Git identity is independent of the profile. The local data also stores
+`gitSigningKey` (a public key or private-key path) and `gitSigningPublicKey`
+(the corresponding public key for signature verification). Initialization
+prompts for both. When supplying a private-key path, enter its public key at
+the second prompt; never enter private-key contents. Both existing machines
+retain their signing identities. Headless machines use `ssh-keygen`; GUI
+macOS machines use the 1Password signing integration.
+
+The 1Password Environment mapping remains per-machine in
+`.chezmoidata/onepassword.yaml`, as described in
+[1Password environments](1password-environments.md). Authentication and access
+to secrets must not be inferred from whether a machine has a display.
+
 ## Ansible changes to apply together
 
 This host is Ubuntu 26.04. The compiler (`cc`), make, and unzip were missing.

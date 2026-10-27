@@ -209,7 +209,7 @@ delivery = "herdr"
 
 # Play sounds when agents change state in background workspaces
 [ui.sound]
-{{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
+{{ if .headless -}}
 enabled = false
 {{ else -}}
 enabled = true

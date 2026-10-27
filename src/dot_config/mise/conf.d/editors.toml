@@ -1,7 +1,3 @@
 [tools]
-helix = "latest"
-neovim = "nightly"
-"conda:ghostscript" = "latest"
-"conda:imagemagick" = "latest"
-"github:tectonic-typesetting/tectonic" = "latest"
-"aqua:asciinema/asciinema" = "latest"
+helix = "latest"  # hx terminal modal editor
+neovim = "nightly"  # nvim terminal editor; config uses nightly vim.pack APIs

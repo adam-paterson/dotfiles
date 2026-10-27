@@ -1,7 +1,10 @@
 [tools]
-node = "latest"
-go = "latest"
-rust = "latest"
-python = "latest"
-uv = "latest"
-bun = "latest"
+# Language runtimes, compilers, and package managers
+bun = "latest"  # JavaScript/TypeScript runtime and package manager
+go = "latest"  # Go compiler/toolchain; used by mise's go backend
+node = "latest"  # Node.js, npm, and npx; runs JS agents and language servers
+pnpm = "12.15.0"  # JavaScript package manager
+python = "latest"  # Python interpreter
+rust = "latest"  # Rust compiler and Cargo; builds cargo-backend tools
+uv = "latest"  # Python environment/package manager and uvx tool runner
+"pipx:poetry" = "latest"  # Python project/dependency/build management

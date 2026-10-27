@@ -41,7 +41,7 @@
 	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = ~/.config/git/allowed_signers
-	program = {{ if eq .chezmoi.os "darwin" }}/Applications/1Password.app/Contents/MacOS/op-ssh-sign{{ else }}ssh-keygen{{ end }}
+	program = {{ if and (eq .chezmoi.os "darwin") (not .headless) }}/Applications/1Password.app/Contents/MacOS/op-ssh-sign{{ else }}ssh-keygen{{ end }}
 
 [commit]
 	gpgsign = true
@@ -81,4 +81,4 @@
 [user]
 	email = hello@adampaterson.co.uk
 	name = Adam Paterson
-	signingKey = {{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" }}"{{ .chezmoi.homeDir }}/.ssh/id_ed25519"{{ else }}ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn{{ end }}
+	signingKey = {{ .gitSigningKey | quote }}

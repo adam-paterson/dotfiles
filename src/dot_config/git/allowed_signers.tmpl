@@ -1,5 +1,1 @@
-{{ if eq (first (splitList "." (lower .chezmoi.hostname))) "seraph" -}}
-hello@adampaterson.co.uk ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDqy5RHK2B2P6JjMR8zbc4xjUgW0ZAVRISv3fvyLIWf
-{{ else -}}
-hello@adampaterson.co.uk ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn
-{{ end -}}
+hello@adampaterson.co.uk {{ .gitSigningPublicKey }}

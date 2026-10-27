@@ -1,4 +1,6 @@
-{{- $user := "adampaterson" -}}
+{{- $headless := promptBoolOnce . "headless" "Headless machine" false -}}
+{{- $gitSigningKey := promptStringOnce . "gitSigningKey" "Git signing key (public key or private-key path)" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn" -}}
+{{- $gitSigningPublicKey := promptStringOnce . "gitSigningPublicKey" "Git signing public key" -}}
 
 [merge]
   command = "nvim"
@@ -26,3 +28,8 @@ mode = "file"
 
 [onepassword]
   cache = true
+
+[data]
+  headless = {{ $headless }}
+  gitSigningKey = {{ $gitSigningKey | quote }}
+  gitSigningPublicKey = {{ $gitSigningPublicKey | quote }}

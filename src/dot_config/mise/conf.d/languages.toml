@@ -1,0 +1,26 @@
+[tools]
+# Language servers and parser/compiler tools
+lua-language-server = "latest"  # Lua LSP
+tree-sitter = "latest"  # Parser generation/build CLI; Neovim parser installs also need a C compiler
+"go:golang.org/x/tools/gopls" = "latest"  # Go LSP
+"npm:@ansible/ansible-language-server" = "latest"  # Ansible YAML LSP
+"npm:@astrojs/language-server" = "latest"  # Astro LSP; Neovim supplies its own JS TypeScript SDK
+"npm:@github/copilot-language-server" = "1.561.0"  # Copilot LSP/ACP integration
+"npm:@tailwindcss/language-server" = "latest"  # Tailwind CSS LSP
+"npm:fish-lsp" = "latest"  # Fish shell LSP
+"npm:typescript" = "7"  # TypeScript compiler; not the JS tsserver SDK
+"npm:typescript-language-server" = "6.0.2"  # LSP bridge to a JS tsserver SDK
+"npm:vscode-langservers-extracted" = "latest"  # HTML, CSS, JSON, and ESLint language servers
+
+# Formatters and static analysis
+biome = "latest"  # JS/TS formatter and linter; Neovim formatter fallback
+oxfmt = "latest"  # Neovim JS/TS and Markdown formatting
+oxlint = "1.89.0"  # JS/TS linting and LSP diagnostics
+prettier = "latest"  # General formatting; Astro has a separate editor-owned version
+shellcheck = "latest"  # Shell-script static analysis
+stylua = "latest"  # Lua formatter
+tombi = "latest"  # TOML formatter, linter, and LSP
+"aqua:golangci/golangci-lint" = "latest"  # Go lint aggregator
+"aqua:mvdan/sh" = "latest"  # shfmt shell-script formatter
+"pipx:ansible-lint" = "latest"  # Ansible playbook and role linting
+"pipx:sqlfluff" = "latest"  # SQL linter/formatter; Neovim SQL formatting

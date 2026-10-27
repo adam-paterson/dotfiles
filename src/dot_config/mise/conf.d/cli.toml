@@ -1,0 +1,40 @@
+[tools]
+# Shell and terminal sessions
+atuin = "latest"  # Searchable shell history
+fzf = "latest"  # Fuzzy selector; also used by zoxide's interactive mode
+herdr = "latest"  # Terminal multiplexer for coding agents
+starship = "latest"  # Shell prompt
+television = "latest"  # tv fuzzy finder and reusable search channels
+usage = "latest"  # CLI specifications and completion generation/runtime
+zoxide = "latest"  # Directory-history navigation
+"aqua:carapace-sh/carapace-bin" = "latest"  # Cross-shell completions
+"aqua:fish-shell/fish-shell" = "latest"  # Fish shell and scripting runtime
+"aqua:joshmedeski/sesh" = "latest"  # Tmux session manager; requires tmux and zoxide
+"aqua:rossmacarthur/sheldon" = "latest"  # Shell plugin manager
+
+# Files, text, and structured data
+eza = "latest"  # Directory listings
+jq = "latest"  # JSON query/filter CLI; used by Television channels
+"aqua:BurntSushi/ripgrep" = "latest"  # rg recursive text search
+"aqua:charmbracelet/glow" = "latest"  # Terminal Markdown rendering
+"aqua:chmln/sd" = "latest"  # Text substitution
+"aqua:dduan/tre" = "latest"  # Gitignore-aware directory trees and editor aliases
+"aqua:ip7z/7zip" = "latest"  # Command-line archive compression/extraction
+"aqua:mikefarah/yq" = "latest"  # YAML and structured-data query CLI
+"aqua:rclone/rclone" = "latest"  # Remote/cloud storage transfer and synchronization
+"aqua:sharkdp/bat" = "latest"  # Syntax-highlighted file display
+"aqua:sharkdp/fd" = "latest"  # File and directory search
+"aqua:simeji/jid" = "latest"  # Incremental interactive JSON exploration
+"aqua:sxyazi/yazi" = "latest"  # Terminal file manager; graphical openers are optional
+"aqua:ynqa/jnv" = "latest"  # Interactive JSON viewer and jq-style filter editor
+
+# System tools and personal utilities
+doggo = "latest"  # DNS queries
+"aqua:ClementTsang/bottom" = "latest"  # btm terminal system monitor
+"aqua:asciinema/asciinema" = "latest"  # Record/replay terminal sessions, not screen video
+"aqua:bootandy/dust" = "latest"  # Disk-usage reporting
+"aqua:dalance/procs" = "latest"  # Process listings
+"aqua:fastfetch-cli/fastfetch" = "latest"  # System information
+"aqua:muesli/duf" = "latest"  # Filesystem free-space reporting
+"aqua:tealdeer-rs/tealdeer" = "latest"  # tldr concise command-reference pages
+"npm:@doist/todoist-cli" = "latest"  # td task management; TODOIST_API_TOKEN supports headless authentication

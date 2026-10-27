@@ -16,7 +16,8 @@ with tempfile.TemporaryDirectory() as directory:
     shutil.copy(SOURCE / ".chezmoiremove", source)
     for name in [".chezmoidata", "dot_config/aerospace", "dot_config/private_fish", "dot_config/ghostty",
                  "dot_config/tableplus",
-                 "dot_config/herdr", "dot_config/mise", "dot_config/git", "dot_pi", "private_dot_homebrew"]:
+                 "dot_config/herdr", "dot_config/mise", "dot_config/git", "dot_config/sqlfluff",
+                 "dot_pi", "private_dot_homebrew"]:
         shutil.copytree(SOURCE / name, source / name)
     # Accidental captures must stay ignored even if they reappear in the source.
     for name in ["dot_config/borders/executable_bordersrc", "dot_config/private_spotatui/private_config.yml"]:
@@ -33,10 +34,13 @@ with tempfile.TemporaryDirectory() as directory:
         target = source / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(SOURCE / name, target)
-    for platform, hostname in [("linux", "seraph"), ("linux", "SERAPH.example.net"),
-                               ("linux", "desktop"), ("darwin", "MACBOOK-002531")]:
-        headless = hostname.lower().split(".")[0] == "seraph"
-        home = root / hostname
+    shared_tools = None
+    for platform, hostname, headless in [
+        ("linux", "seraph", True), ("linux", "seraph", False),
+        ("linux", "new-server", True), ("linux", "desktop", False),
+        ("darwin", "MACBOOK-002531", False), ("darwin", "mac-mini", True),
+    ]:
+        home = root / f"{hostname}-{headless}"
         home.mkdir()
         (home / ".local/bin").mkdir(parents=True)
         (home / ".dotnet/tools").mkdir(parents=True)
@@ -55,19 +59,37 @@ with tempfile.TemporaryDirectory() as directory:
                }})]
         def run(*args):
             return subprocess.check_output(cli + list(args), env=env, text=True)
+        public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDqy5RHK2B2P6JjMR8zbc4xjUgW0ZAVRISv3fvyLIWf"
+        signing_key_value = str(home / ".ssh/custom signing key")
+        rendered_config = subprocess.check_output(
+            cli + ["execute-template", "--init",
+                   "--promptBool", f"Headless machine={str(headless).lower()}",
+                   "--promptString", f"Git signing key (public key or private-key path)={signing_key_value}",
+                   "--promptString", f"Git signing public key={public_key}"],
+            input=(SOURCE / ".chezmoi.toml.tmpl").read_text(), env=env, text=True)
+        data = tomllib.loads(rendered_config)["data"]
+        assert data == {"headless": headless, "gitSigningKey": signing_key_value,
+                        "gitSigningPublicKey": public_key}
+        config.write_text(rendered_config)
+        # Reinitialization must preserve an explicit false, not replace it with a prompt.
+        rerendered = subprocess.check_output(
+            cli + ["execute-template", "--init", "--no-tty"],
+            input=(SOURCE / ".chezmoi.toml.tmpl").read_text(), env=env, text=True)
+        assert tomllib.loads(rerendered)["data"] == data
         managed = set(run("managed", "--path-style=relative").splitlines())
         assert ".config/fish/fish_variables" not in managed
         assert not any("/.git" in path for path in managed)
         for path in [".homebrew/Brewfile", ".config/aerospace/aerospace.toml", ".config/borders/bordersrc",
-                     ".config/fish/conf.d/00-brew.fish",
-                     ".config/fish/conf.d/00-orbstack.fish", ".config/fish/completions/orbctl.fish"]:
+                     ".config/fish/conf.d/00-orbstack.fish"]:
+            assert (path in managed) == (platform == "darwin" and not headless), (platform, path)
+        for path in [".config/fish/conf.d/00-brew.fish", ".config/fish/completions/orbctl.fish"]:
             assert (path in managed) == (platform == "darwin"), (platform, path)
         for path in [".config/ghostty/config", ".config/tableplus/dracula.tableplustheme",
-                     ".config/tableplus/kanagawa.tableplustheme", ".config/spotatui/config.yml",
-                     ".config/mise/conf.d/entertainment.toml"]:
+                     ".config/tableplus/kanagawa.tableplustheme", ".config/spotatui/config.yml"]:
             assert (path in managed) == (not headless), (hostname, path)
         for path in [".config/herdr/config.toml", ".config/mise/conf.d/cli.toml",
-                     ".config/mise/conf.d/editors.toml", ".config/mise/conf.d/languages.toml"]:
+                     ".config/mise/conf.d/editors.toml", ".config/mise/conf.d/languages.toml",
+                     ".config/sqlfluff/.sqlfluff"]:
             assert path in managed, (hostname, path)
         sounds = tomllib.loads(run("cat", str(home / ".config/herdr/config.toml")))["ui"]["sound"]
         assert sounds["enabled"] == (not headless)
@@ -75,17 +97,31 @@ with tempfile.TemporaryDirectory() as directory:
         for path in [".config/nvim/plugin/41_dotnet.lua", ".chezmoiscripts/92-install-roslyn.sh"]:
             assert (path in managed) == (not headless), (hostname, path)
         tools = {}
-        for name in ["config.toml", "conf.d/ai.toml", "conf.d/cli.toml",
-                     "conf.d/languages.toml", "conf.d/security.toml"]:
-            tools.update(tomllib.loads(run("cat", str(home / ".config/mise" / name)))["tools"])
+        owners = {}
+        main = tomllib.loads(run("cat", str(home / ".config/mise/config.toml")))
+        assert not main.get("tools"), "Keep tool declarations in domain files, not the main config"
+        for path in sorted(p for p in managed if p.startswith(".config/mise/conf.d/") and p.endswith(".toml")):
+            for name, spec in tomllib.loads(run("cat", str(home / path))).get("tools", {}).items():
+                assert name not in owners, f"Duplicate {name}: {owners.get(name)} and {path}"
+                owners[name] = path
+                tools[name] = spec
+        if shared_tools is None:
+            shared_tools = tools
+        assert tools == shared_tools, "The CLI toolchain must not change with hostname, OS, or display profile"
         assert "github:microsoft/apm" not in tools
         assert tools["op"] == "2.41.1" and tools["pnpm"] == "12.15.0"
-        assert tools["npm:@github/copilot-language-server"] == ("1.558.0" if headless else "1.561.0")
+        assert tools["npm:@github/copilot-language-server"] == "1.561.0"
+        assert tools["aqua:anomalyco/opencode"] == "latest" and "opencode" not in tools
+        assert tools["cargo:plannotator-tui"] == "latest"
+        assert tools["oxlint"] == "1.89.0" and tools["viteplus"] == "1.4.0"
         for name in ["npm:gentle-pi", "cargo:plannotator-tui", "npm:@colbymchenry/codegraph",
-                     "npm:@doist/todoist-cli", "oxlint", "pipx:sqlfluff", "viteplus"]:
-            assert (name in tools) == (not headless), (hostname, name)
+                     "npm:@doist/todoist-cli", "oxlint", "pipx:sqlfluff", "viteplus",
+                     "npm:@loongphy/codex-auth", "npm:@caveman-ai/cli"]:
+            assert name in tools, (hostname, name)
         assert tools["cloc"]["platforms"]["linux-arm64"]["asset_pattern"] == "cloc-{{ version }}.pl"
         pi = json.loads(run("cat", str(home / ".pi/agent/settings.json")))
+        extension = home / ".local/share/mise/installs/npm-plannotator-pi-extension/latest/node_modules/@plannotator/pi-extension"
+        assert str(extension) in pi["packages"] and "npm:@plannotator/pi-extension" not in pi["packages"]
         if headless:
             assert not pi["subagents"].get("disableBuiltins", False)
             assert len(pi["subagents"]["agentOverrides"]) == 8
@@ -101,14 +137,11 @@ with tempfile.TemporaryDirectory() as directory:
             ["git", "config", "--file", "/dev/stdin", "--get", "gpg.ssh.program"],
             input=git_config, text=True).strip()
         assert signer == ("/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-                          if platform == "darwin" else "ssh-keygen"), (hostname, signer)
+                          if platform == "darwin" and not headless else "ssh-keygen"), (hostname, signer)
         signing_key = subprocess.check_output(
             ["git", "config", "--file", "/dev/stdin", "--get", "user.signingkey"],
             input=git_config, text=True).strip()
-        public_key = ("ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDqy5RHK2B2P6JjMR8zbc4xjUgW0ZAVRISv3fvyLIWf"
-                      if headless else
-                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1CJVWAx5tlEl1onIshZURohd68JMza5uk1E+eStOUn")
-        assert signing_key == (str(home / ".ssh/id_ed25519") if headless else public_key)
+        assert signing_key == signing_key_value
         assert run("cat", str(home / ".config/git/allowed_signers")).strip() == (
             "hello@adampaterson.co.uk " + public_key)
         lock = json.loads(run("cat", str(home / ".config/nvim/nvim-pack-lock.json")))
@@ -133,4 +166,4 @@ with tempfile.TemporaryDirectory() as directory:
         run("apply", "--no-tty", "--exclude=scripts", *(str(path) for path in retired))
         assert all(not path.exists() for path in retired)
         assert state.read_text() == "# Local runtime state\n"
-        print(f"PASS: {hostname} ({platform}) file selection, native paths, shared Diffview, retired hook removal, preserved Fish state")
+        print(f"PASS: {hostname} ({platform}, headless={headless}) initialization, file selection, tools, signing identity, preserved Fish state")

@@ -1,12 +1,35 @@
 [tools]
-ast-grep = "latest"
-"aqua:cli/cli" = "latest"
-"aqua:direnv/direnv" = "latest"
-"aqua:dlvhdr/gh-dash" = "latest"
-"aqua:git-lfs/git-lfs" = "latest"
-"aqua:jesseduffield/lazygit" = "latest"
-"aqua:nektos/act" = "latest"
-"aqua:numtide/treefmt" = "latest"
-"aqua:twpayne/chezmoi" = "latest"
-"aqua:x-motemen/ghq" = "latest"
-"cargo:worktrunk" = "latest"
+# Repositories and diffs
+"aqua:Wilfred/difftastic" = "latest"  # Syntax-aware diffs for Git, chezmoi, and LazyGit
+"aqua:cli/cli" = "latest"  # gh GitHub CLI
+"aqua:dandavison/delta" = "latest"  # Patch-compatible highlighting for staging and picker previews
+"aqua:dlvhdr/gh-dash" = "latest"  # GitHub PR/issue terminal dashboard
+"aqua:git-lfs/git-lfs" = "latest"  # Git large-file storage
+"aqua:jesseduffield/lazygit" = "latest"  # Terminal Git interface
+"aqua:o2sh/onefetch" = "latest"  # Git repository summary
+"aqua:x-motemen/ghq" = "latest"  # Repository checkout organization
+"cargo:worktrunk" = "latest"  # wt Git worktree management
+
+# Project automation, analysis, and testing
+ast-grep = "latest"  # Structural code search and rewriting
+just = "latest"  # Project recipe runner
+viteplus = "1.4.0"  # Vite+ web development/build/test toolchain
+"aqua:direnv/direnv" = "latest"  # Per-directory environment loading
+"aqua:goreleaser/goreleaser" = "latest"  # Build, package, and release automation
+"aqua:nektos/act" = "latest"  # Run GitHub Actions locally; needs a container engine
+"aqua:numtide/treefmt" = "latest"  # Run project-selected formatters; does not replace them
+"aqua:rhysd/actionlint" = "latest"  # GitHub Actions workflow static analysis
+"aqua:sharkdp/hyperfine" = "latest"  # Command benchmarking
+"aqua:twpayne/chezmoi" = "latest"  # Dotfile management
+"pipx:posting" = "latest"  # Terminal HTTP/API client
+"pipx:pre-commit" = "latest"  # Git-hook runner
+
+# Source-line counts. Unix releases use the portable Perl script, not a native binary.
+[tools.cloc]
+version = "latest"
+bin = "cloc"
+platforms.linux-arm64.asset_pattern = "cloc-{{ version }}.pl"
+platforms.linux-x64.asset_pattern = "cloc-{{ version }}.pl"
+platforms.macos-arm64.asset_pattern = "cloc-{{ version }}.pl"
+platforms.macos-x64.asset_pattern = "cloc-{{ version }}.pl"
+platforms.windows-x64.asset_pattern = "cloc-{{ version }}.exe"

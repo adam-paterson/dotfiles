@@ -1,0 +1,7 @@
+# Batch rendering/conversion does not require a desktop display.
+[tools]
+"conda:ghostscript" = "latest"  # PostScript/PDF interpreter and conversion tools
+"conda:imagemagick" = "latest"  # Command-line image conversion and manipulation
+"github:tectonic-typesetting/tectonic" = "latest"  # TeX/LaTeX document compilation
+"npm:@mermaid-js/mermaid-cli" = "latest"  # Diagram rendering; requires headless Chromium/Puppeteer
+"pipx:img2art" = "latest"  # Convert images/video to terminal ASCII art
