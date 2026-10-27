@@ -1,6 +1,6 @@
 [tools]
-# Azure management plus the Azure DevOps command group.
-azure-cli = { version = "latest", uvx_args = "--prerelease=allow", postinstall = "az extension add --name azure-devops" }
+# Azure's macOS broker has no Python 3.15 wheel; scope its interpreter independently.
+azure-cli = { version = "latest", python = "3.14", dependency_prereleases = "allow", postinstall = "az extension add --name azure-devops" }
 cloudflared = "latest"  # Cloudflare Tunnel and network access
 gcloud = "latest"  # Google Cloud SDK CLI
 lazyssh = "latest"  # Terminal SSH host/configuration and file-transfer manager

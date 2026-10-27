@@ -54,6 +54,12 @@ Zoxide's interactive mode, even though Television provides another fuzzy finder.
   This is a version-policy change, not a claim that both versions behave identically.
 - Plannotator TUI keeps `latest`, the effective value before cleanup. Its duplicate
   `0.9.4` entry in the main file was overridden by `conf.d/ai.toml`.
+- Azure CLI uses `dependency_prereleases = "allow"`. Passing the same policy in
+  `uvx_args` duplicates the registry's `--prerelease` flag and makes uv reject
+  installation with current mise versions. Its Python interpreter is scoped to
+  `3.14` because the macOS broker dependency has no Python 3.15 wheel. The global
+  Python selection remains unchanged. Both hosts use mise `2026.10.18`, which
+  supports this per-tool interpreter setting and the current Oxlint release tags.
 - Other version pins and tool options remain unchanged, including Cloc's platform
   assets, Azure's postinstall command, and Plannotator's narrow trust exception.
 - Mise owns the Plannotator Pi extension installation. Pi references its existing
