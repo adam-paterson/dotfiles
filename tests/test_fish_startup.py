@@ -1,4 +1,7 @@
-"""Run with python3 tests/test_fish_startup.py; requires Fish. No real secrets/tools run."""
+"""Run with python3 tests/test_fish_startup.py; requires Fish and direnv.
+
+Tool startup is mocked; direnv upgrade checks use isolated copies and fake envrcs.
+"""
 import os
 from pathlib import Path
 import shutil
@@ -73,3 +76,45 @@ esac
                     expected += ["atuin pty-proxy init fish"]
             assert log.read_text().splitlines() == expected, log.read_text()
     print("PASS: managed tool precedence, one mise activation, deferred Atuin, first-command history, bindings, Herdr, non-interactive shells")
+
+with tempfile.TemporaryDirectory(prefix="direnv-upgrade-") as directory:
+    root = Path(directory)
+    home = root / "home"
+    old = root / "old version"
+    new = root / "new version"
+    for path in [home, old, new]:
+        path.mkdir()
+    binary = shutil.which("direnv")
+    assert binary, "Install direnv before running this test"
+    for path in [old, new]:
+        shutil.copy2(Path(binary).resolve(), path / "direnv")
+    env = {"HOME": str(home), "XDG_CONFIG_HOME": str(home / ".config"),
+           "XDG_DATA_HOME": str(home / ".local/share"), "TERM": "dumb",
+           "PATH": f"{old}:/usr/bin:/bin"}
+    projects = []
+    for value in ["prompt", "directory", "preexec"]:
+        project = root / value
+        project.mkdir()
+        (project / ".envrc").write_text(f"export DIRENV_UPGRADE_TEST={value}\n")
+        subprocess.run([str(new / "direnv"), "allow", str(project)],
+                       env=env, check=True, capture_output=True, text=True)
+        projects.append(project)
+    script = f'''
+source "{SOURCE / 'private_conf.d/direnv.fish'}"
+set -gx PATH "{new}" /usr/bin /bin
+command rm "{old / 'direnv'}"
+emit fish_prompt
+test "$DIRENV_UPGRADE_TEST" = prompt; or exit 20
+cd "{projects[1]}"
+test "$DIRENV_UPGRADE_TEST" = directory; or exit 21
+set -g direnv_fish_mode eval_after_arrow
+cd "{projects[2]}"
+test "$DIRENV_UPGRADE_TEST" = directory; or exit 22
+emit fish_preexec
+test "$DIRENV_UPGRADE_TEST" = preexec; or exit 23
+'''
+    result = subprocess.run([FISH, "--no-config", "-c", script], cwd=projects[0],
+                            env=env, capture_output=True, text=True, timeout=10)
+    assert result.returncode == 0, result.stderr
+    assert "Unknown command" not in result.stderr, result.stderr
+    print("PASS: prompt, directory-change and preexec hooks survive removal of the old direnv binary")
