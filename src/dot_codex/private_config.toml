@@ -1,0 +1,778 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+# Codex CLI Configuration
+# Managed by chezmoi - do not edit directly
+# Run: chezmoi edit ~/.codex/config.toml
+
+# =============================================================================
+# Core Settings
+# =============================================================================
+
+# Approval policy: untrusted | on-failure | on-request | never
+approval_policy = "on-request"
+
+# Sandbox mode: read-only | workspace-write | danger-full-access
+sandbox_mode = "danger-full-access"
+
+# Network access: enabled | disabled
+network_access = "enabled"
+
+# Disable response storage
+disable_response_storage = true
+
+# Windows WSL setup acknowledgement
+windows_wsl_setup_acknowledged = true
+
+# Suppress unstable feature warnings
+suppress_unstable_features_warning = true
+
+# =============================================================================
+# Model Configuration
+# =============================================================================
+
+model = "gpt-6.1-sol"
+
+# Reasoning effort: none | minimal | low | medium | high | xhigh
+model_reasoning_effort = "high"
+
+# Personality: none | friendly | pragmatic
+personality = "pragmatic"
+
+# Web search mode: disabled | cached | live
+web_search = "live"
+
+# =============================================================================
+# Project Documentation
+# =============================================================================
+
+project_doc_fallback_filenames = [
+  "CLAUDE.md",
+  "TEAM_GUIDE.md",
+  ".agents.md",
+  "CODEX.md",
+]
+project_doc_max_bytes = 65536
+
+# =============================================================================
+# Feature Flags
+# =============================================================================
+
+notify = ["/Users/adampaterson/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+approvals_reviewer = "user"
+service_tier = "default"
+
+[features]
+shell_tool = true
+memories = true
+fast_mode = false
+apply_patch_freeform = true
+unified_exec = true
+shell_snapshot = true
+runtime_metrics = true
+undo = true
+request_rule = true
+responses_websockets = false
+remote_models = true
+skill_mcp_dependency_install = true
+skill_env_var_dependency_prompt = true
+js_repl = true
+chronicle = false
+
+# =============================================================================
+# Tools
+# =============================================================================
+
+hooks = true
+
+# =============================================================================
+# History Settings
+# =============================================================================
+
+[history]
+persistence = "save-all"
+max_bytes = 104857600
+
+# =============================================================================
+# TUI Settings
+# =============================================================================
+
+[tui]
+notifications = true
+animations = true
+show_tooltips = true
+status_line = ["model", "reasoning", "git-branch", "branch-changes", "context-remaining", "five-hour-limit", "weekly-limit", "task-progress", "used-tokens", "total-input-tokens", "total-output-tokens"]
+status_line_use_colors = true
+pet = "seedy"
+screen_reader_detection_done = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+gpt-6-astra = 4
+"gpt-6.1-sol" = 1
+
+[mcp_servers.mcporter]
+command = "/Users/adampaterson/node_modules/.bin/mcporter"
+args = ["--config", "/Users/adampaterson/.mcporter/mcporter.jsonc", "serve", "--stdio"]
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+env_vars = ["BROWSER_USE_ACCESS_EXECUTOR_ID", "BROWSER_USE_ACCESS_PIPE_PATH", "BROWSER_USE_ACCESS_VERIFYING_IDENTITY"]
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/adampaterson/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+CODEX_HOME = "/Users/adampaterson/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.1016.61520"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/adampaterson/.codex/plugins/cache/openai-bundled/browser/26.1016.61520/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/adampaterson/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = true
+
+[mcp_servers.codegraph]
+command = "codegraph"
+args = ["serve", "--mcp"]
+
+[mcp_servers.buffer]
+command = "/Users/adampaterson/.local/bin/codex-buffer-mcp"
+
+[mcp_servers.thrive_content]
+url = "https://dev.thrivegroup.ai/_emdash/api/mcp"
+
+[mcp_servers.artifacts]
+enabled = true
+url = "https://artifacts.adampaterson.dev/mcp"
+
+[mcp_servers.artifacts.http_headers]
+Bearer = "as_key_key_d2ad3f24-45a9-4412-8e7e-78c79c4deb1d_VEs0_vtSnvkhr9ZqQmLZixrYQjmqAv433C_ZUKB43VM"
+
+# =============================================================================
+# Profiles
+# =============================================================================
+
+[profiles.deep-review]
+model_reasoning_effort = "xhigh"
+approval_policy = "on-request"
+
+[profiles.research]
+model_reasoning_effort = "med"
+web_search = "live"
+
+# =============================================================================
+# Shell Environment Policy
+# =============================================================================
+
+[shell_environment_policy]
+inherit = "all"
+exclude = []
+ignore_default_excludes = true
+experimental_use_profile = true
+
+[shell_environment_policy.set]
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
+
+## ===========================================
+## Projects
+## ===========================================
+[projects."/Users/adampaterson/Projects/GroupTechnology/competitor-analysis/data-engineering"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/GroupTechnology/keyphrase-classifier"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/codex-research"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/GroupTechnology/competitor-analysis"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/thrive"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/spec-kit"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/.codex"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/ritual-flow"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/agentgrid"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/string-link"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/chirpy"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/agentcrate"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/zmk-sofle"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/MAHORAGA"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-05-22/hubspot-plugin-hubspot-openai-curated-we"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-05-23/goal-we-would-like-to-build"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-05-23/can-you-research-people-s-superwhisper"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-05-26/i-need-you-to-look-at"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-05-26/i-need-to-access-my-routers"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/open-crew"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/skills"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-04/azure-devops-cli-users-adampaterson-agents"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-04/i-m-trying-to-demonstrate-to"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-05/i-use-multiple-different-ai-harnesses"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-07/i-need-some-help-diagnosing-an"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-08/files-mentioned-by-the-user-25"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-10/we-keep-getting-this-error-from"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-10/i-need-some-assistance-setting-up"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/adampaterson.co.uk"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/cuehouse"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/content-agent"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Library/Mobile Documents/iCloud~md~obsidian/Documents/Personal"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-19/sites-plugin-sites-openai-bundled-create"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-19/a"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-06-20/apollo-io-app-asdk-app-69bd664f2a908191a3a0a47eca8559d1"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-02/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-07/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-10/i-ha"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-10/i-m"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-11/sites-plugin-sites-openai-bundled-create"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-11/w"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-12/i-ne"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-12/sanity-plugin-app-69ceae6d8d78819192e59f76b8e170b5-openai-curated"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-13/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-13/files-mentioned-by-the-user-here"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Blog Articles"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-16/l"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-16/sites-plugin-sites-openai-bundled-create"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-21/we-re"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-21/presentations-plugin-presentations-openai-primary-runtime"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-27/i-m-t"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-27/ubersuggest-plugin-app-69457f8444848191918f7c00fea68076-openai-curated"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-28/ubersuggest-plugin-app-69457f8444848191918f7c00fea68076-openai-curated"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-28/we-have-a-vast-amount-of"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-28/thrive-social-studio-sites-project-appgprj"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-28/thrive-social-studio-sites-project-appgprj-2"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-07-28/thrive-social-studio-sites-project-appgprj-3"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-02/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-18/referenced-chatgpt-conversation-this-is-an"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-18/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-19/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-24/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-25/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-25/realtime-voice-chat-2"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-25/codex-threads-01a03798-bf17-7f22-924a"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-08-26/our-presentation-mode-in-sanity-is"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-03/record-replay-plugin-record-and-replay"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-03/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-05/s"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/MyMetaHealth"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-06/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/ansible"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-15/i-m"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-16/hatch-pet-users-adampaterson-codex-skills"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/.config/nvim"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-21/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-21/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-21/referenced-chatgpt-conversation-this-is-an"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-22/2"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-23/2"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Documents/Codex/2026-09-23/2-2"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/starling"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/.config"]
+trust_level = "trusted"
+
+[projects."/Users/adampaterson/Projects/thrive-client-docs"]
+trust_level = "trusted"
+
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/Users/adampaterson/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/Users/adampaterson/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[marketplaces.superwhisper]
+last_updated = "2026-08-28T06:56:23Z"
+last_revision = "e2a9a6d5165ac162990b9491eb6b483947736072"
+source_type = "git"
+source = "https://github.com/superultrainc/superwhisper-codex.git"
+
+[marketplaces.adam-paterson-skills]
+last_updated = "2026-08-28T06:56:20Z"
+last_revision = "bc77d65353b7e6826615b981bc13bdf0e2cd92d1"
+source_type = "git"
+source = "https://github.com/adam-paterson/skills.git"
+
+[marketplaces.spark-codex-marketplace]
+source_type = "git"
+source = "https://github.com/readdle/spark-codex-marketplace.git"
+
+[marketplaces.worktrunk]
+source_type = "git"
+source = "https://github.com/max-sixty/worktrunk.git"
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."linear@openai-curated"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."openai-developers@openai-curated"]
+enabled = true
+
+[plugins."hugging-face@openai-curated"]
+enabled = true
+
+[plugins."cloudflare@openai-curated"]
+enabled = true
+
+[plugins."remotion@openai-curated"]
+enabled = true
+
+[plugins."hubspot@openai-curated"]
+enabled = true
+
+[plugins."canva@openai-curated"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."superwhisper@superwhisper"]
+enabled = true
+
+[plugins."record-and-replay@openai-bundled"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."spark-cli-skills@spark-codex-marketplace"]
+enabled = true
+
+[plugins."worktrunk@worktrunk"]
+enabled = true
+
+[plugins."code-review@openai-bundled"]
+enabled = true
+
+[desktop]
+appearanceTheme = "dark"
+appearanceLightCodeThemeId = "codex"
+appearanceDarkCodeThemeId = "catppuccin"
+sansFontSize = 16
+codeFontSize = 16
+usePointerCursors = true
+followUpQueueMode = "steer"
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-show-sidebar-pr-icons = true
+git-commit-instructions = "Always use Conventional Commit standards with scope. Ticket references should be in the footer of commit rather than title."
+selected-avatar-id = "pet_6abbcaddc2d48191b77e49fade672791"
+reviewDelivery = "detached"
+show-context-window-usage = true
+hotkey-window-projectless-default-enabled = true
+avatar-overlay-mascot-width-px = 125
+dock-icon-preference = "app-default"
+enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
+open-link-in-target-preference = "in-app-browser"
+conversationDetailMode = "STEPS_COMMANDS"
+appearanceDiffMarkerStyle = "color"
+realtimeVoiceScreenContextEnabled = true
+toys-confetti-enabled = true
+agent-usage-reset-enabled = true
+default-workspace-full-view = true
+
+[desktop.appearanceLightChromeTheme]
+accent = "#4d699b"
+contrast = 90
+ink = "#545464"
+opaqueWindows = false
+surface = "#f2ecbc"
+
+[desktop.appearanceLightChromeTheme.fonts]
+
+[desktop.appearanceLightChromeTheme.semanticColors]
+diffAdded = "#00a240"
+diffRemoved = "#e02e2a"
+skill = "#751ed9"
+
+[desktop.appearanceDarkChromeTheme]
+accent = "#f077af"
+accentSource = "chatgpt"
+contrast = 90
+ink = "#cdd6f4"
+opaqueWindows = false
+surface = "#1e1e2e"
+
+[desktop.appearanceDarkChromeTheme.fonts]
+
+[desktop.appearanceDarkChromeTheme.semanticColors]
+diffAdded = "#a6e3a1"
+diffRemoved = "#f38ba8"
+skill = "#cba6f7"
+
+[desktop.open-in-target-preferences]
+global = "ghostty"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/adampaterson/.codex/worktrees/7ccc/thrive" = "vscode"
+"/Users/adampaterson/Projects/thrive" = "ghostty"
+"/Users/adampaterson/Projects/zmk-sofle" = "ghostty"
+
+[notice]
+hide_full_access_warning = true
+
+[hooks.state]
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:364f19c3dcb6031fafb41ff1c37d0abb517712c655c59dee97aeeb98a6d7e009"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:9e73956474e0549dabbd9a83143ee75432f508d01a228bb700e9ca8d304b6813"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:6441a88262b32a666442ffb2a56c077e54ff01d78b5365f55205ccf90ad8bab0"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:282ef4f786ed6c3cd4d9639e029d006c516c39638b258d2f1da498b82c616a2e"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:cd22837ba2be1172d62c405e12ca985b102d16595ab93bb9051f5eaa5e3d85cf"
+enabled = true
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:stop:1:0"]
+trusted_hash = "sha256:f514f90c87e18e54427aba5ca29568aade4fb53df356d872739cc8ae82de0d3e"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:fc87dbee1cb8a9be4f78ba094c4fa8d5e2fd38cb800854e3717f9b6a52fe2a47"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:ac371f260e4b23ba1d1b7a4ad68a44a323a8470b61f38471a47aceac1b7a5a7c"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:1b7624ea48936b8f3258affd1669804316f5b45cff6d2326b7732916469eb48a"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:session_start:2:0"]
+trusted_hash = "sha256:d719d08c23da6bcbf773109fe496c2cacf76d6e1a4710f86b95d4880bcc32c28"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:523d693b2584fd65e5910e1dd8df3b23c76fb2451655a4c1ac2e46c5fce70171"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:stop:2:0"]
+trusted_hash = "sha256:867567ecaa48329e17c968e2ad95153afce17deaa91e4780dc29b0c3d32b379d"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:c05d56d9cdb445b1e3559f91989b6e1894961684b10f2f49e0073d27478faef6"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:cf6c5757853ce2bc958834de6597380b89e3113a1f509378ed9bd24913de5b17"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:b9ceca433aff1b27fabe4a7edc76df965010dbd0393b8ab38595a9a239ec8ab8"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:session_start:0:0"]
+trusted_hash = "sha256:7f9c59c4d011099c8983ba6954de7f6f5d97cad38ae7572a4437843f9a6ea182"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:055cd7130fa6307a9cb697156f581906ea7ff8ce0fc62ae76baa8df14ef6a784"
+
+[hooks.state."superwhisper@superwhisper:hooks.json:stop:0:0"]
+trusted_hash = "sha256:75c2216e0eacf533f604849358919cdb9f4498bfe6ac6ea00b7aaa0fc4d45e58"
+
+[hooks.state."worktrunk@worktrunk:plugin.json#hooks[0]:permission_request:0:0"]
+trusted_hash = "sha256:b5f6112154fd814298da679652ea096e11434b7f2876d471eb00c790a68045d0"
+
+[hooks.state."worktrunk@worktrunk:plugin.json#hooks[0]:session_end:0:0"]
+trusted_hash = "sha256:09b9fff83447c926af5f61010bc3dd3c8f2e6194c7c06b08f8acbf808a51710d"
+
+[hooks.state."worktrunk@worktrunk:plugin.json#hooks[0]:user_prompt_submit:0:0"]
+trusted_hash = "sha256:e2ffec558188fd0988ad51768594f675801fd2a1ba2895b5df2aca2650d70c2a"
+
+[hooks.state."worktrunk@worktrunk:plugin.json#hooks[0]:stop:0:0"]
+trusted_hash = "sha256:350c210fba4996f546f4d0483fc29286d73880ca5ef01fda3583ea2ce676945d"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:post_tool_use:1:0"]
+trusted_hash = "sha256:a148b26c100295750b892c552b9eb35da6d68b86ca22e56f67ae77ea9a608a7e"
+
+[hooks.state."/Users/adampaterson/.codex/hooks.json:stop:3:0"]
+trusted_hash = "sha256:fcbc53cb686f3694a40d2ec3621098c55069c901a0e0d4b1f30a54e1263ce2be"
+
+[apps.asdk_app_69a089a326dc8191b32a3f2553f5be2c.tools."linear.save_issue"]
+approval_mode = "approve"
+
+[apps.asdk_app_69bd664f2a908191a3a0a47eca8559d1.tools."apollo_io.apollo_sequences_update"]
+approval_mode = "approve"
+
+[apps.asdk_app_69bd664f2a908191a3a0a47eca8559d1.tools."apollo_io.apollo_emailer_campaigns_approve"]
+approval_mode = "approve"
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-add-phase/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-add-tests/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-add-todo/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-audit-milestone/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-check-todos/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-cleanup/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-complete-milestone/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-debug/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-discuss-phase/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-execute-phase/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-health/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-help/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-insert-phase/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-join-discord/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-list-phase-assumptions/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-map-codebase/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-new-milestone/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-new-project/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-pause-work/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/gsd-plan-milestone-gaps/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/adampaterson/.codex/skills/hatch-pet/SKILL.md"
+enabled = false

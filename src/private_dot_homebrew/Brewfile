@@ -4,7 +4,6 @@ tap "ctrlspice/otel-desktop-viewer", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
 tap "largemodgames/spotatui", "https://github.com/LargeModGames/homebrew-spotatui"
 tap "rjyo/moshi", trusted: true
-tap "romaintb/terminalist", trusted: true
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@3"
 # GNU compiler collection for arm-none-eabi
@@ -83,8 +82,6 @@ brew "felixkratz/formulae/sketchybar"
 brew "largemodgames/spotatui/spotatui", trusted: true
 # Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
 brew "rjyo/moshi/moshi-hook"
-# A terminal-based Todoist client with modern TUI interface
-brew "romaintb/terminalist/terminalist"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password

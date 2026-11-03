@@ -7,7 +7,6 @@ claude = "latest"  # Claude Code terminal agent
 "npm:@caveman-ai/cli" = "latest"  # Agent wrapper, context compression, and usage metering
 "npm:@colbymchenry/codegraph" = "latest"  # Local code index and MCP server; used by mcporter
 "npm:@earendil-works/pi-coding-agent" = "latest"  # Pi terminal agent
-"npm:@loongphy/codex-auth" = "latest"  # Codex account switching; supports device-code login
 "npm:@tobilu/qmd" = "latest"  # Local document search; semantic search downloads models, GPU optional
 "npm:gentle-pi" = "latest"  # Gentle Shell terminal interface for Pi
 

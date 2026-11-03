@@ -15,8 +15,12 @@ pager = "delta --paging=never"
 
 [projects]
 
-[projects."ssh.dev.azure.com/v3/idhl/*".list.custom-columns.Ticket]
-template = "{{ vars.ticket }}"
+[projects."ssh.dev.azure.com/v3/idhl/*"]
+list.custom-columns.Ticket.template = "{{ vars.ticket }}"
+commit.generation.command = "MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --safe-mode --setting-sources='user'"
+commit.generation.template-append = """
+   Show ticket references prefixed with "#" in the commit footer. Never sign the commit off from "Claude"
+   """
 
 # # User Configuration
 #
@@ -118,8 +122,8 @@ command = "pi -p --model openai-codex/gpt-5.6-luna --thinking off"
 [list]
 # summary = true    # Enable LLM branch summaries (requires [commit.generation])
 #
-full = true       # Show CI status and LLM summaries (--full)
-branches = true   # Include branches without worktrees (--branches)
+full = true  # Show CI status and LLM summaries (--full)
+branches = true  # Include branches without worktrees (--branches)
 # remotes = false    # Include remote-only branches (--remotes)
 #
 # json-schema = 2    # JSON output schema: 2 (envelope, default) or 1 (bare array)

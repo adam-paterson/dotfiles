@@ -111,12 +111,17 @@ alt-1 = "workspace 1"
 alt-2 = "workspace 2"
 alt-3 = "workspace 3"
 alt-4 = "workspace 4"
+alt-5 = "workspace 5"
+alt-6 = "workspace 6"
+alt-7 = "workspace 7"
 
 # Move window to workspace (stay on current)
 cmd-alt-1 = "move-node-to-workspace 1"
 cmd-alt-2 = "move-node-to-workspace 2"
 cmd-alt-3 = "move-node-to-workspace 3"
 cmd-alt-4 = "move-node-to-workspace 4"
+cmd-alt-5 = "move-node-to-workspace 5"
+cmd-alt-6 = "move-node-to-workspace 6"
 
 # ============================================================================
 # ESSENTIAL SHORTCUTS
@@ -475,6 +480,8 @@ alt-ctrl-b = [
 2 = "^Built-in.*"
 3 = "^DELL"
 4 = "^Sidecar"
+5 = "main"
+6 = "^Built-in.*"
 
 [[on-window-detected]]
 if.app-id = "com.microsoft.teams*"
@@ -491,3 +498,7 @@ run = 'move-node-to-workspace 3'
 [[on-window-detected]]
 if.app-id = "md.obsidian"
 run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = "com.cisco.secureclient.gui"
+run = "layout floating"

@@ -42,6 +42,14 @@
       "env": {
         "ARTIFACT_SERVER_AGENT_TOKEN": "${ARTIFACT_SERVER_AGENT_TOKEN}"
       }
+    },
+    "codegraph": {
+      "command": "codegraph",
+      "args": ["serve", "--mcp"],
+      "lifecycle": "keep-alive"
+    },
+    "todo": {
+      "baseUrl": "https://ai.todoist.net/mcp"
     }
   }
 }

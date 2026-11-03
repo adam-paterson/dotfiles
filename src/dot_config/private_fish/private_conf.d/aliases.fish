@@ -24,6 +24,8 @@ alias scratch 'nvim -c "setlocal buftype=nofile"'
 alias vimdiff 'nvim -d'
 alias wr wrangler
 
+alias mcp 'mcporter'
+
 # zoxide
 alias z zoxide
 
