@@ -18,7 +18,7 @@ git:
   remoteBranchSortOrder: date
   truncateCopiedCommitHashesTo: 5
   diffRenderers:
+    - command: "delta --paging=never"
     - type: extDiff
       command: difft --display=side-by-side-show-both --color=always --context={{diffContext}}
     - command: "hunk pager --mode split --line-numbers"
-    - command: "delta"

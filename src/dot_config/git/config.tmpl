@@ -10,12 +10,13 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	st = status -sb
 	unstage = reset HEAD --
-  dlog = -c 'diff.external=difft --display=side-by-side-show-both' log --ext-diff
-  dshow = -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
-  ddiff = -c 'diff.external=difft --display=side-by-side-show-both' diff
-  dl = -c 'diff.external=difft --display=side-by-side-show-both' log -p --ext-diff
-  ds = -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
-  dft = -c 'diff.external=difft --display=side-by-side-show-both' diff
+  dlog = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' log --ext-diff
+  dshow = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
+  ddiff = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' diff
+  dl = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' log -p --ext-diff
+  ds = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' show --ext-diff
+  dft = -c 'core.pager=less -R' -c 'diff.external=difft --display=side-by-side-show-both' diff
+  hdiff = -c 'core.pager=hunk pager --mode split --line-numbers' diff
 
 [color]
 	ui = true
@@ -24,10 +25,10 @@
 	editor = nvim
 	longpaths = true
 	excludesFile = ~/.config/git/ignore
-	pager = less -R
+	pager = delta
 
 [pager]
-  difftool = true
+  difftool = less -R
 
 [delta]
 	dark = true
@@ -53,7 +54,6 @@
 	diffFilter = delta --color-only
 
 [diff]
-  external = difft --display=side-by-side-show-both
   tool = difftastic
 
 [difftool]
