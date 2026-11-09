@@ -20,3 +20,6 @@ credential_command = 'if [ "$MISE_CREDENTIAL_HOST" = github.com ] && [ -x "$HOME
 
 [env]
 _.path = ["./node_modules/.bin", "./bin"]
+
+[tools]
+opencode = { version = "2.2.5", allow_builds = ["@opencode/cli"] }

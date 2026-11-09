@@ -4,6 +4,10 @@
       "rev": "0abc8f390b278c3b4aabc4c004ac8a088b65cf24",
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
+    "aerial.nvim": {
+      "rev": "28fe6e822ae344544c379d60fcb13c9519a1f08a",
+      "src": "https://github.com/stevearc/aerial.nvim"
+    },
     "alpha-ascii.nvim": {
       "rev": "0d9ee001495caf4e597476aaaca1133f0c444ae6",
       "src": "https://github.com/nhattVim/alpha-ascii.nvim"
@@ -63,6 +67,10 @@
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    "markview.nvim": {
+      "rev": "190bb227c9d3eb4451b81fa16ea3d2efde2d67c5",
+      "src": "https://github.com/OXY2DEV/markview.nvim"
     },
     "mini.clue": {
       "rev": "4d506660e7030a15748ab073bebfe3ed03884000",
@@ -172,6 +180,10 @@
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
+    },
+    "trouble.nvim": {
+      "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
+      "src": "https://github.com/folke/trouble.nvim"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",

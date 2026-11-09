@@ -1,7 +1,8 @@
 [tools]
+"github:alvinunreal/lazyskills" = "latest"  # Terminal UI for managing agent skills
 claude = "latest"  # Claude Code terminal agent
 # Explicit backend avoids different registry defaults on different mise versions.
-"aqua:anomalyco/opencode" = "latest"  # OpenCode terminal agent
+"npm:@opencode/cli" = "latest"  # OpenCode terminal agent
 "aqua:openai/codex" = "latest"  # Codex terminal agent
 "aqua:sigoden/aichat" = "latest"  # LLM CLI, REPL, and retrieval tools
 "npm:@caveman-ai/cli" = "latest"  # Agent wrapper, context compression, and usage metering
@@ -13,3 +14,4 @@ claude = "latest"  # Claude Code terminal agent
 "cargo:plannotator-tui" = "latest"  # Terminal Markdown annotation and review
 # Browser review works remotely through port forwarding; this is not GUI-only.
 "npm:@plannotator/pi-extension" = { version = "latest", trust_policy_excludes = ["@pierre/theme@2.0.0"] }
+"npm:skills" = "latest"  # Agent skills CLI (renamed from @vercel-labs/skills)

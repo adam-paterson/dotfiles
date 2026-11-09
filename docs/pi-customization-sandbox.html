@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Safe Pi Customization Sandbox</title>
+<style>
+:root{color-scheme:dark;--bg:#101313;--panel:#191e1d;--line:#343e39;--muted:#a3b0a8;--text:#edf2ed;--green:#a8d5ba;--gold:#dfc68a;--blue:#94bad0}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -25%,#293831,var(--bg) 65%);color:var(--text);font:16px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}.wrap{max-width:980px;margin:auto;padding:42px 24px 70px}h1{font-size:clamp(26px,5vw,42px);line-height:1.12;margin:0 0 10px;letter-spacing:-.04em}p{color:var(--muted);margin:0 0 24px}.flow{display:grid;grid-template-columns:1fr 36px 1fr 36px 1fr;align-items:stretch;gap:10px}.node{border:1px solid var(--line);background:linear-gradient(160deg,#1e2522,var(--panel));border-radius:12px;padding:20px;min-height:220px;box-shadow:0 16px 40px #0003}.node h2{font-size:17px;margin:12px 0 8px}.node p{font-size:13px;margin:0;color:#bdc8c0}.icon{font-size:23px;color:var(--green)}.arrow{display:grid;place-items:center;color:#65766c;font-size:23px}.tag{display:inline-block;border:1px solid #405346;color:var(--green);border-radius:99px;padding:3px 9px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.safe{margin-top:22px;border:1px solid #3b5345;background:#15221b;padding:17px 20px;border-radius:10px;color:#d9e9dc}.safe strong{color:var(--green)}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b0e0d;border:1px solid #303a34;padding:15px;border-radius:8px;font-size:13px;color:#d7e2da;margin:12px 0 0}.foot{margin-top:18px;font-size:12px;color:#829087}@media(max-width:700px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:20px}.node{min-height:0}}
+</style></head>
+<body><main class="wrap"><span class="tag">Reversible workflow</span><h1>Customize Pi without risking your everyday setup</h1><p>A separate agent directory and session directory let you experiment in a second Pi process. Your regular install stays the control group.</p>
+<section class="flow" aria-label="Safe customization flow">
+<article class="node"><div class="icon">①</div><h2>Keep your normal Pi</h2><p>Your existing <code>~/.pi/agent</code>, extensions, settings, and sessions remain untouched.</p></article><div class="arrow">→</div>
+<article class="node"><div class="icon">②</div><h2>Launch an isolated copy</h2><p>Point Pi at a separate config home and session folder. Optionally disable auto-discovered resources.</p><pre>PI_CODING_AGENT_DIR="$HOME/.pi-lab/agent" \
+pi --session-dir "$HOME/.pi-lab/sessions" \
+  --no-approve --no-context-files</pre></article><div class="arrow">→</div>
+<article class="node"><div class="icon">③</div><h2>Try the customization</h2><p>Load just the prototype extension in the lab. Iterate there; close the process or remove the lab folder to back out.</p><pre>PI_CODING_AGENT_DIR="$HOME/.pi-lab/agent" \
+pi --session-dir "$HOME/.pi-lab/sessions" \
+  --no-approve --no-context-files \
+  --extension ./my-extension.ts</pre></article>
+</section><div class="safe"><strong>Safety boundary</strong> — the sandbox isolates Pi configuration and sessions. For edits to an extension, work on a copy or a separate Git branch too; avoid editing files inside your active Pi install.</div><p class="foot">Commands are examples based on the installed Pi CLI. The separate directory is created as needed. Don’t copy personal credentials into the sandbox unless you explicitly want the test instance to use them.</p></main></body></html>

@@ -1,4 +1,8 @@
 {
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
+    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(uv:*)",
@@ -153,6 +157,15 @@
             "async": true
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude 2>/dev/null || true'",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "Stop": [
@@ -193,7 +206,7 @@
   "disableArtifact": true,
   "statusLine": {
     "type": "command",
-    "command": "bash '/Users/adampaterson/.claude/statusline-command.sh'"
+    "command": "node '/Users/adampaterson/.config/herdr-app/mods/pi-context/dist/claude-statusline.js' \"bash '/Users/adampaterson/.claude/statusline-command.sh'\""
   },
   "enabledPlugins": {
     "caveman@caveman": true,
@@ -283,9 +296,5 @@
     ]
   },
   "disableBundledPlugins": false,
-  "disabledWorkspaces": true,
-  "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
-    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1"
-  }
+  "disabledWorkspaces": true
 }
