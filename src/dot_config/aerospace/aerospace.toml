@@ -48,29 +48,29 @@ outer.right = 5
 
 [mode.main.binding]
 # ============================================================================
-# MODE SWITCHERS - alt-ctrl-[letter] pattern
+# MODE SWITCHERS - ctrl-alt-shift-cmd-[letter] prefix
 # ============================================================================
 
-alt-ctrl-w = [
+ctrl-alt-shift-cmd-w = [
   "mode window",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=window",
 ]
 
-alt-ctrl-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
+ctrl-alt-shift-cmd-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
 
-alt-ctrl-l = [
+ctrl-alt-shift-cmd-l = [
   "mode layout",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=layout",
 ]
 
-alt-ctrl-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
+ctrl-alt-shift-cmd-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
 
-alt-ctrl-m = [
+ctrl-alt-shift-cmd-m = [
   "mode maintenance",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=maintenance",
 ]
 
-alt-ctrl-b = [
+ctrl-alt-shift-cmd-b = [
   "mode binding",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=binding"
 ]
@@ -106,14 +106,14 @@ alt-shift-down = "move down"
 # ============================================================================
 
 # Workspace switching
-alt-tab = "workspace-back-and-forth"
-alt-1 = "workspace 1"
-alt-2 = "workspace 2"
-alt-3 = "workspace 3"
-alt-4 = "workspace 4"
-alt-5 = "workspace 5"
-alt-6 = "workspace 6"
-alt-7 = "workspace 7"
+ctrl-alt-shift-cmd-tab = "workspace-back-and-forth"
+ctrl-alt-shift-cmd-1 = "workspace 1"
+ctrl-alt-shift-cmd-2 = "workspace 2"
+ctrl-alt-shift-cmd-3 = "workspace 3"
+ctrl-alt-shift-cmd-4 = "workspace 4"
+ctrl-alt-shift-cmd-5 = "workspace 5"
+ctrl-alt-shift-cmd-6 = "workspace 6"
+ctrl-alt-shift-cmd-7 = "workspace 7"
 
 # Move window to workspace (stay on current)
 cmd-alt-1 = "move-node-to-workspace 1"
@@ -127,7 +127,7 @@ cmd-alt-6 = "move-node-to-workspace 6"
 # ESSENTIAL SHORTCUTS
 # ============================================================================
 
-alt-f = "fullscreen"
+ctrl-alt-shift-cmd-f = "fullscreen"
 
 # ============================================================================
 # WINDOW MODE - Advanced window operations
@@ -193,16 +193,16 @@ shift-q = [
 ]
 
 # Quick mode switching
-alt-ctrl-l = [
+ctrl-alt-shift-cmd-l = [
   "mode layout",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=layout",
 ]
-alt-ctrl-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
-alt-ctrl-m = [
+ctrl-alt-shift-cmd-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
+ctrl-alt-shift-cmd-m = [
   "mode maintenance",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=maintenance",
 ]
-alt-ctrl-b = [
+ctrl-alt-shift-cmd-b = [
   "mode binding",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=binding"
 ]
@@ -282,16 +282,16 @@ shift-right = [
 ]
 
 # Quick mode switching
-alt-ctrl-w = [
+ctrl-alt-shift-cmd-w = [
   "mode window",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=window",
 ]
-alt-ctrl-l = [
+ctrl-alt-shift-cmd-l = [
   "mode layout",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=layout",
 ]
-alt-ctrl-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
-alt-ctrl-b = [
+ctrl-alt-shift-cmd-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
+ctrl-alt-shift-cmd-b = [
   "mode binding",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=binding"
 ]
@@ -364,17 +364,17 @@ period = [
 ]
 
 # Quick mode switching
-alt-ctrl-w = [
+ctrl-alt-shift-cmd-w = [
   "mode window",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=window",
 ]
-alt-ctrl-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
-alt-ctrl-m = [
+ctrl-alt-shift-cmd-a = ["mode app", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=app"]
+ctrl-alt-shift-cmd-m = [
   "mode maintenance",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=maintenance",
 ]
 
-alt-ctrl-b = [
+ctrl-alt-shift-cmd-b = [
   "mode binding",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=binding"
 ]
@@ -409,14 +409,14 @@ f = [
 ]
 
 # Quick mode switching
-alt-ctrl-w = [
+ctrl-alt-shift-cmd-w = [
   "mode window",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=window",
 ]
 
-alt-ctrl-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
+ctrl-alt-shift-cmd-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
 
-alt-ctrl-m = [
+ctrl-alt-shift-cmd-m = [
   "mode maintenance",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=maintenance",
 ]
@@ -457,20 +457,28 @@ shift-s = [
 ]
 
 # Quick mode switching
-alt-ctrl-w = [
+ctrl-alt-shift-cmd-w = [
   "mode window",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=window",
 ]
-alt-ctrl-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
-alt-ctrl-l = [
+ctrl-alt-shift-cmd-s = ["mode space", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=space"]
+ctrl-alt-shift-cmd-l = [
   "mode layout",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=layout",
 ]
 
-alt-ctrl-b = [
+ctrl-alt-shift-cmd-b = [
   "mode binding",
   "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=binding"
 ]
+
+# ============================================================================
+# BINDING MODE - Placeholder for future sub-binding definitions
+# ============================================================================
+
+[mode.binding.binding]
+# Exit mode
+esc = ["mode main", "exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main"]
 
 # ============================================================================
 # AUTOMATIC WINDOW & APP ASSIGNMENT
