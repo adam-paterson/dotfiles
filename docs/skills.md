@@ -1,97 +1,81 @@
 # Skills
 
-Chezmoi manages `~/skills-lock.json` from `src/skills-lock.json`. APM is no longer
-declared or invoked. The install hook filters out existing skills and runs the
-CLI's native restore in a temporary project:
+The global skills inventory is a skills CLI *project*: the lockfile is
+`~/.agents/skills-lock.json` (chezmoi-managed from `src/dot_agents/skills-lock.json`,
+symlinked into `$HOME` as `~/skills-lock.json`), and the canonical install
+directory is `~/.agents/skills`, which Amp reads directly. Harness links
+(Claude Code, Codex, Cursor, Gemini CLI, Copilot, OpenCode, Pi, and the rest the
+CLI detects) are created by the CLI itself on every install, honoring
+`XDG_CONFIG_HOME`, `CLAUDE_CONFIG_DIR`, and `CODEX_HOME`.
 
-```sh
-npx skills@1.7.0 experimental_install
-```
-
-The hook runs on first apply and when the lockfile or hook changes. It checks
-that every requested skill was restored before copying missing directories to
-`~/.agents/skills`, which Amp discovers directly. It then adds missing links for
-Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, OpenCode, Pi, Continue,
-Factory, and Kiro. Amp needs no additional links under `~/.config/agents/skills`.
-The hook respects `XDG_CONFIG_HOME`, `CLAUDE_CONFIG_DIR`, and `CODEX_HOME`.
-Existing canonical skills, custom files, and links are preserved, including
-dangling links. Fix dangling links explicitly if needed.
-
-Do not run native restore directly in your home directory to synchronize this
-inventory. It replaces selected skill directories and can return success after
-a partial failure. The hook isolates those writes and checks completeness.
-
-## Pstack
-
-All 58 skills from `cursor/plugins/pstack/skills` are selected at revision
-`c5149ef275fa7be41e3ffe5e79c8fc16efcaeedc`. Full skill directories include
-playbooks, scripts, and references. The corresponding README, guide, harness
-adapter, and subagent reference files are fetched by chezmoi into `~/.agents`
-so relative documentation links resolve. Keep that archive revision aligned
-with the pstack entries in the lockfile when updating.
-
-`tdd` and `teach` select pstack's versions rather than Matt Pocock's. During the
-initial reconciliation, conflicting copies were backed up before replacement;
-normal applies remain additive. Harness-specific pstack copies were replaced
-with links to the shared installation so they cannot shadow it.
-
-No model settings are synchronized by this installer. It does not run
-`setup-pstack` or write `pstack-models.mdc`, `pstack-models.md`, or harness
-configuration. The setup skill and upstream model recommendations remain in
-the skill content; installing them does not apply those recommendations.
-
-This is a skills installation, not a pstack plugin installation. Making the
-files available does not register plugin subagent types or provide Cursor-only
-features in other harnesses. Those workflows still depend on harness support.
-
-## Add and update
-
-Run these commands from your home directory, without `-g`:
+The lock is schema v2: every entry carries the git `commit` it came from and a
+`computedHash` of the installed files, so restores are exact and hash-verified:
 
 ```sh
 cd "$HOME"
-npx skills@1.7.0 add ast-grep/agent-skill --skill ast-grep -a universal -y
-npx skills@1.7.0 update -p
-chezmoi re-add ~/skills-lock.json
-chezmoi apply
+npx skills@1.9.0 install --frozen-lockfile
 ```
 
-Updates replace local changes in the selected skill. Back them up first.
-For one update, use `npx skills@1.7.0 update ast-grep -p`. Save the updated lockfile
-before applying chezmoi, or chezmoi will restore the previously saved metadata.
-The apply also creates missing harness links for newly added skills.
+The reconciler wraps that as `~/.local/bin/skills-sync` (chezmoi-managed from
+`src/dot_local/bin/skills-sync`); the chezmoi hook
+`run_onchange_after_95-install-skills.sh` runs it whenever the lockfile or the
+hook changes. On a fresh machine the first apply installs all 169 selections at
+their pinned commits — no interactive steps.
 
-To remove a skill, run `npx skills remove name -y` from home and save the lockfile.
-The hook does not prune old harness links or uninstall entries removed by
-hand from the lockfile.
+## Pruning
 
-## Migration and limits
+The lockfile is the source of truth: `skills-sync` also deletes directories in
+`~/.agents/skills` with no lock entry, except ones chezmoi manages directly
+(vendored/authored skills). Safety rails:
 
-The project lockfile contains 168 selections, including the full pstack set.
-Twelve retired upstream names were removed from the earlier 125-name inventory;
-removing their selections did not delete installed skills.
-`implement-spec` stays with `adam-paterson/skills`; `show-me` stays with
-`dmmulroy/.dotfiles`. Existing installations are not replaced to change providers.
-Initial `computedHash` fields are empty because global Git tree hashes are not
-project content hashes. The hook leaves the managed manifest unchanged.
+- Without `~/.agents/.skills-prune-armed`, pruning is a dry run: it lists
+  candidates and deletes nothing. `touch ~/.agents/.skills-prune-armed` to arm.
+- `skills-sync --no-prune` or `SKILLS_PRUNE=0` skips pruning entirely.
+- `skills-sync --dry-run` never deletes.
 
-Pstack, the Plannotator extras, and `show-me` use `source` and `skillPath` without
-a `.git` URL. In Skills 1.7.0, that URL takes precedence and prevents path-targeted
-restoration. Other entries select by name from the repository, so moving a skill
-within its repository does not break restoration.
+## Daily commands
 
-The retired names are `batch-grill-me`, `decision-mapping`, `design-an-interface`,
-`edit-article`, `resolving-merge-conflicts`, `to-issues`, `to-prd`,
-`ubiquitous-language`, `write-a-skill`, `writing-great-skills`, `zoom-out`, and
-`to-gherkin`. Their documented successors are already selected. Upstream removed
-`edit-article`, `resolving-merge-conflicts`, and `zoom-out` without replacements.
+The fish `skill` function runs the CLI from `$HOME` (where the lock is symlinked)
+and never deletes:
 
-Pstack is revision-pinned; the other selections are not frozen installs.
-Native restore fetches each source at its recorded Git ref, or its current
-default branch when no ref is recorded. Hashes support
-update detection; they do not pin restoration to those bytes. The CLI's restore
-command is experimental. Updates remain explicit rather than running on each apply.
+```sh
+skill add ast-grep/agent-skill --skill ast-grep -y
+skill update -p          # refresh locked skills, move pins forward
+skill remove <name> -y   # removes files, lock entry, and harness links
+skill check              # report available updates
+skill sync               # the reconciler: frozen install + prune
+skill sync --dry-run
+```
 
-`~/.agents/.skill-lock.json` is no longer managed by chezmoi. The old global
-metadata, APM data, and existing agent-specific skills are left in place.
-Do not use `skills update -g` for this inventory.
+After `skill add`/`update`/`remove`, save the lock into the repo:
+`chezmoi re-add ~/.agents/skills-lock.json`. Unsaved local changes are pruned on
+the next lock-changing apply — that is the contract.
+
+## Git authentication
+
+`~/.config/git/config` routes `https://github.com` through
+`gh auth git-credential`, giving git the authenticated 5000/hour quota.
+Unauthenticated git traffic shares 60/hour per IP, which the CLI's clone bursts
+exhaust (HTTP 429). Keep `gh auth login` current on every machine, including
+Seraph.
+
+## Pstack
+
+All 58 pstack skills from `cursor/plugins/pstack/skills` are selected at revision
+`c5149ef275fa7be41e3ffe5e79c8fc16efcaeedc` and now carry per-skill commit pins in
+the lockfile itself. The corresponding README, guide, harness adapter, and
+subagent reference files are fetched by `.chezmoiexternal.toml` into `~/.agents`;
+keep that archive revision aligned with the lockfile's pstack entries when
+updating. `tdd` and `teach` select pstack's versions rather than Matt Pocock's.
+Installing skills does not apply model settings (`setup-pstack` is a separate,
+explicit step).
+
+## History
+
+Microsoft APM (`src/dot_apm`, September 2026) was replaced on 26 October 2026:
+it only installs APM packages, which does not fit the loose GitHub sources here,
+and it has no Pi/Amp targets. Skills CLI global scope (`-g`) was also rejected:
+it keeps its lock in `~/.agents/.skill-lock.json` but has no restore command, so
+reproducibility on Seraph would still need a staging workaround. The project
+layout above gives the same lockfile guarantees with supported commands only.
+`~/.agents/.skill-lock.json` is CLI bookkeeping, not managed by chezmoi.

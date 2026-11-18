@@ -62,6 +62,12 @@
 [difftool "difftastic"]
   cmd = difft --display=side-by-side-show-both "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
+[credential "https://github.com"]
+	# gh's keyring token lifts git HTTPS to the authenticated 5000/h quota;
+	# unauthenticated git traffic shares 60/h per IP, which skills-CLI clone
+	# bursts exhaust (HTTP 429).
+	helper = "!gh auth git-credential"
+
 [merge]
 	autoStash = true
 	conflictStyle = zdiff3

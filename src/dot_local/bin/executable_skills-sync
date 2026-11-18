@@ -1,0 +1,69 @@
+#!/bin/sh
+# Reconcile global agent skills with ~/.agents/skills-lock.json.
+# Used by the chezmoi install hook and by the fish `skill sync` wrapper.
+#
+#   skills-sync              install --frozen-lockfile, then prune (armed only)
+#   skills-sync --no-prune   restore only, never delete
+#   skills-sync --dry-run    show what prune would delete, delete nothing
+#   SKILLS_PRUNE=0           same as --no-prune
+#
+# Pruning deletes untracked skill directories only when
+# ~/.agents/.skills-prune-armed exists; without it the run reports the
+# candidates and deletes nothing, so the first pass is always a review.
+set -eu
+
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+agents="$HOME/.agents"
+
+case "${1:-}" in
+    "") ;;
+    --no-prune) SKILLS_PRUNE=0; shift ;;
+    --dry-run) SKILLS_PRUNE=dry; shift ;;
+    *) echo "usage: skills-sync [--no-prune|--dry-run]" >&2; exit 2 ;;
+esac
+
+# The CLI treats cwd as the project root: the lock is read from
+# $HOME/skills-lock.json (a symlink into ~/.agents) and skills install to
+# ~/.agents/skills.
+cd "$HOME"
+npx --yes skills@1.9.0 install --frozen-lockfile
+
+[ "${SKILLS_PRUNE:-1}" != 0 ] || exit 0
+[ -d "$agents/skills" ] || exit 0
+
+python3 - "$agents" "${SKILLS_PRUNE:-}" <<'PY'
+import json, os, shutil, subprocess, sys
+from pathlib import Path
+
+agents = Path(sys.argv[1])
+mode = sys.argv[2]  # "" (normal) or "dry"
+lock = json.loads((agents / "skills-lock.json").read_text())
+tracked = set(lock["skills"])
+
+managed = subprocess.run(
+    ["chezmoi", "managed", "--path-style", "absolute"],
+    capture_output=True, text=True,
+)
+if managed.returncode != 0:
+    sys.exit("prune skipped: chezmoi managed failed: " + managed.stderr.strip())
+prefix = str(agents / "skills") + "/"
+vendored = {path[len(prefix):] for path in managed.stdout.splitlines()
+            if path.startswith(prefix)}
+
+existing = {p.name for p in (agents / "skills").iterdir() if p.is_dir()}
+candidates = sorted(existing - tracked - vendored)
+if not candidates:
+    print("Prune: nothing untracked")
+    raise SystemExit
+
+if mode == "dry" or not (agents / ".skills-prune-armed").exists():
+    print("Prune dry-run; nothing deleted. Untracked skills:")
+    for name in candidates:
+        print("  - " + name)
+    print("Approve deletion: touch ~/.agents/.skills-prune-armed")
+    raise SystemExit
+
+for name in candidates:
+    shutil.rmtree(agents / "skills" / name)
+    print("Pruned " + name)
+PY
