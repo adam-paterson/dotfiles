@@ -176,7 +176,7 @@ safely("later", function()
 	require("trouble").setup({
 		focus = true,
 		auto_close = true,
-		win = { position = "bottom", size = 10 },
+		win = { position = "right", size = 50 },
 	})
 end)
 

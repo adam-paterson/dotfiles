@@ -1,6 +1,7 @@
 local edges = {
   right = { label = "Slide-out right", bounds = { 0.55, 0, 0.45, 1 } },
   bottom = { label = "Slide-out bottom", bounds = { 0, 0.6, 1, 0.4 } },
+  center = { label = "Quick terminal", bounds = { 0.125, 0.125, 0.75, 0.75 } },
 }
 
 rex.action{
@@ -9,7 +10,7 @@ rex.action{
   args = { edge = "string" },
   run = function(ctx, args)
     local edge = edges[args.edge]
-    if not edge then error("Slide-out edge must be right or bottom", 0) end
+    if not edge then error("Slide-out edge must be right, bottom, or center", 0) end
 
     local view, err = rex.session.view{}
     if err then error(err, 0) end

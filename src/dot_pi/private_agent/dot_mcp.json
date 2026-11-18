@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mcporter": {
+      "command": "mcporter",
+      "args": [
+        "serve",
+        "--stdio"
+      ]
+    }
+  }
+}

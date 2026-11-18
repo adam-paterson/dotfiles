@@ -20,6 +20,8 @@ vim.defer_fn(function()
  local ok, err = pcall(function()
   assert(vim.wait(5000, function() return vim.fn.exists(':Trouble') == 2 and MiniPick ~= nil end))
   local trouble = require('trouble')
+  vim.o.columns = 160
+  vim.o.lines = 50
   local function press(key)
    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'xt', false)
   end
@@ -28,6 +30,11 @@ vim.defer_fn(function()
     return trouble.is_open({mode=mode}) and #trouble.get_items({mode=mode}) == count
    end), mode .. ': wrong result count')
    assert(vim.wait(3000, function() return vim.bo.filetype == 'trouble' end), 'Trouble did not receive focus')
+   local win = vim.api.nvim_get_current_win()
+   assert(vim.api.nvim_win_get_config(win).relative == '', 'Trouble should be a split')
+   assert(vim.api.nvim_win_get_width(win) == 50, 'Wrong sidebar width')
+   local layout = vim.fn.winlayout()
+   assert(layout[1] == 'row' and layout[2][#layout[2]][2] == win, 'Trouble is not the rightmost split')
   end
   vim.cmd('edit first.txt')
   local first = vim.api.nvim_get_current_buf()
@@ -38,12 +45,12 @@ vim.defer_fn(function()
   for _, buf in ipairs({first, second}) do
    vim.diagnostic.set(ns, buf, {{lnum=0, col=0, message='Test diagnostic', severity=vim.diagnostic.severity.ERROR}})
   end
-  press(' xX')
+  press(' lxX')
   wait_for_items('diagnostics', 1)
   assert(trouble.get_items({mode='diagnostics'})[1].buf == first, 'Wrong buffer diagnostic')
   trouble.close()
   vim.api.nvim_set_current_win(main)
-  press(' xx')
+  press(' lxx')
   wait_for_items('diagnostics', 2)
   vim.diagnostic.reset(ns)
   assert(vim.wait(3000, function() return not trouble.is_open({mode='diagnostics'}) end), 'Empty list did not close')
@@ -53,16 +60,19 @@ vim.defer_fn(function()
   MiniPick.default_choose_marked({{bufnr=first, lnum=1, col=1, text='Picked result'}})
   assert(#vim.fn.getqflist() == 1, 'Picker did not populate quickfix')
   vim.cmd('cclose')
-  press(' xq')
+  press(' lxq')
   wait_for_items('qflist', 1)
   trouble.close()
   vim.api.nvim_set_current_win(main)
   vim.fn.setloclist(0, {{bufnr=first, lnum=1, col=1, text='Local result'}})
-  press(' xl')
+  press(' lxl')
   wait_for_items('loclist', 1)
   trouble.close()
-  for _, key in ipairs({'xx', 'xX', 'xq', 'xl', 'xL'}) do
+  for _, key in ipairs({'lxx', 'lxX', 'lxq', 'lxl', 'lxL'}) do
    assert(vim.fn.maparg(' ' .. key, 'n', false, true).desc, key .. ': missing hint')
+  end
+  for _, key in ipairs({'xx', 'xX', 'xq', 'xl', 'xL'}) do
+   assert(vim.fn.maparg(' ' .. key, 'n') == '', key .. ': old mapping remains')
   end
   assert(vim.fn.maparg(' fS', 'n'):find('Pick lsp', 1, true), 'mini.pick mapping replaced')
  end)

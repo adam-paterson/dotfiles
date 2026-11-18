@@ -62,10 +62,16 @@
 [difftool "difftastic"]
   cmd = difft --display=side-by-side-show-both "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
+# GitHub's HTTP endpoints never issue a 401 for public repositories, so a
+# credential helper alone is not applied proactively and git traffic stays
+# anonymous (60/h per IP, which skills-CLI clone bursts exhaust with HTTP 429).
+# Rewriting to SSH makes every github.com HTTPS git URL authenticated.
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
 [credential "https://github.com"]
-	# gh's keyring token lifts git HTTPS to the authenticated 5000/h quota;
-	# unauthenticated git traffic shares 60/h per IP, which skills-CLI clone
-	# bursts exhaust (HTTP 429).
+	# Fallback for environments without an SSH key: gh's keyring token lifts
+	# git HTTPS to the authenticated 5000/h quota.
 	helper = "!gh auth git-credential"
 
 [merge]
