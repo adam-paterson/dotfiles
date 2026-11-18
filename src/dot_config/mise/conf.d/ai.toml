@@ -14,4 +14,6 @@ claude = "latest"  # Claude Code terminal agent
 "cargo:plannotator-tui" = "latest"  # Terminal Markdown annotation and review
 # Browser review works remotely through port forwarding; this is not GUI-only.
 "npm:@plannotator/pi-extension" = { version = "latest", trust_policy_excludes = ["@pierre/theme@2.0.0"] }
-"npm:skills" = "latest"  # Agent skills CLI (renamed from @vercel-labs/skills)
+# The skills CLI is not mise-managed: the fish `skill` wrapper and
+# `skills-sync` invoke `npx --yes skills@1.9.0` directly, pinned to the CLI
+# version the lockfile workflow was verified against.
